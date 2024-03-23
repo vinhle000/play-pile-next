@@ -16,7 +16,10 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/games', require('./src/routes/gameRoutes'));
-// app.use('/api/users', require('./src/routes/userRoutes'))
+// app.get('/', (req, res) => {
+//   res.send('API is running');
+// })
+app.use('/api/games/', require('./src/routes/gameRoutes'));
+app.use('/api/users/', require('./src/routes/userRoutes'))
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
