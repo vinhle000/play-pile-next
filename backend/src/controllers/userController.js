@@ -1,9 +1,9 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const User = require("../models/userModel");
-const asyncHandler = require("express-async-handler"); // This is a wrapper to catch errors from async functions
-const logger = require("../../config/logger");
-const colors = require("colors");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const User = require('../models/userModel');
+const asyncHandler = require('express-async-handler'); // This is a wrapper to catch errors from async functions
+const logger = require('../../config/logger');
+const colors = require('colors');
 // @desc   Register a new user
 // @route  POST /api/users
 // @access Public
@@ -12,14 +12,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (!username || !email || !password) {
     res.status(400);
-    throw new Error("Please fill in all fields");
+    throw new Error('Please fill in all fields');
   }
 
   const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(400);
-    throw new Error("User already exists");
+    throw new Error('User already exists');
   }
 
   // Hash  password
@@ -42,7 +42,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Invalid user data");
+    throw new Error('Invalid user data');
   }
 });
 
@@ -53,7 +53,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // check if user email
-  const user = await User.findOne({ email }).select("+password"); // Explicitly include the password field
+  const user = await User.findOne({ email }).select('+password'); // Explicitly include the password field
 
   // check if user and password match
   if (user && (await bcrypt.compare(password, user.password))) {
@@ -63,17 +63,17 @@ const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
     });
-    logger.debug("User logged in")
+    logger.debug('User logged in');
   } else {
     res.status(401);
-    throw new Error("Invalid email or password");
+    throw new Error('Invalid email or password');
   }
 });
 
 // Generate JWT token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+    expiresIn: '30d',
   });
 };
 
@@ -81,7 +81,6 @@ const generateToken = (id) => {
 // @route  GET /api/users/me
 // @access Private
 const getMe = asyncHandler(async (req, res) => {
-
   const { _id, username, email } = await User.findById(req.user._id);
 
   res.status(200).json({

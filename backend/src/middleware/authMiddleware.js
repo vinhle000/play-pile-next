@@ -8,7 +8,10 @@ const protectRoute = asyncHandler(async (req, res, next) => {
   let token;
 
   // check if token is in the header
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
     try {
       token = req.headers.authorization.split(' ')[1];
 
@@ -25,7 +28,6 @@ const protectRoute = asyncHandler(async (req, res, next) => {
       // throw new Error('Not authorized, token failed'); // this is for middleware error handling if you have any`
     }
   }
-})
-
+});
 
 module.exports = protectRoute;

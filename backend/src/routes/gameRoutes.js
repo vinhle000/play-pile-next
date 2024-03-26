@@ -1,24 +1,26 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 const {
   getIgdbGameById,
   getIgdbGames,
-} = require("../controllers/gameController");
+  searchIgdbGames,
+  getGameById,
+  getGames,
+  createGames,
+  updateGameById,
+  deleteGameById,
+} = require('../controllers/gameController');
 
-// Search games and get items
-router.get("/", (req, res) => {
-  res.send("get games - search games");
-});
+// DIRECT to IGDB's API  ===============================================
+router.post('/igdb/', getIgdbGames);
+router.post('/search/', searchIgdbGames);
 
-//Get game by IGDB id
-router.get("/igdb/:id", getIgdbGameById);
+// Games collection  ===============================================
+router.get('/:igdbId/', getGameById);
+router.post('/query/', getGames);
+router.put('/:igdbId', updateGameById);
+router.delete('/:igdbId', deleteGameById);
 
-// Get games from array of IGDB game ids
-router.post("/igdb/", getIgdbGames);
+// router.delete('/:_id', ()) // for dev and testing only
 
-// Get game by id'
-// Items are from mongo with enriched data user related metrics and data from IGDB
-router.get("/", (req, res) => {
-  res.send("get game by from mongo");
-});
 module.exports = router;
