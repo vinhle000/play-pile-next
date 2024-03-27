@@ -4,6 +4,28 @@ const IGDBWrapper = require('../services/IGDBWrapper');
 const logger = require('../../config/logger');
 const mongoose = require('mongoose');
 
+//TODO: convert into a classbased controller
+// class GameController {
+//   constructor() {
+//       this.IGDB = new IGDBWrapper();
+//   }
+
+//   getIgdbGameById = asyncHandler(async (req, res) => {
+//       const gameId = req.params.id;
+
+//       if (!gameId) {
+//           return res.status(400).json({ message: 'No game ID provided' });
+//       }
+
+//       try {
+//           const game = await this.IGDB.fetchGameById(gameId);
+//           res.status(200).json(game);
+//       } catch (error) {
+//           logger.error(`Error fetching game by ID from IGDB ${error}`);
+//           res.status(500).json({ message: 'Error fetching game from IGDB' });
+//       }
+//   });
+
 //  =======================================================================================
 // IGDB API operations
 //  =======================================================================================
@@ -63,6 +85,13 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
 
   try {
     const games = await IGDB.fetchGamesBySearchTerm(searchTerm);
+
+    // TODO://FIXME: store games in MongoDB
+    // Need to create the games in mongo from the search query results.
+    // This is will build the database of games and sync it with IGDB as needed.
+
+
+
     res.status(200).json(games);
   } catch (error) {
     logger.error(

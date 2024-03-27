@@ -21,5 +21,5 @@ app.use(express.urlencoded({ extended: true }));
 // })
 app.use('/api/games/', require('./src/routes/gameRoutes'));
 app.use('/api/users/', require('./src/routes/userRoutes'))
-
+app.use('/api/userGames/', require('./src/routes/userGameRoutes'))
 app.listen(port, () => console.log(`Server is running on port ${port}`));
