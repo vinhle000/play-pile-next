@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const gameSchema = new mongoose.Schema(
   {
     igdbId: {
-      type: String,
+      type: Number,
       required: true,
     },
     name: {
@@ -15,7 +15,7 @@ const gameSchema = new mongoose.Schema(
       // required: true,
     },
     releaseDates: {
-      type: [Date],
+      type: [Object],
       // required: true,
     },
     firstReleaseDate: {
@@ -39,17 +39,16 @@ const gameSchema = new mongoose.Schema(
       // required: true,
     },
     screenshots: {
-      type: [String],
-      // required: true,
+      type:  [Object]
     },
-    similar_games: {
+    similarGames: {
       type: [Number],
       // required: true,
     },
-    // igdbUrl: {
-    //   type: String,
-    //   // required: true,
-    // },
+    igdbUrl: {
+      type: String,
+      // required: true,
+    },
   },
   {
     timestamps: true,

@@ -49,20 +49,10 @@ class IGDBWrapper {
       });
     } catch (error) {
       logger.error(`Error in IGDB API request ${error}`);
-      // console.error("Error in IGDB API request", error);
       throw new Error('Error in IGDB API request');
     }
   }
-
-  // async fetchGameById(igdbGameId) {
-  //   const query = `fields name, cover.url, first_release_date, genres.name, platforms.name, rating, rating_count, summary; where id = (${igdbGameId});`;
-  //   const response = await this.makeIGDBRequest(query);
-  //   return response.data;
-  // }
-
-  //TODO: Refactor to use query to get specific fields of the games
-  //  `fields name, cover.url, first_release_date, genres.name, platforms.name, rating, rating_count, summary; where id = (${igdbGameId});`;
-
+å
   async fetchGames(igdbGameIds) {
     const ids = igdbGameIds.join(',');
     const query = `fields *; where id = (${ids});`;
@@ -72,9 +62,21 @@ class IGDBWrapper {
 
   //TODO: Refactor to use query to get specific fields of the games
   async fetchGamesBySearchTerm(searchTerm) {
-    const query = `search "${searchTerm}"; fields *;`;
-    const response = await this.makeIGDBRequest(query);
-    return response.data;
+    logger.debug({searchTerm});
+    const query = `search "${searchTerm}"; fields name, summary, release_dates.human, first_release_date, genres.name, platforms.name, cover.url, artworks.url, screenshots.url, videos.video_id, rating, rating_count;`;
+    try {
+      const response = await this.makeIGDBRequest(query);
+      if (response.data) {
+        return response.data;
+      } else {
+        // logger.warn(`Error in search IGDB API request ${response}`);
+        return [];
+      }
+
+    } catch (error) {
+        logger.error(`Error in search IGDB API request ${error}`);
+        throw new Error('Error in search IGDB API request');
+      }
   }
 }
 

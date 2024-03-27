@@ -83,22 +83,21 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'No search term provided' });
   }
 
-
   try {
     const igdbGames = await IGDB.fetchGamesBySearchTerm(searchTerm);
-    const igdbsIds = igdbGames.map((game) => game.id);
+    const igdbIds = igdbGames.map((game) => game.id);
 
-    const existingGames = await Game.find({ igdbId: { $in: igdbsIds } });
+    const existingGames = await Game.find({ igdbId: { $in: igdbIds } });
 
-    const existingIgdbIds = new Set(existingGames.map((game) => game.igdbId));
+   //NOTE:  DOUBLE CHECK Issue with existing games not being found due to Number vs String type of IgdbId
+    const existingIgdbIds = new Set(existingGames.map((game) => parseInt(game.igdbId)));
     const newIgdbGames = igdbGames.filter((game) => !existingIgdbIds.has(game.id));
 
     if (newIgdbGames.length > 0) {
       const newGames = await storeGames(newIgdbGames);
     }
-
     // Fetch all games after insertion to ensure we have a complete list of persisted games
-    const games = await Game.find({ igdbId: { $in: igdbsIds } });
+    const games = await Game.find({ igdbId: { $in: igdbIds } });
     res.status(200).json(games);
   } catch (error) {
     logger.error(
@@ -108,6 +107,25 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
       message: `Error fetching games from IGDB by search term "${searchTerm}"`,
     });
   }
+
+  // TODO: Implement pagination for search results
+  // const page = req.query.page || 1;
+  //Here is an example for how to use limit. The default limit is 10. The maximum value you can set for limit is 500.
+
+        // Address:
+
+        // https://api.igdb.com/v4/platforms/
+        // Body:
+
+        // limit 33;
+        // There is also an offset. This will start the list at position 22 and give 33 results.
+
+        // Address:
+        // https://api.igdb.com/v4/platforms/
+        // Body:
+        // limit 33;
+        // offset 22;
+
 });
 
 
@@ -292,11 +310,10 @@ const storeGames = async (igdbGames) => {
       cover: game.cover,
       // artworks: game.artworks,
       screenshots: game.screenshots,
-      similar_games: game.similar_games,
+      similarGames: game.similar_games,
       igdbUrl: game.url,
     };
   });
-  console.log({ games });
   try {
     const newGames = await Game.insertMany(games);
     logger.debug(`New game(s) created from [${ids}] IGDB ID(s)`);
