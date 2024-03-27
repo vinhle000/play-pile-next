@@ -83,15 +83,22 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'No search term provided' });
   }
 
+
   try {
-    const games = await IGDB.fetchGamesBySearchTerm(searchTerm);
+    const igdbGames = await IGDB.fetchGamesBySearchTerm(searchTerm);
+    const igdbsIds = igdbGames.map((game) => game.id);
 
-    // TODO://FIXME: store games in MongoDB
-    // Need to create the games in mongo from the search query results.
-    // This is will build the database of games and sync it with IGDB as needed.
+    const existingGames = await Game.find({ igdbId: { $in: igdbsIds } });
 
+    const existingIgdbIds = new Set(existingGames.map((game) => game.igdbId));
+    const newIgdbGames = igdbGames.filter((game) => !existingIgdbIds.has(game.id));
 
+    if (newIgdbGames.length > 0) {
+      const newGames = await storeGames(newIgdbGames);
+    }
 
+    // Fetch all games after insertion to ensure we have a complete list of persisted games
+    const games = await Game.find({ igdbId: { $in: igdbsIds } });
     res.status(200).json(games);
   } catch (error) {
     logger.error(
@@ -101,12 +108,8 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
       message: `Error fetching games from IGDB by search term "${searchTerm}"`,
     });
   }
-
-  // check if games exist in MongoDB
-  // if not, store games in MongoDB
-  // return games;
-  res.status(200).json({ message: 'search games by query' }); // placeholder
 });
+
 
 //  =======================================================================================
 // Operations with Games controller
@@ -161,6 +164,7 @@ const getGames = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc    Create game document(s) in MongoDB
 // @route   POST /games/
 // @access  Public //TODO: should be protected
@@ -193,19 +197,20 @@ const createGames = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc    Update game document in MongoDB by igdbId
 // @route   PUT /games/:id
 // @access  Public TODO: should be protected  (for dev and testing currently)
 // Going to sync with IGDB data through Webhooks
 const updateGameById = asyncHandler(async (req, res) => {
   let igdbId = req.params.igdbId;
-  let gameData = req.body;
+  let gameDataUpdateFields = req.body;
 
   if (!igdbId) {
     return res.status(400).json({ message: 'No game IGDB id provided' });
   }
 
-  if (!gameData) {
+  if (!gameDataUpdateFields) {
     // TODO: validate game data
     // use the scheme to validae? or use a middleware?
     return res.status(400).json({ message: 'No game data provided' });
@@ -221,7 +226,7 @@ const updateGameById = asyncHandler(async (req, res) => {
     }
 
     // Update game data
-    game.set({ ...gameData });
+    game.set({ ...gameDataUpdateFields });
     game.save();
     res.status(201).json(game);
   } catch (error) {
@@ -229,6 +234,7 @@ const updateGameById = asyncHandler(async (req, res) => {
     res.status(500).json({ message: 'Error updating game from MongoDB' });
   }
 });
+
 
 // @desc    Delete game document in MongoDB by igdbId
 // @route   DELETE /games/:id
@@ -257,14 +263,11 @@ const deleteGameById = asyncHandler(async (req, res) => {
   }
 });
 
-//  =======================================================================================
-// Operations with Games and UserGames controller
-//  =======================================================================================
-// TODO: Implement the following operations
 
 //  =======================================================================================
 // Helper functions
 //  =======================================================================================
+
 const checkForNonExistingGames = async (igdbGameIds) => {
   const existing = await Game.find({ igdbId: { $in: igdbGameIds } });
   const existingIgdbIds = new Set(
@@ -273,7 +276,7 @@ const checkForNonExistingGames = async (igdbGameIds) => {
   return igdbGameIds.filter((id) => !existingIgdbIds.has(id));
 };
 
-// persist games in MongoDB
+
 const storeGames = async (igdbGames) => {
   let ids = [];
   const games = igdbGames.map((game) => {
@@ -303,6 +306,7 @@ const storeGames = async (igdbGames) => {
     throw new Error({ message: 'Error in creating games(s)' });
   }
 };
+
 
 module.exports = {
   getIgdbGameById,
