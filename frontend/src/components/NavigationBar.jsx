@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 
-const userLoggedIn = true;
+const userLoggedIn = false;  //REMOVE: this is just for testing
 function AvatarDropdownMenu() {
   return (
     <div>
@@ -113,29 +113,30 @@ function NavigationBar() {
                 </NavigationMenuItem>
 
                 {userLoggedIn ? (
-                  <NavigationMenuItem key={'profile'}>
+                  <NavigationMenuItem key={'avatar'}>
                     <AvatarDropdownMenu></AvatarDropdownMenu>
                   </NavigationMenuItem>
                 ) : (
                   <>
                     <NavigationMenuItem key={'login'}>
-                      <NavigationMenuLink
-                        as={Link}
+                      <Link
+                        // as={Link}
                         to={'/login'}
                         className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                       >
                         {'Login'}
-                      </NavigationMenuLink>
+                      </Link>
                     </NavigationMenuItem>
 
                     <NavigationMenuItem key={'register'}>
-                      <NavigationMenuLink
-                        as={Link}
+                      <Link
+                        // as={Link}
                         to={'/register'}
                         className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                       >
                         {'Sign Up'}
-                      </NavigationMenuLink>
+
+                      </Link>
                     </NavigationMenuItem>
                   </>
                 )}
