@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "build",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    // "baseUrl": "localhost:5173",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+
+  },
+  "include": ["src"]
+}
