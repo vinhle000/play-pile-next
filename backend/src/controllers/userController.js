@@ -11,14 +11,14 @@ const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
-    res.status(400);
+      res.status(400);
     throw new Error('Please fill in all fields');
   }
 
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400);
+      res.status(400);
     throw new Error('User already exists');
   }
 
@@ -27,21 +27,25 @@ const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // Create user
-  const user = await User.create({
-    username,
-    email,
-    password: hashedPassword,
-  });
+      const user = await User.create({
+          username,
+          email,
+          password: hashedPassword,
+      });
 
-  if (user) {
-    res.status(201).json({
-      _id: user.id,
-      username: user.username,
-      email: user.email,
-      token: generateToken(user._id),
+      if (user) {
+        res.cookie('userToken', generateToken(user.id), {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
+        })
+
+        res.status(201).json({
+        _id: user.id,
+        username: user.username,
+        email: user.email,
     });
   } else {
-    res.status(400);
+      res.status(400);
     throw new Error('Invalid user data');
   }
 });
@@ -57,6 +61,11 @@ const loginUser = asyncHandler(async (req, res) => {
 
   // check if user and password match
   if (user && (await bcrypt.compare(password, user.password))) {
+    res.cookie('userToken', generateToken(user.id), {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
+    })
+
     res.json({
       _id: user.id,
       username: user.username,

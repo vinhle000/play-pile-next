@@ -6,8 +6,10 @@ import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 
+
 function App() {
-  const [count, setCount] = useState(0)
+
+  console.log(import.meta.env.VITE_REACT_APP_URL);
 
   return (
     <div>
