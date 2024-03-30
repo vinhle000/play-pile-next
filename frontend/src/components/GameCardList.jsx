@@ -2,6 +2,9 @@ import React from 'react'
 import GameCard from './GameCard'
 
 function GameCardList({games}) {
+
+  // useEffect(0_)
+
   return (
     <div>
     {/*list of games container*/}

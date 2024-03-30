@@ -59,7 +59,7 @@ class UserGameController {
   // @desc  Add to game to user's backlog
   // @route PUT /api/userGames/backlog/:igdb
   // @access Private
-  addGameToBacklog = asyncHandler( async (req, res) => {
+  addGameToBacklog = asyncHandler( async (req, res) => { //TODO: REMOVE after consolidating with updateUserGame
     const igdbId = req.params.igdbId;
     const userId = req.user._id;
     if (!igdbId) {
@@ -102,7 +102,7 @@ class UserGameController {
   // @desc  Remove game from user's backlog
   // @route Delete /api/userGames/backlog/:igdbId
   // @access Private
-  removeGameFromBacklog = asyncHandler( async (req, res) => {
+  removeGameFromBacklog = asyncHandler( async (req, res) => { //TODO: REMOVE after consolidating with updateUserGame
     const igdbId = req.params.igdbId;
     const userId = req.user._id;
 
@@ -133,46 +133,32 @@ class UserGameController {
   })
 
 
-  // @desc  Update user game data, can update multiple fields
-  // @route PATCH /api/userGames/:igdbId
-  // @access Private
-  updateUserGame = asyncHandler( async (req, res) => {
-    const igdbId = req.params.igdbId;
-    const userId = req.user._id;
+ // TODO: consolidate endpoints to a general and flexible update userGame fields with PATCH request
 
-    updateData = req.body;
+// @desc  Update user game data, can update multiple fields
+// @route PATCH /api/userGames/:igdbId
+// @access Private
+updateUserGame = asyncHandler(async (req, res) => {
+  const igdbId = req.params.igdbId;
+  const userId = req.user._id;
+  const updateData = req.body;
 
-    if (!igdbId) {
-      return res.status(400).json({ message: 'No iddbId provided'});
-    }
+  if (!igdbId) {
+    return res.status(400).json({ message: 'No igdbId provided' });
+  }
 
-    if (!updateData) {
-      return res.status(400).json({ message: 'No update data provided'});
-    }
+  if (!updateData) {
+    return res.status(400).json({ message: 'No update data provided' });
+  }
 
-    try {
-      let userGameData = await this.getUserGameData(userId, igdbId);
-
-      if (!userGameData) {
-        return res.status(400).json('Game Not found in user backlog');
-      }
-
-      let updatedData = await this.updateUserGameData(
-        userId,
-        igdbId,
-        updateData
-      );
-      res.status(201).json(updatedData)
-
-    } catch (error) {
-      logger.error(`Error updating user game data ${error}`);
-      res.status(500).json({message: 'Error updating user game data'})
-    }
-
-    res.status(200).json({message: "update game status"})
-  })
-
-
+  try {
+    let updatedData = await this.updateUserGameData(userId, igdbId, updateData);
+    res.status(200).json(updatedData);
+  } catch (error) {
+    logger.error(`Error updating user game data ${error}`);
+    res.status(500).json({ message: 'Error updating user game data' });
+  }
+});
   // ====================================================
   // CRUD OPERATIONS
   // ====================================================

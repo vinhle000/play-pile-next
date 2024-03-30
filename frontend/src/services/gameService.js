@@ -19,7 +19,7 @@ const gameService = {
 
   async getGameById(igdbId) {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/games/${igdbId}`, {withCredentials: true});
+      const response = await axios.get(`${API_URL}/${igdbId}`, {withCredentials: true});
       return response.data;
     } catch (error) {
       console.error(error);
@@ -30,11 +30,8 @@ const gameService = {
     try {
       const options = {
         withCredentials: true,
-        body: {
-          igdbId: igdbIds ? igdbIds : [],
-        },
       };
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/games/query`, options);  //TODO: Maybe change the 'games/query' to 'games/list'
+      const response = await axios.post(`${API_URL}/query`, {igdbIds}, options);  //TODO: Maybe change the 'games/query' to 'games/list'
       return response.data;
     } catch (error) {
       console.error(error);

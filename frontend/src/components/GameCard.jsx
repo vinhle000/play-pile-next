@@ -63,16 +63,15 @@ function GameCard({game}) {
     .catch(error => console.error('Error adding game to backlog', error))
   }
 
-
-
-  console.log('GameCard -> game', game)
   return (
     <div className="">
       <Card className="flex">
 
         <CardContent>
 
-          {game.cover && <img src={game.cover[0].url} alt={game.name} className="h-56 object-cover" />}
+          {game.cover.length &&
+            <img src={game.cover[0].url} alt={game.name} className="h-56 object-cover" />
+          }
 
           {/* <p>Rating: {game.rating}</p> */}
           {/* <p>Initial Release Date: {game.releaseDate[0]['human']}</p> */}
@@ -80,9 +79,14 @@ function GameCard({game}) {
           <div className="mt-3 justify-between items-center">
             <PlayStatusDropdown />
 
-          <button className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Remove</button>
+          <div>
+            {(game.isInBacklog ? (
+              <button onClick={(e) => handleRemoveFromBacklog(game.igdbId)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Remove</button>
+            ) : (
+              <button onClick={(e) => handleAddToBacklog(game.igdbId)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Add To Backlog</button>
+            ))}
+          </div>
 
-          <button onClick={(e) => handleAddToBacklog(game.igdbId)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Add To Backlog</button>
         </div>
         </CardContent>
 

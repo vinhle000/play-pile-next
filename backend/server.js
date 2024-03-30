@@ -20,11 +20,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use((req, res, next) => { // Middleware to log all requests
-//   console.log('Headers:', req.body);
-//   // console.log('Cookies:', req.cookies);
-//   next();
-// });
+app.use((req, res, next) => { // Middleware to log all requests
+  // console.log('Headers:', req.body);
+  // console.log('Cookies:', req.cookies);
+  next();
+});
 app.use('/api/games/', require('./src/routes/gameRoutes'));
 app.use('/api/users/', require('./src/routes/userRoutes'))
 app.use('/api/userGames/', require('./src/routes/userGameRoutes'))
