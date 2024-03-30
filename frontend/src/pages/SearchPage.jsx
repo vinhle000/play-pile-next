@@ -11,14 +11,8 @@ import GameCardsList from '../components/GameCardList'
 function SearchPage() {
   const [games, setGames] = useState(null);
   const location = useLocation();
-  console.log('SearchPage -> location', location)
-  //{pathname: '/games/search', search: '?q=fasdf', hash: '', state: null, key: 'f0edybvp'}
-  // const queryParams = new URLSearchParams(location.q);
-  const searchTerm = location['search'].split('=')[1];
-
-  console.log('SearchPage -> searchTerm', searchTerm)
-
-
+  const params = new URLSearchParams(location.search);
+  const searchTerm = params.get('q');
 
   useEffect(() => {
     const fetchGames = async () => {
