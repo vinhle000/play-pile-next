@@ -1,9 +1,10 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 import { z } from "zod"
+import userService from "@/services/userService"
 
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,69 +15,52 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
 
- function LoginPage() {
 
+ function RegisterPage() {
+  const navigate = useNavigate();
 
   const formSchema = z.object({
-    username: z.string()
-      .min(2, "Username must be at least 2 characters.")
-      .max(50, "Username max is 50 characters."),
+
     email: z.string().email("Must be a valid email"),
     password: z.string().min(4, "Password must be at least 4 characters").max(50),
-    confirmPassword: z.string().min(4, "Confirm Password must be at least 4 characters").max(50),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+
+  })
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
   function onSubmit(values) {
-    //TODO: Submit the form to
-    console.log(values)
+
+    userService.login(values.email, values.password)
+    .then((response) => {
+      console.log(response) //REMOVE: Debugging
+      navigate("/")
+    })
+    .catch((error) => {
+      console.error('Error registering user', error)
+    })
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+    <div className="flex justify-center align h-screen">
+    <Form {...form} className=" flex-row block ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-4">
 
-        control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="username" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
           <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>email</FormLabel>
+            <FormItem className="flex items-center">
+              <FormLabel className="block w-1/4">Email</FormLabel>
               <FormControl>
-                <Input placeholder="email" {...field} />
+                <Input className="block w-3/4" placeholder="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -87,32 +71,21 @@ const formSchema = z.object({
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>password</FormLabel>
+            <FormItem className="flex items-center">
+              <FormLabel className="block w-1/4">Password</FormLabel>
               <FormControl>
-                <Input placeholder="password" {...field} />
+                <Input className="block w-3/4" placeholder="Password" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="flex-col justify-center"/>
             </FormItem>
           )}
         />
-          <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input placeholder="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+
+        <Button type="submit">Sign In</Button>
       </form>
     </Form>
+  </div>
   )
 }
 
-export default LoginPage
+export default RegisterPage
