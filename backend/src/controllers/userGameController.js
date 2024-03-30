@@ -71,6 +71,15 @@ class UserGameController {
 
       if (!userGameData) {
         const newUserGameData = await this.createUserGameData(userId, igdbId, true);
+                    //FIXME:
+  /*
+  BacklogPage -> gameData
+  Need to get Game documents from mongo,
+    - Currently only getting the UserGame documentss
+        return res.status(201).json(newUserGameData);
+      }
+  */
+
         return res.status(201).json(newUserGameData);
       }
 
@@ -91,7 +100,7 @@ class UserGameController {
 
 
   // @desc  Remove game from user's backlog
-  // @route PUT /api/userGames/backlog/remove/:igdbId
+  // @route Delete /api/userGames/backlog/:igdbId
   // @access Private
   removeGameFromBacklog = asyncHandler( async (req, res) => {
     const igdbId = req.params.igdbId;

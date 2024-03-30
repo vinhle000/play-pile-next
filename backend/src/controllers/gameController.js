@@ -69,12 +69,12 @@ const getIgdbGames = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get games from IGDB by search query
-// @route   GET /games/search //FIXME: change to /games/search query
+// @route   GET /games/search //FIXME: NEED TO HANDLE SPACED SEARCH TERMS
 // @access  Public
 const searchIgdbGames = asyncHandler(async (req, res) => {
-  // const searchTerm = req.body.searchTerm;
-  const { q } = req.query;
 
+  const { q } = req.query;
+  logger.debug(`Search query: ${q}`);
   if (!q) {
     return res.status(400).json({ message: 'No search term provided' });
   }

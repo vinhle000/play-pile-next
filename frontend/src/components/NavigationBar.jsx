@@ -80,6 +80,7 @@ function NavigationBar() {
             <NavigationMenu>
             <SearchBar />
 
+            {/* //FIXME Need to fix Backlog nav, not going to localhost:xxxx/backlog*/}
               <NavigationMenuList>
                 <NavigationMenuItem key={'backlog'}>
                   <NavigationMenuLink

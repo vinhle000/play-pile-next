@@ -17,6 +17,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import userGameService from "@/services/userGameService"
+
+
 function GameCard({game}) {
 
 
@@ -26,7 +29,7 @@ function GameCard({game}) {
   }
 
   const GenreList = () => {
-    let genres = game.genres.map(genre =>
+    let genres = game?.genres.map(genre =>
       <li key={genre.id}>{genre.name}</li>
     )
     return (
@@ -36,7 +39,7 @@ function GameCard({game}) {
     )
   }
   const PlatformsList = () => {
-    let platforms = game.platforms.map(platform =>
+    let platforms = game?.platforms.map(platform =>
       <li key={platform.id}>{platform.name}</li>
     )
     return (
@@ -46,21 +49,40 @@ function GameCard({game}) {
     )
   }
 
+  const handleAddToBacklog =(igdbId) => {
+    console.log('GameCard -> igdbId', igdbId)
+    userGameService.addGameToBacklog(igdbId)
+    .then(response => { })
+    .catch(error => console.error('Error adding game to backlog', error))
+  }
+
+  const handleRemoveFromBacklog =(igdbId) => {
+    console.log('GameCard -> igdbId', igdbId)
+    userGameService.removeGameFromBacklog(igdbId)
+    .then(response => { })
+    .catch(error => console.error('Error adding game to backlog', error))
+  }
+
+
+
   console.log('GameCard -> game', game)
   return (
-    <div class="">
+    <div className="">
       <Card className="flex">
 
         <CardContent>
-          <img src={game.cover[0].url} alt={game.name} className="h-56 object-cover" />
+
+          {game.cover && <img src={game.cover[0].url} alt={game.name} className="h-56 object-cover" />}
 
           {/* <p>Rating: {game.rating}</p> */}
           {/* <p>Initial Release Date: {game.releaseDate[0]['human']}</p> */}
-          <PlatformsList />
+          {/* <PlatformsList /> */}
           <div className="mt-3 justify-between items-center">
             <PlayStatusDropdown />
-          {/* <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">Play</button> */}
-          <button className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Add To Backlog</button>
+
+          <button className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Remove</button>
+
+          <button onClick={(e) => handleAddToBacklog(game.igdbId)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Add To Backlog</button>
         </div>
         </CardContent>
 
