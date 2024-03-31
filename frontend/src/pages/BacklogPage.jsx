@@ -19,7 +19,7 @@ import GameCardList from "@/components/GameCardList";
     -
 
   */
-function BacklogPage() {
+function BacklogPage() {  //
   const [backlog, setBacklog] = useState([])
 
 //TODO: Consolidate the following useEffect for one type of userUpdate request, so that the userGameController can be updated to handle all userGame updates

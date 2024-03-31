@@ -7,42 +7,12 @@ const mongoose = require('mongoose');
 
 class UserGameController {
 
-  // // @desc  Get userGame by IGDB ID
-  // // @route GET /api/userGames/:igdbId
-  // // @access Public (for now) //TODO: MUST BE PRIVATE
-  // getUserGameByIgdbId = asyncHandler( async (req, res) => {
-  //   const igdbId = req.params.igdbId;
-  //   const user = req.user;
-
-  //   if (!igdbId) {
-  //     return res.status(400).json({ message: 'No iddbId provided'});
-  //   }
-  //   if (!user) {
-  //     return res.status(400).json({ message: 'User not authenticated'});
-  //   }
-
-  //   try {
-
-  //     const userGame = await UserGame.findOne({userId: user.id, igdbId: igdbId});
-  //     if (!userGame) {
-  //       return res.status(404).json({ message: 'No userGame found'});
-  //     }
-
-  //     res.status(200).json(userGame)
-  //   } catch (error) {
-  //     logger.error(`Error fetching userGame by igdbId from MongoDB ${error}`);
-  //     res.status(500).json({ message: 'Error fetching userGame by igdbId' });
-  //   }
-
-  // });
-
   // @desc  Add to game to user's backlog
   // @route GET /api/userGames/backlog
   // @access Private
   getUserBacklog = asyncHandler( async (req, res) => {
     let userId = req.user._id;
-    console.log('USER ID', userId)
-    //check user, but protectRouter authMiddleware should handle it
+
     try {
       const userGameBacklog = await UserGame.find({
         userId: userId,
@@ -54,150 +24,137 @@ class UserGameController {
       logger.error(`Error getting backlog for user ${error}`)
       res.status(500).json({message: 'Error getting backlog for user'})
     }
-  });
+  })
 
+  //TODO: REMOVE after consolidating with updateUserGame
   // @desc  Add to game to user's backlog
   // @route PUT /api/userGames/backlog/:igdb
   // @access Private
-  addGameToBacklog = asyncHandler( async (req, res) => { //TODO: REMOVE after consolidating with updateUserGame
-    const igdbId = req.params.igdbId;
-    const userId = req.user._id;
-    if (!igdbId) {
-      return res.status(400).json({ message: 'No iddbId provided'});
-    }
+  // addGameToBacklog = asyncHandler( async (req, res) => {
+  //   const igdbId = req.params.igdbId;
+  //   const userId = req.user._id;
+  //   if (!igdbId) {
+  //     return res.status(400).json({ message: 'No iddbId provided'});
+  //   }
 
-    try {
-      let userGameData = await this.getUserGameData(userId, igdbId);
+  //   try {
+  //     let userGameData = await this.getUserGameData(userId, igdbId);
 
-      if (!userGameData) {
-        const newUserGameData = await this.createUserGameData(userId, igdbId, true);
-                    //FIXME:
-  /*
-  BacklogPage -> gameData
-  Need to get Game documents from mongo,
-    - Currently only getting the UserGame documentss
-        return res.status(201).json(newUserGameData);
-      }
-  */
+  //     if (!userGameData) {
+  //       const newUserGameData = await this.createUserGameData(userId, igdbId, true);
+  //       return res.status(201).json(newUserGameData);
+  //     }
 
-        return res.status(201).json(newUserGameData);
-      }
+  //     let updatedData = await this.updateUserGameData(
+  //       userId,
+  //       igdbId,
+  //       {
+  //         isInBacklog: true,
+  //       }
+  //     );
+  //     res.status(201).json(updatedData)
 
-      let updatedData = await this.updateUserGameData(
-        userId,
-        igdbId,
-        {
-          isInBacklog: true,
-        }
-      );
-      res.status(201).json(updatedData)
+  //   } catch (error) {
+  //     logger.error(`Error adding game to user backlog ${error}`);
+  //     res.status(500).json({message: 'Error adding game to user backlog'})
+  //   }
+  // })
 
-    } catch (error) {
-      logger.error(`Error adding game to user backlog ${error}`);
-      res.status(500).json({message: 'Error adding game to user backlog'})
-    }
-  })
-
-
+  //TODO: REMOVE after consolidating with updateUserGame
   // @desc  Remove game from user's backlog
   // @route Delete /api/userGames/backlog/:igdbId
   // @access Private
-  removeGameFromBacklog = asyncHandler( async (req, res) => { //TODO: REMOVE after consolidating with updateUserGame
-    const igdbId = req.params.igdbId;
-    const userId = req.user._id;
+  // removeGameFromBacklog = asyncHandler( async (req, res) => {
+  //   const igdbId = req.params.igdbId;
+  //   const userId = req.user._id;
 
-    if (!igdbId) {
-      return res.status(400).json({ message: 'No iddbId provided'});
-    }
+  //   if (!igdbId) {
+  //     return res.status(400).json({ message: 'No iddbId provided'});
+  //   }
 
-    try {
-      let userGameData = await this.getUserGameData(userId, igdbId);
+  //   try {
+  //     let userGameData = await this.getUserGameData(userId, igdbId);
 
-      if (!userGameData) {
-        //should we return the data?
-        return res.status(400).json('Game Not found in user backlog');
-      }
+  //     if (!userGameData) {
+  //       //should we return the data?
+  //       return res.status(400).json('Game Not found in user backlog');
+  //     }
 
-      let updatedData = await this.updateUserGameData(
-        userId,
-        igdbId,
-        {
-          isInBacklog: false,
-        }
-      );
-      res.status(201).json(updatedData)
-    } catch (error) {
-      logger.error(`Error removing game from user backlog ${error}`);
-      res.status(500).json({message: 'Error removing game from user backlog'})
-    }
-  })
+  //     let updatedData = await this.updateUserGameData(
+  //       userId,
+  //       igdbId,
+  //       {
+  //         isInBacklog: false,
+  //       }
+  //     );
+  //     res.status(201).json(updatedData)
+  //   } catch (error) {
+  //     logger.error(`Error removing game from user backlog ${error}`);
+  //     res.status(500).json({message: 'Error removing game from user backlog'})
+  //   }
+  // })
 
 
  // TODO: consolidate endpoints to a general and flexible update userGame fields with PATCH request
 
-// @desc  Update user game data, can update multiple fields
-// @route PATCH /api/userGames/:igdbId
-// @access Private
-updateUserGame = asyncHandler(async (req, res) => {
-  const igdbId = req.params.igdbId;
-  const userId = req.user._id;
-  const updateData = req.body;
+  // @desc  Update user game data, can update multiple fields
+  // @route PATCH /api/userGames/:igdbId
+  // @access Private
+  updateUserGameData = asyncHandler(async (req, res) => {
+    const igdbId = req.params.igdbId;
+    const userId = req.user._id;
+    const updateData = req.body;
 
-  if (!igdbId) {
-    return res.status(400).json({ message: 'No igdbId provided' });
-  }
+    if (!igdbId) {
+      return res.status(400).json({ message: 'No igdbId provided' });
+    }
 
-  if (!updateData) {
-    return res.status(400).json({ message: 'No update data provided' });
-  }
+    if (!updateData) {
+      return res.status(400).json({ message: 'No update data provided' });
+    }
 
-  try {
-    let updatedData = await this.updateUserGameData(userId, igdbId, updateData);
-    res.status(200).json(updatedData);
-  } catch (error) {
-    logger.error(`Error updating user game data ${error}`);
-    res.status(500).json({ message: 'Error updating user game data' });
-  }
-});
+    try {
+      let updatedData = await this.updateUserGameDocument(userId, igdbId, updateData);
+      res.status(200).json(updatedData);
+    } catch (error) {
+      logger.error(`Error updating user game data ${error}`);
+      res.status(500).json({ message: 'Error updating user game data' });
+    }
+  });
+
+
   // ====================================================
   // CRUD OPERATIONS
   // ====================================================
+  // @desc  Get userGame document PRIVATE  //NOTE: may need to refactor or remove
+  getUserGameDocument = async (userId, igdbId) => {
 
-  // @desc  Get userGame document PRIVATE
-  getUserGameData = async (userId, igdbId) => {
     try {
-      // const objectId = mongoose.Types.ObjectId(userId);
-      console.log('getUserGameData function ', {userId, igdbId})
       const userGame = await UserGame.findOne({userId: userId, igdbId: parseInt(igdbId)});
-      console.log('getUserGameDAta ----', userGame)
+
       if (!userGame) {
-        // create one
-        const newUserGameData = await this.createUserGameData(userId, igdbId);
+        const newUserGameData = await this.createUserGameDocument(userId, igdbId);
         logger.info(`No userGame document in Mongo, creating one for ${userId} and ${igdbId}`)
         return newUserGameData;
       }
-      return userGame;
 
+      return userGame;
     } catch (error) {
       logger.error(`Error getting userGame document in Mongo ${error}`)
       throw new Error('Error getting userGame docuement in Mongo')
     }
   }
 
+
   // @desc  Create userGame document PRIVATE
-  createUserGameData = async (userId, igdbId, isInBacklog, status ) => {
+  createUserGameDocument = async (userId, igdbId, updatedData ) => {
 
-
-    //BUG - NEED TO SET the game id of
-
+    //NOTE: - Dont thisnk the mongo objectID is needed
     try {
-
       const userGame = await UserGame.create({
         userId: userId,
         igdbId: parseInt(igdbId),
-        status: status || 'Plan to Play',
-        isInBacklog: isInBacklog || false,
-        notes: 'THIS IS A TEST',
+        ...updatedData
       });
 
       return userGame;
@@ -209,10 +166,18 @@ updateUserGame = asyncHandler(async (req, res) => {
 
 
   // @desc  Update userGame document PRIVATE
-  updateUserGameData = async (userId, igdbId, updateData) => {
+  updateUserGameDocument = async (userId, igdbId, updateData) => {
     try {
+
+      let userGameDocument = await UserGame.findOne({userId, igdbId});
+
+      if (!userGameDocument) {  // create a new document if it doesn't exist
+        userGameDocument = new UserGame({userId, igdbId});
+        await userGameDocument.save();
+      }
+
       const userGame = await UserGame.findOneAndUpdate(
-        {userId: userId, igdbId: igdbId},
+        { userId: userId, igdbId: igdbId },
         { $set: updateData },
         { new: true} // return the updated document
       )
@@ -226,7 +191,6 @@ updateUserGame = asyncHandler(async (req, res) => {
       throw new Error('Error updating userGame document ');
     }
   }
-
 
   // @desc Delete userGame document PRIVATE - //TODO: remove after dev and testing
   deleteUserGameData = async (userId, igdbId) => {

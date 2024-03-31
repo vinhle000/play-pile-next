@@ -51,15 +51,19 @@ function GameCard({game}) {
 
   const handleAddToBacklog =(igdbId) => {
     console.log('GameCard -> igdbId', igdbId)
-    userGameService.addGameToBacklog(igdbId)
-    .then(response => { })
+    userGameService.updateUserGameData(igdbId, {isInBacklog: true})
+    .then(response => {
+      console.log('handleAddToBacklog -> response', response)
+     })
     .catch(error => console.error('Error adding game to backlog', error))
   }
 
   const handleRemoveFromBacklog =(igdbId) => {
     console.log('GameCard -> igdbId', igdbId)
-    userGameService.removeGameFromBacklog(igdbId)
-    .then(response => { })
+    userGameService.updateUserGameData(igdbId, {isInBacklog: false})
+    .then(response => {
+      console.log('handleRemoveFromBacklog -> response', response)
+    })
     .catch(error => console.error('Error adding game to backlog', error))
   }
 

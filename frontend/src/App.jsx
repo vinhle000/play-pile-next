@@ -10,7 +10,6 @@ import BacklogPage from './pages/BacklogPage'
 
 function App() {
 
-  console.log(import.meta.env.VITE_REACT_APP_URL);
 
   return (
     <div>

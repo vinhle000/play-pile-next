@@ -83,13 +83,12 @@ function NavigationBar() {
             {/* //FIXME Need to fix Backlog nav, not going to localhost:xxxx/backlog*/}
               <NavigationMenuList>
                 <NavigationMenuItem key={'backlog'}>
-                  <NavigationMenuLink
-                    as={Link}
+                  <Link
                     to={'/backlog'}
                     className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                   >
                     {'Backlog'}
-                  </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuItem>
 
                 {userLoggedIn ? (
