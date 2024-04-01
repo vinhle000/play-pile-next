@@ -44,14 +44,14 @@ import {
   });
 
   function onSubmit(values) {
-    //TODO: Submit the form to
+
     userService.register(values.username, values.email, values.password)
     .then((response) => {
       console.log(response)
       navigate("/")
     })
     .catch((error) => {
-      console.error('Error registrating user', error)
+      console.error('Error registering user', error)
     })
   }
   return (

@@ -155,7 +155,7 @@ const getGameById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get multiple games from MongoDB by [igdbId]
-// @route   POST /games/query
+// @route   POST /games/list
 // @access  Public
 const getGames = asyncHandler(async (req, res) => {
   let igdbIds = req.body.igdbIds;
@@ -165,6 +165,9 @@ const getGames = asyncHandler(async (req, res) => {
   }
 
   try {
+
+    //BUG: Issue with igdbId being a Number in IGDB and a String in MongoDB
+
     // Query the database using the igdbId
     let games = await Game.find({ igdbId: { $in: igdbIds } });
     if (!games || games.length === 0) {

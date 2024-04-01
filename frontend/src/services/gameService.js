@@ -27,12 +27,12 @@ const gameService = {
   },
 
    async getGames(igdbIds) {
-    try {
+        try {
       const options = {
         withCredentials: true,
       };
-      const response = await axios.post(`${API_URL}/query`, {igdbIds}, options);  //TODO: Maybe change the 'games/query' to 'games/list'
-      return response.data;
+      const response = await axios.post(`${API_URL}/list/`, {igdbIds}, options);  //TODO: Maybe change the 'games/query' to 'games/list' and use GET with path params
+            return response.data;
     } catch (error) {
       console.error(error);
     }

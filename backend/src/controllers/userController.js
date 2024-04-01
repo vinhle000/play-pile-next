@@ -37,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
         res.cookie('userToken', generateToken(user.id), {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
+          sameSite: 'Lax'
         })
 
         res.status(201).json({
@@ -63,21 +64,28 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.cookie('userToken', generateToken(user.id), {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 10 days
+      sameSite: 'Lax',
     })
+
+    logger.debug('res.cookie: ', res.cookie);
 
     res.json({
       _id: user.id,
       username: user.username,
       email: user.email,
-      token: generateToken(user._id),
     });
-    logger.debug('User logged in');
+
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
   }
 });
+
+const logoutUser = asyncHandler(async (req, res) => {
+  res.cookie(`userToken`, null,  { httpOnly: true, expires: new Date(0) })
+  res.status(200).json({ message: 'User logged out successfully' });
+})
 
 // Generate JWT token
 const generateToken = (id) => {
@@ -102,6 +110,7 @@ const getMe = asyncHandler(async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  logoutUser,
   getMe,
 };
 

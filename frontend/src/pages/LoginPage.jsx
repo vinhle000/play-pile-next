@@ -1,3 +1,4 @@
+import React, {useContext,} from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
@@ -15,10 +16,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import UserContext from "@/contexts/UserContext";
 
 
+ function LoginPage() {
 
- function RegisterPage() {
+  const { user, loading, login } = useContext(UserContext);
   const navigate = useNavigate();
 
   const formSchema = z.object({
@@ -38,10 +41,10 @@ import {
 
   function onSubmit(values) {
 
-    userService.login(values.email, values.password)
+    login(values.email, values.password)
     .then((response) => {
-      console.log(response) //REMOVE: Debugging
-      navigate("/")
+
+      navigate("/") // FIXME: rediredt to home page, but needs to update the navBar
     })
     .catch((error) => {
       console.error('Error registering user', error)
@@ -88,4 +91,4 @@ import {
   )
 }
 
-export default RegisterPage
+export default LoginPage

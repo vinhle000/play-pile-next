@@ -17,7 +17,7 @@ router.get('/search', searchIgdbGames); //by query
 
 // Games collection  ===============================================
 router.get('/:igdbId/', getGameById);
-router.post('/query/', getGames);  //TODO change the endpoint to /games/igdbIds ? Change to GET and use path params
+router.post('/list', getGames);  //TODO change the endpoint to /games/igdbIds ? Change to GET and use path params
 router.put('/:igdbId', updateGameById);
 router.delete('/:igdbId', deleteGameById);
 

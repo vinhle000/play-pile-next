@@ -15,22 +15,32 @@ const userGameService = {
   },
 
   async getUserBacklogWithGameDetails() {
-
     try {
       const userBacklog = await this.getUserBacklog();
-      const igdbIds = userBacklog.map(name => name.igdbId)
-      const games = await gameService.getGames(igdbIds);
+      if (!userBacklog?.length) {
+        console.log('User has no items in backlog');
+        return [];
+      }
 
+      const igdbIds = userBacklog.map(userGame => userGame.igdbId);
+      const games = await gameService.getGames(igdbIds);
+      if (!games?.length) {
+        console.log('No games found for user backlog');
+        return [];
+      }
+
+
+      console.log({userBacklog, igdbIds, games})
       const backlogWithGameDetails = userBacklog.map((userGame) => {
         const game = games.find((games) => games.igdbId === userGame.igdbId); // find the game with the same igdbId, extra verification
         return { ...userGame, ...game }; //Get both the userGame and game details to fill the backlog list with users relationship data with game details data
       });
 
-       console.log('userGameService.getUserBacklogWithGameDetails -> backlogWithGameDetails', backlogWithGameDetails);
-       return backlogWithGameDetails;
-      } catch (error) {
-        console.error('Error getting user backlog with game details', error);
-      }
+console.log('userGameService.getUserBacklogWithGameDetails -> backlogWithGameDetails', backlogWithGameDetails);
+      return backlogWithGameDetails;
+    } catch (error) {
+      console.error('Error getting user backlog with game details', error);
+          }
   },
 
 

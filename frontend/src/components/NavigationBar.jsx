@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import {
   NavigationMenu,
@@ -17,11 +17,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 import SearchBar  from '@/components/SearchBar';
+import  UserContext  from '../contexts/UserContext';
 
 //TODO: implement userLoggedIn state after logging in
   //useContext to get userLoggedIn state
-const userLoggedIn = false;  //REMOVE: this is just for testing
+
 function AvatarDropdownMenu() {
+
+  const { user, loading, logout } = useContext(UserContext);
   return (
     <div>
       <DropdownMenu>
@@ -46,7 +49,7 @@ function AvatarDropdownMenu() {
           <DropdownMenuItem>
             <Link to="/settings">Settings</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => console.log('logging')}>
+          <DropdownMenuItem onClick={logout}>
             <Link to="/">Logout</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -56,6 +59,9 @@ function AvatarDropdownMenu() {
 }
 
 function NavigationBar() {
+
+  const { user, loading, logout } = React.useContext(UserContext);
+
   return (
     <div as="header" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
@@ -91,7 +97,7 @@ function NavigationBar() {
                   </Link>
                 </NavigationMenuItem>
 
-                {userLoggedIn ? (
+                {user ? (
                   <NavigationMenuItem key={'avatar'}>
                     <AvatarDropdownMenu></AvatarDropdownMenu>
                   </NavigationMenuItem>
