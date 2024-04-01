@@ -5,15 +5,9 @@ const logger = require('../../config/logger');
 
 // Authenticate User and get token
 const protectRoute = asyncHandler(async (req, res, next) => {
-  let token;
-
-  // check if token is in the header
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  let token = req.cookies['userToken'];
+  if (token) {
     try {
-      token = req.headers.authorization.split(' ')[1];
 
       //validate token
       let decode = jwt.verify(token, process.env.JWT_SECRET);
@@ -27,6 +21,8 @@ const protectRoute = asyncHandler(async (req, res, next) => {
       res.status(401).json({ message: 'Not authorized, token failed' });
       // throw new Error('Not authorized, token failed'); // this is for middleware error handling if you have any`
     }
+  } else {
+    res.status(401).json({ message: 'Not authorized, no token' })
   }
 });
 

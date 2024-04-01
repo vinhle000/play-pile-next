@@ -7,11 +7,6 @@ const UserGameSchema = new mongoose.Schema(
       required: true,
       ref: 'User',
     },
-    // gameId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   required: true,
-    //   ref: 'Game',
-    // },
     igdbId: { type: Number, required: true },
     status: {
       type: String,

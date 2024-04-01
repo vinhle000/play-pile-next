@@ -13,11 +13,11 @@ const {
 
 // DIRECT to IGDB's API  ===============================================
 router.post('/igdb/', getIgdbGames);
-router.post('/search/', searchIgdbGames);
+router.get('/search', searchIgdbGames); //by query
 
 // Games collection  ===============================================
 router.get('/:igdbId/', getGameById);
-router.post('/query/', getGames);
+router.post('/list', getGames);  //TODO change the endpoint to /games/igdbIds ? Change to GET and use path params
 router.put('/:igdbId', updateGameById);
 router.delete('/:igdbId', deleteGameById);
 

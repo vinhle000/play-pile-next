@@ -37,12 +37,9 @@ const IGDB = new IGDBWrapper();
 // @access  Public
 const getIgdbGameById = asyncHandler(async (req, res) => {
   const gameId = req.params.id;
-
-  logger.debug('getIgdbGames', igdbGameIds);
   if (!gameId) {
     return res.status(400).json({ message: 'No game ID provided' });
   }
-
   try {
     const game = await IGDB.fetchGameById(gameId);
     res.status(200).json(game);
@@ -58,8 +55,6 @@ const getIgdbGameById = asyncHandler(async (req, res) => {
 const getIgdbGames = asyncHandler(async (req, res) => {
   const igdbGameIds = req.body.igdbGameIds;
 
-  logger.info(`getIgdbGames- ---  ${igdbGameIds}`);
-
   if (!igdbGameIds || igdbGameIds.length === 0) {
     return res.status(400).json({ message: 'No IGDB IDs provided' });
   }
@@ -74,17 +69,18 @@ const getIgdbGames = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get games from IGDB by search query
-// @route   POST /games/search
+// @route   GET /games/search //FIXME: NEED TO HANDLE SPACED SEARCH TERMS
 // @access  Public
 const searchIgdbGames = asyncHandler(async (req, res) => {
-  const searchTerm = req.body.searchTerm;
 
-  if (!searchTerm || searchTerm.length === 0) {
+  const { q } = req.query;
+  logger.debug(`Search query: ${q}`);
+  if (!q) {
     return res.status(400).json({ message: 'No search term provided' });
   }
 
   try {
-    const igdbGames = await IGDB.fetchGamesBySearchTerm(searchTerm);
+    const igdbGames = await IGDB.fetchGamesBySearchTerm(q);
     const igdbIds = igdbGames.map((game) => game.id);
 
     const existingGames = await Game.find({ igdbId: { $in: igdbIds } });
@@ -133,7 +129,7 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
 // Operations with Games controller
 //  =======================================================================================
 
-// @desc    Get game from DB by IGDB ID
+// @desc    Get game from MongoDB by igdbId
 // @route   GET /games/:igdbId
 // @access  Public
 const getGameById = asyncHandler(async (req, res) => {
@@ -158,8 +154,8 @@ const getGameById = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get multiple games from DB by IGDB ID
-// @route   POST /games/query
+// @desc    Get multiple games from MongoDB by [igdbId]
+// @route   POST /games/list
 // @access  Public
 const getGames = asyncHandler(async (req, res) => {
   let igdbIds = req.body.igdbIds;
@@ -169,6 +165,9 @@ const getGames = asyncHandler(async (req, res) => {
   }
 
   try {
+
+    //BUG: Issue with igdbId being a Number in IGDB and a String in MongoDB
+
     // Query the database using the igdbId
     let games = await Game.find({ igdbId: { $in: igdbIds } });
     if (!games || games.length === 0) {
@@ -185,7 +184,7 @@ const getGames = asyncHandler(async (req, res) => {
 
 // @desc    Create game document(s) in MongoDB
 // @route   POST /games/
-// @access  Public //TODO: should be protected
+// @access  Public //TODO: should be protected //Might not be neccessary
 const createGames = asyncHandler(async (req, res) => {
   let igdbIds = req.body.igdbIds;
 
@@ -207,7 +206,7 @@ const createGames = asyncHandler(async (req, res) => {
     let newGamesData = await IGDB.fetchGames([newIgdbIds]);
     let newGames = await storeGames(newGamesData);
 
-    logger.debug(`New game(s) created from [${newIgdbIds}] IGDB ID(s)`);
+    logger.debug(`New game(s) DB items created from [${newIgdbIds}] IGDB ID(s)`);
     res.status(201).json(newGames);
   } catch (error) {
     logger.error(`Error in creating game(s): ${error}`);
