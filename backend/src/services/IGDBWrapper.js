@@ -63,7 +63,7 @@ class IGDBWrapper {
   //TODO: Refactor to use query to get specific fields of the games
   async fetchGamesBySearchTerm(searchTerm) {
     logger.debug({searchTerm});
-    const query = `search "${searchTerm}"; fields name, summary, release_dates.human, first_release_date, genres.name, platforms.name, cover.url, artworks.url, screenshots.url, videos.video_id, rating, rating_count;`;
+    const query = `search "${searchTerm}"; fields name, summary, release_dates.human, first_release_date, genres.name, platforms.name, cover.image_id, artworks.url, screenshots.url, videos.video_id, rating, rating_count;`;
     try {
       const response = await this.makeIGDBRequest(query);
       if (response.data) {
@@ -78,6 +78,42 @@ class IGDBWrapper {
         throw new Error('Error in search IGDB API request');
       }
   }
+  /*
+  NOTE: Size options available for images
+    cover_small	90 x 128	Fit
+    screenshot_med	569 x 320	Lfill, Center gravity
+    cover_big	264 x 374	Fit
+    logo_med	284 x 160	Fit
+    screenshot_big	889 x 500	Lfill, Center gravity
+    screenshot_huge	1280 x 720	Lfill, Center gravity
+    thumb	90 x 90	Thumb, Center gravity
+    micro	35 x 35	Thumb, Center gravity
+    720p	1280 x 720	Fit, Center gravity
+    1080p	1920 x 1080	Fit, Center gravity
+  */
+  // Fetching cover image for a game tht is higher quality
+  async fetchImage(size, igdbImageId) {
+
+    try{
+      const response = await axios({
+        url: `https://images.igdb.com/igdb/image/upload/t_${size}/${igdbImageId}.jpg`,
+        method: 'GET',
+        headers: {
+          'Client-ID': process.env.IGDB_CLIENT_ID,
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'text/plain',
+        },
+      });
+
+      return response;
+
+
+    } catch (error) {
+      logger.error(`Error in fetching image from IGDB API request ${error}`);
+      throw new Error('Error in fetching image from IGDB API request');
+    }
+  }
+
 }
 
 module.exports = IGDBWrapper;

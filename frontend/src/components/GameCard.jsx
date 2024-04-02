@@ -73,16 +73,22 @@ function GameCard ({ game }) {
     }
   }
 
+  //TODO: Add a loading spinner
+  // Create a condition to render the card if its the backlog page, rerender list/gameDco the game is removed...
+  // Other condition, as isSearchItem,
+  //isSearchItem ? renderAs search format:
+  //renderAs normal format(BacklogPage)
+  // Includes hovering over the card to show minimal overlay options to edit some of the userGameData
+  // Such as PlaysStatus and AddtoBacklog || RemoveFromBacklog
+
+
   return (
     <div className="">
       <Card className="flex">
-
         <CardContent>
-
           {game.cover?.length &&
-            <img src={game.cover[0].url} alt={game.name} className="h-56 object-cover" />
+            <img src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover[0].image_id}.jpg`} alt={game.name} className="h-56 object-cover" />
           }
-
           {/* <p>Rating: {game.rating}</p> */}
           {/* <p>Initial Release Date: {game.releaseDate[0]['human']}</p> */}
           {/* <PlatformsList /> */}

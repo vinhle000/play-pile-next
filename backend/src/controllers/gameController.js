@@ -10,21 +10,6 @@ const mongoose = require('mongoose');
 //       this.IGDB = new IGDBWrapper();
 //   }
 
-//   getIgdbGameById = asyncHandler(async (req, res) => {
-//       const gameId = req.params.id;
-
-//       if (!gameId) {
-//           return res.status(400).json({ message: 'No game ID provided' });
-//       }
-
-//       try {
-//           const game = await this.IGDB.fetchGameById(gameId);
-//           res.status(200).json(game);
-//       } catch (error) {
-//           logger.error(`Error fetching game by ID from IGDB ${error}`);
-//           res.status(500).json({ message: 'Error fetching game from IGDB' });
-//       }
-//   });
 
 //  =======================================================================================
 // IGDB API operations
@@ -69,7 +54,7 @@ const getIgdbGames = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get games from IGDB by search query
-// @route   GET /games/search //FIXME: NEED TO HANDLE SPACED SEARCH TERMS
+// @route   GET /games/search //
 // @access  Public
 const searchIgdbGames = asyncHandler(async (req, res) => {
 
@@ -97,25 +82,21 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
     res.status(200).json(games);
   } catch (error) {
     logger.error(
-      `Error fetching games from IGDB by search term "${searchTerm}": ${error}`
+      `Error fetching games from IGDB by query "${q}": ${error}`
     );
     res.status(500).json({
-      message: `Error fetching games from IGDB by search term "${searchTerm}"`,
+      message: `Error fetching games from IGDB by query "${q}"`,
     });
   }
 
   // TODO: Implement pagination for search results
   // const page = req.query.page || 1;
   //Here is an example for how to use limit. The default limit is 10. The maximum value you can set for limit is 500.
-
         // Address:
-
         // https://api.igdb.com/v4/platforms/
         // Body:
-
         // limit 33;
         // There is also an offset. This will start the list at position 22 and give 33 results.
-
         // Address:
         // https://api.igdb.com/v4/platforms/
         // Body:
@@ -165,9 +146,6 @@ const getGames = asyncHandler(async (req, res) => {
   }
 
   try {
-
-    //BUG: Issue with igdbId being a Number in IGDB and a String in MongoDB
-
     // Query the database using the igdbId
     let games = await Game.find({ igdbId: { $in: igdbIds } });
     if (!games || games.length === 0) {
@@ -298,7 +276,7 @@ const storeGames = async (igdbGames) => {
   let ids = [];
   const games = igdbGames.map((game) => {
     ids.push(game.id);
-    return {
+        return {
       igdbId: game.id,
       name: game.name,
       summary: game.summary,
