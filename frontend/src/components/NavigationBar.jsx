@@ -86,36 +86,28 @@ function NavigationBar() {
             <NavigationMenu>
             <SearchBar />
 
-            {/* //FIXME Need to fix Backlog nav, not going to localhost:xxxx/backlog*/}
+
               <NavigationMenuList>
-                <NavigationMenuItem key={'backlog'}>
-                  <Link
-                    to={'/backlog'}
-                    className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >
-                    {'Backlog'}
-                  </Link>
-                </NavigationMenuItem>
+
 
                 {user ? (
+                  <>
+                    <NavigationMenuItem key={'backlog'}>
+                    <Link
+                      to={'/backlog'}
+                      className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                    >
+                      {'Backlog'}
+                    </Link>
+                  </NavigationMenuItem>
                   <NavigationMenuItem key={'avatar'}>
                     <AvatarDropdownMenu></AvatarDropdownMenu>
                   </NavigationMenuItem>
+                  </>
                 ) : (
                   <>
-                    <NavigationMenuItem key={'login'}>
-                      <Link
-                        // as={Link}
-                        to={'/login'}
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        {'Login'}
-                      </Link>
-                    </NavigationMenuItem>
-
                     <NavigationMenuItem key={'register'}>
                       <Link
-                        // as={Link}
                         to={'/register'}
                         className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                       >
@@ -123,6 +115,15 @@ function NavigationBar() {
 
                       </Link>
                     </NavigationMenuItem>
+                    <NavigationMenuItem key={'login'}>
+                      <Link
+                        to={'/login'}
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        {'Login'}
+                      </Link>
+                    </NavigationMenuItem>
+
                   </>
                 )}
               </NavigationMenuList>

@@ -14,11 +14,11 @@ function SearchPage() {
   const params = new URLSearchParams(location.search);
   const searchTerm = params.get('q');
 
-  useEffect(() => {
+
+   useEffect(() => {
     const fetchGames = async () => {
       try {
         let gameData = await gameService.searchIgdbGames(searchTerm);
-        console.log('RESPONSE from search', gameData);
         setGames(gameData);
         // if pagination is needed, add a 'next' button to fetch the next page of results
         // may have to use setGames([...games, ...response.data]);

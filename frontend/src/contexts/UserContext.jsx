@@ -1,10 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import LogRocket from 'logrocket';
+
 
 import userService from '@/services/userService';
 const UserContext = createContext({});
 
 const API_URL = `${import.meta.env.VITE_REACT_APP_URL}/api/users`;
+
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -15,6 +18,11 @@ export const UserProvider = ({ children }) => {
                 setLoading(true);
                 const response = await userService.getUserInfo();
                 setUser(response.data);
+
+                LogRocket.identify('THE_USER_ID_IN_YOUR_APP', {
+                    username: response.data.username,
+                    email: response.data.email,
+                });
             } catch (error) {
                 console.error('Error fetching user data', error);
                 setUser(null);

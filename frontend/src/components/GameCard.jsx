@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext, useState, memo} from 'react'
 import {
   Card,
   CardContent,
@@ -18,14 +18,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import userGameService from "@/services/userGameService"
+import UserBacklogContext from '@/contexts/UserBacklogContext'
+import useUserGameData from '@/hooks/useUserGameData'
+import LogRocket from 'logrocket';
 
-
-function GameCard({game}) {
-
+function GameCard ({ game }) {
+  const { userBacklog, setUserBacklog, loading} = useContext(UserBacklogContext);
+  const [ userGameData, setUserGameData ] = useUserGameData({
+    status: game.status,
+    isInBacklog: game.isInBacklog,
+  })
 
   const PlayStatusDropdown = (game) => {
     <div> Play Status</div>
-
   }
 
   const GenreList = () => {
@@ -49,22 +54,23 @@ function GameCard({game}) {
     )
   }
 
-  const handleAddToBacklog =(igdbId) => {
-    console.log('GameCard -> igdbId', igdbId)
-    userGameService.updateUserGameData(igdbId, {isInBacklog: true})
-    .then(response => {
-      console.log('handleAddToBacklog -> response', response)
-     })
-    .catch(error => console.error('Error adding game to backlog', error))
-  }
 
-  const handleRemoveFromBacklog =(igdbId) => {
-    console.log('GameCard -> igdbId', igdbId)
-    userGameService.updateUserGameData(igdbId, {isInBacklog: false})
-    .then(response => {
-      console.log('handleRemoveFromBacklog -> response', response)
-    })
-    .catch(error => console.error('Error adding game to backlog', error))
+  const updateUserGameData = async (igdbId, updateData) => {
+    updateData ? updateData : {}
+    try {
+      //NOTE: Only rerenders the GameCard component in the list that has the updated changes
+      // Utilizing useUserGameData hook to manage the state of the game data
+      // with the use of React.useMemo and React.useCallback
+     let newData = await userGameService.updateUserGameData(igdbId, {...updateData})
+
+     setUserGameData({...userGameData, ...newData})
+     console.log('GameCard -> updateBacklog -> newData', newData)
+      LogRocket.log('userGameData updated successfully', newData);
+
+    } catch (error) {
+      console.error('Error updating UserGame Data ', error)
+      LogRocket.error('Error updating UserGame Data ', error);
+    }
   }
 
   return (
@@ -73,7 +79,7 @@ function GameCard({game}) {
 
         <CardContent>
 
-          {game.cover.length &&
+          {game.cover?.length &&
             <img src={game.cover[0].url} alt={game.name} className="h-56 object-cover" />
           }
 
@@ -84,10 +90,10 @@ function GameCard({game}) {
             <PlayStatusDropdown />
 
           <div>
-            {(game.isInBacklog ? (
-              <button onClick={(e) => handleRemoveFromBacklog(game.igdbId)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Remove</button>
+            {(userGameData.isInBacklog ? (
+              <button onClick={(e) => updateUserGameData(game.igdbId, {isInBacklog: false})} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Remove</button>
             ) : (
-              <button onClick={(e) => handleAddToBacklog(game.igdbId)} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Add To Backlog</button>
+              <button onClick={(e) => updateUserGameData(game.igdbId, {isInBacklog: true})} className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-700 transition-colors">Add To Backlog</button>
             ))}
           </div>
 
@@ -98,7 +104,7 @@ function GameCard({game}) {
           <CardTitle>{game.name}</CardTitle>
           <CardDescription>Card Description</CardDescription>
         </CardHeader>
-{/*
+        {   /*
         <CardFooter>
           <p>Card Footer</p>
         </CardFooter> */}

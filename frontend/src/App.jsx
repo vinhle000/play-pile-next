@@ -9,22 +9,25 @@ import SearchPage from './pages/SearchPage'
 import BacklogPage from './pages/BacklogPage'
 
 import { UserProvider } from './contexts/UserContext'
+import { UserBacklogProvider } from './contexts/UserBacklogContext'
 function App() {
 
 
   return (
     <div>
       <UserProvider>
-        <Router>
-          <NavigationBar/>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/games/search" element={<SearchPage />} />
-            <Route path="/backlog" element={<BacklogPage />} />
-          </Routes>
-        </Router>
+        <UserBacklogProvider>
+          <Router>
+            <NavigationBar/>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/games/search" element={<SearchPage />} />
+              <Route path="/backlog" element={<BacklogPage />} />
+            </Routes>
+          </Router>
+        </UserBacklogProvider>
       </UserProvider>
     </div>
   );
