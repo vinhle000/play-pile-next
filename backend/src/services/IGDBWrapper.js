@@ -63,7 +63,9 @@ class IGDBWrapper {
   //TODO: Refactor to use query to get specific fields of the games
   async fetchGamesBySearchTerm(searchTerm) {
     logger.debug({searchTerm});
-    const query = `search "${searchTerm}"; fields name, summary, release_dates.human, first_release_date, genres.name, platforms.name, cover.image_id, artworks.url, screenshots.url, videos.video_id, rating, rating_count;`;
+    const query = `search "${searchTerm}"; fields name, summary, release_dates.human, first_release_date, genres.name, platforms.name, cover.image_id, artworks.url, screenshots.url, videos.video_id, rating, rating_count;
+    where rating >= 60 & rating_count > 10;`
+
     try {
       const response = await this.makeIGDBRequest(query);
       if (response.data) {

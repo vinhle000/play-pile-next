@@ -31,7 +31,7 @@ const gameSchema = new mongoose.Schema(
       // required: true,
     },
     cover: {
-      type: [Object],
+      type: Object,
       // required: true,
     },
     artworks: {

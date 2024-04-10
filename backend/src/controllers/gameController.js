@@ -284,7 +284,10 @@ const storeGames = async (igdbGames) => {
       firstReleaseDate: game.first_release_date,
       genres: game.genres,
       platforms: game.platforms,
-      cover: game.cover,
+      cover: {
+        image_id: game.cover.image_id,
+        url: `https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`,
+      },
       // artworks: game.artworks,
       screenshots: game.screenshots,
       similarGames: game.similar_games,
