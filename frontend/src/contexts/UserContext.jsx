@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import LogRocket from 'logrocket';
+// import LogRocket from 'logrocket';
 
 
 import userService from '@/services/userService';
@@ -18,8 +18,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(true);
                 const response = await userService.getUserInfo();
                 setUser(response.data);
-
-                LogRocket.identify('THE_USER_ID_IN_YOUR_APP', {
+                LogRocket.identify(response.data.id, {
                     username: response.data.username,
                     email: response.data.email,
                 });
@@ -41,6 +40,7 @@ export const UserProvider = ({ children }) => {
             setUser(response.data);
         } catch (error) {
             console.error('Error logging in', error);
+            throw error;
         }
     }
 
@@ -51,6 +51,7 @@ export const UserProvider = ({ children }) => {
             setUser(null);
         } catch (error) {
             console.error('Error logging out', error);
+            throw error;
         }
     };
 

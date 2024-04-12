@@ -276,12 +276,13 @@ const storeGames = async (igdbGames) => {
   let ids = [];
   const games = igdbGames.map((game) => {
     ids.push(game.id);
-        return {
+    const firstReleaseDate = new Date(game.first_release_date * 1000); // Convert the timestamp to milliseconds
+    return {
       igdbId: game.id,
       name: game.name,
       summary: game.summary,
       releaseDates: game.release_dates,
-      firstReleaseDate: game.first_release_date,
+      firstReleaseDate: firstReleaseDate,
       genres: game.genres,
       platforms: game.platforms,
       cover: {

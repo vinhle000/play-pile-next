@@ -26,77 +26,8 @@ class UserGameController {
     }
   })
 
-  //TODO: REMOVE after consolidating with updateUserGame
-  // @desc  Add to game to user's backlog
-  // @route PUT /api/userGames/backlog/:igdb
-  // @access Private
-  // addGameToBacklog = asyncHandler( async (req, res) => {
-  //   const igdbId = req.params.igdbId;
-  //   const userId = req.user._id;
-  //   if (!igdbId) {
-  //     return res.status(400).json({ message: 'No iddbId provided'});
-  //   }
 
-  //   try {
-  //     let userGameData = await this.getUserGameData(userId, igdbId);
-
-  //     if (!userGameData) {
-  //       const newUserGameData = await this.createUserGameData(userId, igdbId, true);
-  //       return res.status(201).json(newUserGameData);
-  //     }
-
-  //     let updatedData = await this.updateUserGameData(
-  //       userId,
-  //       igdbId,
-  //       {
-  //         isInBacklog: true,
-  //       }
-  //     );
-  //     res.status(201).json(updatedData)
-
-  //   } catch (error) {
-  //     logger.error(`Error adding game to user backlog ${error}`);
-  //     res.status(500).json({message: 'Error adding game to user backlog'})
-  //   }
-  // })
-
-  //TODO: REMOVE after consolidating with updateUserGame
-  // @desc  Remove game from user's backlog
-  // @route Delete /api/userGames/backlog/:igdbId
-  // @access Private
-  // removeGameFromBacklog = asyncHandler( async (req, res) => {
-  //   const igdbId = req.params.igdbId;
-  //   const userId = req.user._id;
-
-  //   if (!igdbId) {
-  //     return res.status(400).json({ message: 'No iddbId provided'});
-  //   }
-
-  //   try {
-  //     let userGameData = await this.getUserGameData(userId, igdbId);
-
-  //     if (!userGameData) {
-  //       //should we return the data?
-  //       return res.status(400).json('Game Not found in user backlog');
-  //     }
-
-  //     let updatedData = await this.updateUserGameData(
-  //       userId,
-  //       igdbId,
-  //       {
-  //         isInBacklog: false,
-  //       }
-  //     );
-  //     res.status(201).json(updatedData)
-  //   } catch (error) {
-  //     logger.error(`Error removing game from user backlog ${error}`);
-  //     res.status(500).json({message: 'Error removing game from user backlog'})
-  //   }
-  // })
-
-
- // TODO: consolidate endpoints to a general and flexible update userGame fields with PATCH request
-
+  // BUG: Issue getting 401 when making PATCH request
   // @desc  Update user game data, can update multiple fields
   // @route PATCH /api/userGames/:igdbId
   // @access Private

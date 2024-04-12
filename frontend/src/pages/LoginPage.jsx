@@ -43,11 +43,12 @@ import UserContext from "@/contexts/UserContext";
 
     login(values.email, values.password)
     .then((response) => {
-
+      console.log('User logged in', response)
       navigate("/") // FIXME: rediredt to home page, but needs to update the navBar
     })
     .catch((error) => {
-      console.error('Error registering user', error)
+      // FIXME: show red error message to user that login failed
+      console.error('Error logging in user', error)
     })
   }
   return (

@@ -65,7 +65,7 @@ function GameCard ({ game }) {
 
      setUserGameData({...userGameData, ...newData})
      console.log('GameCard -> updateBacklog -> newData', newData)
-      LogRocket.log('userGameData updated successfully', newData);
+      // LogRocket.log('userGameData updated successfully', newData);
 
     } catch (error) {
       console.error('Error updating UserGame Data ', error)

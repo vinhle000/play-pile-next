@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import { useLocation} from 'react-router-dom'
 import gameService from '../services/gameService'
-import GameCard from '../components/GameCard'
-import GameCardsList from '../components/GameCardList'
-
+// import GameCard from '../components/GameCard'
+// import GameCardsList from '../components/GameCardList'
+import SearchResultsList from '../components/SearchResultsList'
 
 //TODOS:
 // Spinner icon
@@ -29,13 +29,13 @@ function SearchPage() {
     fetchGames();
   }, [searchTerm])
   return (
-    <div >
+    <div className="mx-10" >
       <h1>Search Results for: {searchTerm}</h1>
       <br />
       <br />
       <br />
       <br />
-      <GameCardsList games={games} />
+      <SearchResultsList games={games} />
 
     </div>
   )
