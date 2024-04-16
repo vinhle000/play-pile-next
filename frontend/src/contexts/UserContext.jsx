@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-// import LogRocket from 'logrocket';
+import LogRocket from 'logrocket';
 
 
 import userService from '@/services/userService';
