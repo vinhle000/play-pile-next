@@ -3,8 +3,6 @@ import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
-
-
 import {
   Popover,
   PopoverContent,
@@ -50,7 +48,8 @@ import LogRocket from 'logrocket';
 function GameCard ({ game }) {
   const { userBacklog, setUserBacklog, loading} = useContext(UserBacklogContext);
   const [ userGameData, setUserGameData ] = useUserGameData({
-    status: game.status,
+    playingStatus: game.playingStatus,
+    playedStatus: game.playedStatus,
     isInBacklog: game.isInBacklog,
   })
 
@@ -58,23 +57,6 @@ function GameCard ({ game }) {
 
 
 
-  const updateUserGameData = async (igdbId, updateData) => {
-    updateData ? updateData : {}
-    try {
-      //NOTE: Only rerenders the GameCard component in the list that has the updated changes
-      // Utilizing useUserGameData hook to manage the state of the game data
-      // with the use of React.useMemo and React.useCallback
-     let newData = await userGameService.updateUserGameData(igdbId, {...updateData})
-
-     setUserGameData({...userGameData, ...newData})
-     console.log('GameCard -> updateBacklog -> newData', newData)
-      LogRocket.log('userGameData updated successfully', newData);
-
-    } catch (error) {
-      console.error('Error updating UserGame Data ', error)
-      LogRocket.error('Error updating UserGame Data ', error);
-    }
-  }
 
   //TODO: Add a loading spinner
   if (loading) {
@@ -94,7 +76,12 @@ function GameCard ({ game }) {
         <p className="text-white text-xl font-bold">{game.name}</p>
       </div>
       {showEditModal && (
-        <UserGameDataEditModal game onClose={() => setShowEditModal(false)} />
+        <UserGameDataEditModal
+        game={game}
+        userGameData={userGameData}
+        setUserGameData={setUserGameData}
+        onClose={() => setShowEditModal(false)}
+        />
       )}
 
   </li>
