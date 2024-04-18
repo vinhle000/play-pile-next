@@ -3,6 +3,7 @@ import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
+import ConfirmModal from '@/components/ConfirmModal'
 import {
   Popover,
   PopoverContent,
@@ -45,23 +46,22 @@ import LogRocket from 'logrocket';
 //   )
 // }
 
-function GameCard ({ game }) {
-  const { userBacklog, setUserBacklog, loading} = useContext(UserBacklogContext);
-  const [ userGameData, setUserGameData ] = useUserGameData({
-    playingStatus: game.playingStatus,
-    playedStatus: game.playedStatus,
-    isInBacklog: game.isInBacklog,
-  })
-
-  const [showEditModal, setShowEditModal] = useState(false);
+function GameCard ({ game, handleOpenEditModal, setModalState }) {
 
 
+  // const [modalState, setModalState] = useState(''); // '' or 'edit' or 'remove'
+  // console.log('GameCard -> modalState', modalState)
+  const handleRemoveConfirm = async () => {
 
+    try {
+      await userGameService.updateUserGameData(game.igdbId, {isInBacklog: "false"})
 
-  //TODO: Add a loading spinner
-  if (loading) {
-    return <h3>Loading...</h3>
+    } catch (error) {
+      console.error('Error removing game from backlog', error)
+    }
+    setModalState('')
   }
+
 
   return (
 
@@ -72,17 +72,10 @@ function GameCard ({ game }) {
         className="rounded-sm min-h-48 h-60 transition duration-300 ease-in-out transform group-hover:scale-110 group-hover:brightness-50 object-cover"
 
       />
-      <div onClick={() => setShowEditModal(true)} className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div onClick={() => handleOpenEditModal(game)} className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <p className="text-white text-xl font-bold">{game.name}</p>
       </div>
-      {showEditModal && (
-        <UserGameDataEditModal
-        game={game}
-        userGameData={userGameData}
-        setUserGameData={setUserGameData}
-        onClose={() => setShowEditModal(false)}
-        />
-      )}
+
 
   </li>
 

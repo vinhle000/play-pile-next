@@ -30,10 +30,10 @@ const UserGameSchema = new mongoose.Schema(
     playDates: {
       type: [
         {
-          startDate: {
+          from: {
             type: Date,
           },
-          endDate: {
+          to: {
             type: Date,
           },
         },
