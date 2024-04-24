@@ -43,32 +43,14 @@ console.log('userGameService.getUserBacklogWithGameDetails -> backlogWithGameDet
           }
   },
 
-
-  // async addGameToBacklog(igdbId) {
-  //   const requestBody = {
-  //     isInBacklog: true,
-  //   };
-
-  //   try {
-  //     const response = await axios.put(`${API_URL}/backlog/${igdbId}`, requestBody, { withCredentials: true });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error adding game to backlog', error);
-  //   }
-  // },
-
-  // async removeGameFromBacklog(igdbId) {
-  //   const requestBody = {
-  //     isInBacklog: false,
-  //   };
-
-  //   try {
-  //     const response = await axios.delete(`${API_URL}/backlog/${igdbId}`, requestBody, { withCredentials: true });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('Error removing game from backlog', error);
-  //   }
-  // },
+  async getUserPlayPile() {
+    try {
+      const response = await axios.get(`${API_URL}/playPile`, { withCredentials: true});
+      return response.data;
+    } catch (error) {
+      console.error('Error getting user play pile', error);
+    }
+  },
 
   async updateUserGameData(igdbId, fields) {
     const requestBody = fields ? { ...fields, } : {};

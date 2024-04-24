@@ -9,14 +9,19 @@ import SearchPage from './pages/SearchPage'
 import BacklogPage from './pages/BacklogPage'
 
 import { UserProvider } from './contexts/UserContext'
-import { UserBacklogProvider } from './contexts/UserBacklogContext'
+import { UserPlayPileProvider } from './contexts/UserPlayPileContext'
+
+import { UserBacklogProvider } from './contexts/UserBacklogContext' //TODO: Remove old userbacklog context usage
 function App() {
 
 
   return (
     <div>
       <UserProvider>
+      <UserPlayPileProvider>
+
         <UserBacklogProvider>
+
           <Router>
             <NavigationBar/>
             <Routes>
@@ -28,6 +33,8 @@ function App() {
             </Routes>
           </Router>
         </UserBacklogProvider>
+
+      </UserPlayPileProvider>
       </UserProvider>
     </div>
   );
