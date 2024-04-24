@@ -104,7 +104,7 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
 
               <div className="flex-1 min-w-0">
                 <DropdownMenu>
-                <DropdownMenuTrigger  lassName="w-full">{fieldData.playedStatus}</DropdownMenuTrigger>
+                <DropdownMenuTrigger  className="w-full">{fieldData.playedStatus}</DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'No status') }>No status</DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Finished') }>Finished</DropdownMenuItem>

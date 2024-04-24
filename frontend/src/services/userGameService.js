@@ -7,7 +7,7 @@ const userGameService = {
 
   async getUserBacklog() {
     try {
-      const response = await axios.get(`${API_URL}/backlog`, { withCredentials: true });
+      const response = await axios.get(`${API_URL}/playPile`, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error('Error getting user backlog', error);

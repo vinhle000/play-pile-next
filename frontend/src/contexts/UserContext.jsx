@@ -33,11 +33,23 @@ export const UserProvider = ({ children }) => {
         fetchUser();
     }, []);
 
+    const register = async (username, email, password, confirmPassword) => {
+        try {
+            const response = await userService.register(username, email, password, confirmPassword);
+            setUser(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error registering user', error);
+            throw error;
+        }
+    }
+
     const login = async (email, password) =>{
 
         try {
-            const response = await userService.login(email, password);;
+            const response = await userService.login(email, password);
             setUser(response.data);
+            return response.data;
         } catch (error) {
             console.error('Error logging in', error);
             throw error;
@@ -56,7 +68,7 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, loading, login, logout }}>
+        <UserContext.Provider value={{ user, loading, login, logout, register }}>
             {children}
         </UserContext.Provider>
     );

@@ -1,3 +1,4 @@
+import { useContext } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
@@ -15,10 +16,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import UserContext from "@/contexts/UserContext";
 
 
+function RegisterPage() {
 
- function RegisterPage() {
+  const { user, loading, register } = useContext(UserContext);
   const navigate = useNavigate();
 
   const formSchema = z.object({
@@ -44,16 +47,16 @@ import {
   });
 
   function onSubmit(values) {
-
-    userService.register(values.username, values.email, values.password)
+    register(values.username, values.email, values.password, values.confirmPassword)
     .then((response) => {
-      console.log(response)
+      console.log('User registered', response)
       navigate("/")
     })
     .catch((error) => {
       console.error('Error registering user', error)
     })
   }
+
   return (
     <div className="flex justify-center align h-screen">
     <Form {...form} className=" flex-row block ">

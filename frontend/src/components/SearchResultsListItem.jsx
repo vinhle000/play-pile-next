@@ -25,7 +25,7 @@ function SearchResultsListItem({ game }) {
     useContext(UserBacklogContext);
   const [userGameData, setUserGameData] = useUserGameData({
     status: game.status,
-    isInBacklog: game.isInBacklog,
+    isInPlayPile: game.isInPlayPile,
   });
 
 
@@ -116,10 +116,11 @@ function SearchResultsListItem({ game }) {
       </div>
 
       <div className="flex items-center">
-        {userGameData.isInBacklog ? (
+        {/* //FIXME: Remove button does not appear after page refresh */}
+        {userGameData.isInPlayPile ? (
           <button
             onClick={() =>
-              updateUserGameData(game.igdbId, { isInBacklog: false })
+              updateUserGameData(game.igdbId, { isInPlayPile: false })
             }
             className="min-w-32 mx-5 px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-300 transition-colors"
           >
@@ -128,7 +129,7 @@ function SearchResultsListItem({ game }) {
         ) : (
           <button
             onClick={() =>
-              updateUserGameData(game.igdbId, { isInBacklog: true })
+              updateUserGameData(game.igdbId, { isInPlayPile: true })
             }
             className="min-w-32 mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
           >
