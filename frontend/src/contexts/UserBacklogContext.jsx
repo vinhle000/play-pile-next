@@ -6,29 +6,28 @@ export const UserBacklogProvider = ({children}) => {
   const [userBacklog, setUserBacklog] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchUserBacklog = async () => {
+    try {
+      setLoading(true);
+      const response = await userGameService.getUserBacklogWithGameDetails();
+      setUserBacklog(response);
+      console.log('UserBacklogProvider -> fetchUserBacklog -> response', response);
+
+    } catch (error) {
+      console.error('Error fetching user backlog', error);
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchUserBacklog = async () => {
-      try {
-        setLoading(true);
-        const response = await userGameService.getUserBacklogWithGameDetails();
-        setUserBacklog(response);
-        console.log('UserBacklogProvider -> fetchUserBacklog -> response', response);
-
-      } catch (error) {
-        console.error('Error fetching user backlog', error);
-      } finally {
-        setLoading(false)
-      }
-    }
-
    fetchUserBacklog();
   }, [])
 
 
 
   return (
-    <UserBacklogContext.Provider  value={{ userBacklog, setUserBacklog, loading}}>
+    <UserBacklogContext.Provider  value={{ userBacklog, setUserBacklog, loading, fetchUserBacklog}}>
       {children}
     </UserBacklogContext.Provider>
   )

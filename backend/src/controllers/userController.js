@@ -65,10 +65,10 @@ const loginUser = asyncHandler(async (req, res) => {
     res.cookie('userToken', generateToken(user.id), {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 30, // 10 days
-      sameSite: 'Lax',
+      sameSite: 'None',
     })
 
-    logger.debug('res.cookie: ', res.cookie);
+    logger.debug('userController -> res.cookie.userToken -> : ', res.cookie.userToken);
 
     res.json({
       _id: user.id,

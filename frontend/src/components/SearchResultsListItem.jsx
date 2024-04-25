@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import userGameService from '@/services/userGameService';
-import UserBacklogContext from '@/contexts/UserBacklogContext';
+import UserPlayPileContext from '@/contexts/UserPlayPileContext';
 import useUserGameData from '@/hooks/useUserGameData';
-// import LogRocket from 'logrocket';
+import LogRocket from 'logrocket';
 
 const statuses = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -21,11 +21,11 @@ const platformsNames = {
 };
 
 function SearchResultsListItem({ game }) {
-  const { userBacklog, setUserBacklog, loading } =
-    useContext(UserBacklogContext);
+
+  const { userPlayPile, setUserPlayPile, loading } = useContext(UserPlayPileContext)
   const [userGameData, setUserGameData] = useUserGameData({
     status: game.status,
-    isInBacklog: game.isInBacklog,
+    isInPlayPile: game.isInPlayPile,
   });
 
 
@@ -38,11 +38,10 @@ function SearchResultsListItem({ game }) {
       });
 
       setUserGameData({ ...userGameData, ...newData });
-      //  console.log('SearchResultsListItem -> updateBacklog -> newData', newData)
-      // LogRocket.log('userGameData updated successfully', newData);
+      LogRocket.log('userGameData updated successfully', newData);
     } catch (error) {
       console.error('Error updating UserGame Data ', error);
-      // LogRocket.error('Error updating UserGame Data ', error);
+      LogRocket.error('Error updating UserGame Data ', error);
     }
   };
 
@@ -116,10 +115,11 @@ function SearchResultsListItem({ game }) {
       </div>
 
       <div className="flex items-center">
-        {userGameData.isInBacklog ? (
+        {/* //FIXME: Remove button does not appear after page refresh */}
+        {userGameData.isInPlayPile ? (
           <button
             onClick={() =>
-              updateUserGameData(game.igdbId, { isInBacklog: false })
+              updateUserGameData(game.igdbId, { isInPlayPile: false })
             }
             className="min-w-32 mx-5 px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-300 transition-colors"
           >
@@ -128,7 +128,7 @@ function SearchResultsListItem({ game }) {
         ) : (
           <button
             onClick={() =>
-              updateUserGameData(game.igdbId, { isInBacklog: true })
+              updateUserGameData(game.igdbId, { isInPlayPile: true })
             }
             className="min-w-32 mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
           >

@@ -1,4 +1,5 @@
 const UserGame = require('../models/userGameModel');
+const Game = require('../models/gameModel');
 const asyncHandler = require('express-async-handler');
 const logger = require('../../config/logger');
 const mongoose = require('mongoose');
@@ -7,22 +8,22 @@ const mongoose = require('mongoose');
 
 class UserGameController {
 
-  // @desc  Add to game to user's backlog
-  // @route GET /api/userGames/backlog
+  // @desc  Add to game to user's "pile" of games they want to track
+  // @route GET /api/userGames/pile
   // @access Private
-  getUserBacklog = asyncHandler( async (req, res) => {
+  getUserGamePile = asyncHandler( async (req, res) => {
     let userId = req.user._id;
 
     try {
-      const userGameBacklog = await UserGame.find({
+      const userGamePile = await UserGame.find({
         userId: userId,
-        isInBacklog: true,
+        isInPlayPile: true,
       });
 
-      res.status(200).json(userGameBacklog);
+      res.status(200).json(userGamePile);
     } catch (error) {
-      logger.error(`Error getting backlog for user ${error}`)
-      res.status(500).json({message: 'Error getting backlog for user'})
+      logger.error(`Error getting game pile for user ${error}`)
+      res.status(500).json({message: 'Error getting game pile for user'})
     }
   })
 
@@ -99,11 +100,23 @@ class UserGameController {
   // @desc  Update userGame document PRIVATE
   updateUserGameDocument = async (userId, igdbId, updateData) => {
     try {
-
       let userGameDocument = await UserGame.findOne({userId, igdbId});
 
-      if (!userGameDocument) {  // create a new document if it doesn't exist
-        userGameDocument = new UserGame({userId, igdbId});
+      // Fetch game from Game collection with Game model
+      const gameInfo = await Game.findOne({igdbId: igdbId});
+      if ( !gameInfo ) {
+        throw new Error('Game info not found');
+      }
+
+      if (!userGameDocument) {  // NOTE: Create a New Doc to track User & Game relationship if it doesn't exist
+        userGameDocument = new UserGame({
+          userId,
+          igdbId,
+          gameInfo: {
+            name: gameInfo.name,
+            coverUrl: gameInfo.cover.url,
+          },
+        });
         await userGameDocument.save();
       }
 

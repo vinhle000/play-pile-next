@@ -21,6 +21,12 @@ function BacklogPage() {  //
       setUserBacklog(response)
     })
   }, [])
+
+
+  if ( loading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
       <div>BacklogPage</div>
