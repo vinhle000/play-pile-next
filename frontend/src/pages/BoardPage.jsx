@@ -3,10 +3,9 @@ import userGameService from "@/services/userGameService";
 import GameCardList from "@/components/GameCardList";
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 
-// TODO: Refacroting to use the "UserPlayPileGamesGames"
 
-// BUG: playPile games are not appearing on page
-function PlayPileBoardPage() {  //
+// TODO: switch to more generic name "BoardPage"
+function BoardPage() {  //
 
   const { UserPlayPileGames, setUserPlayPileGames, loading } = useContext(UserPlayPileGamesContext);
 
@@ -39,4 +38,4 @@ function PlayPileBoardPage() {  //
   )
 }
 
-export default PlayPileBoardPage;
+export default BoardPage;

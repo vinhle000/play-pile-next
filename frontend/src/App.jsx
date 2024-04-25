@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import SearchPage from './pages/SearchPage'
-import PlayPileBoardPage from './pages/PlayPileBoardPage'
+import BoardPage from './pages/BoardPage'
 
 import { UserProvider } from './contexts/UserContext'
 import { UserPlayPileGamesProvider } from './contexts/UserPlayPileGamesContext'
@@ -45,7 +45,7 @@ const [isPlayPilePanelOpen, setIsPlayPilePanelOpen] = useState(false)
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/games/search" element={<SearchPage />} />
-              <Route path="/playPileBoard" element={<PlayPileBoardPage />} />
+              <Route path="/playPileBoard" element={<BoardPage />} />
             </Routes>
           </Router>
       </UserPlayPileGamesProvider>
