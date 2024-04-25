@@ -18,47 +18,16 @@ import LogRocket from 'logrocket';
 
 
 
-
-//TODO: Decide to show this menu on hover? or always show it with the popover menu to quickly change the status
-// function statusEditMenuOptions () {
-//   return (
-//     <div className="-mt-px flex divide-x divide-gray-200">
-//     <Popover>
-//       <PopoverTrigger className="flex w-0 flex-1">
-//           <div className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-//           Played
-//           <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-//           </div>
-//         </PopoverTrigger>
-//       <PopoverContent>Place content for the popover here.</PopoverContent>
-//     </Popover>
-//     <Popover>
-//       <PopoverTrigger className="flex w-0 flex-1">
-//           <div className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-//           Played
-//           <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-//           </div>
-//         </PopoverTrigger>
-//       <PopoverContent>Place content for the popover here.</PopoverContent>
-//     </Popover>
-//     </div>
-//   )
-// }
-
 function GameCard ({ game, handleOpenEditModal, setModalState }) {
 
   const handleRemoveConfirm = async () => {
-
     try {
       await userGameService.updateUserGameData(game.igdbId, {isInPlayPile: "false"})
-
     } catch (error) {
       console.error('Error removing game from pile', error)
     }
     setModalState('')
   }
-
-  console.log('GameCard -> game', game)
 
   return (
 
@@ -72,7 +41,6 @@ function GameCard ({ game, handleOpenEditModal, setModalState }) {
       <div onClick={() => handleOpenEditModal(game)} className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <p className="text-white text-xl font-bold">{game.gameInfo.name}</p>
       </div>
-
 
   </li>
 

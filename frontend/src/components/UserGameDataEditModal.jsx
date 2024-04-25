@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import DateRangePicker from '@/components/DateRangePicker'
+import ColumnChangeRadioGroup from '@/components/ColumnChangeRadioGroup'
 
 import logRocket from 'logrocket'
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 import {
   Dialog,
@@ -30,6 +32,8 @@ import {
   Popover, PopoverContent, PopoverTrigger
 } from "@/components/ui/popover"
 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+
 
 function UserGameDataEditModal({game, modalState, setModalState}) { // game has UserGameData and Game details
 
@@ -42,6 +46,7 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
     playedStatus: game.playedStatus,
     notes: game.notes
   })
+
 
 
 
@@ -93,7 +98,19 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
               <span>In list: </span>
               <Popover>
                 <PopoverTrigger>Open</PopoverTrigger>
-                <PopoverContent>Place content for the popover here.</PopoverContent>
+                <PopoverContent className="w-auto">
+
+                  {/* map of the avaialble lists
+                      1. show which is currently selected
+                      2. upon select radio buttoon of user
+                      3. we either make a save button
+                            - useState for the updated value
+                            - implement submit/move/save button
+                            - Then update the list(column) of the game using
+                              updateUserGame(igdbId, {columnId: 'newColumnId'})
+                           */ }
+                  <ColumnChangeRadioGroup />
+                </PopoverContent>
               </Popover>
             </div>
 
