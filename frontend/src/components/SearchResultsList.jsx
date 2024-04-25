@@ -14,7 +14,7 @@ function SearchResultsList({games}) {
     return (
       <ul role="list" className="divide-y divide-gray-100">
       {games.map((game) => (
-        <SearchResultsListItem key={game.id} game={game} />
+        <SearchResultsListItem key={game.igdbId}   game={game} />
       ))}
       </ul>
     )

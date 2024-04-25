@@ -46,7 +46,7 @@ function SearchResultsListItem({ game }) {
   };
 
   return (
-    <li key={game.id} className="flex items-center justify-between py-5">
+    <li className="flex items-center justify-between py-5">
       <div className="flex gap-x-6">
         <div>
           <Link to={'/games/' + game.igdbId}>
