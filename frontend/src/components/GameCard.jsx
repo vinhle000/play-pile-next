@@ -58,6 +58,7 @@ function GameCard ({ game, handleOpenEditModal, setModalState }) {
     setModalState('')
   }
 
+  console.log('GameCard -> game', game)
 
   return (
 

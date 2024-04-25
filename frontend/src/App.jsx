@@ -34,7 +34,7 @@ const [isPlayPilePanelOpen, setIsPlayPilePanelOpen] = useState(false)
 
               <SheetContent
                 side="left"
-                className="min-h-screen min-w-128 p-4 shadow-none transition-all duration-300 ease-in-out">
+                className="min-h-screen min-w-128 overflow-auto p-4 shadow-none transition-all duration-300 ease-in-out">
                 <PlayPileList />
               </SheetContent>
 

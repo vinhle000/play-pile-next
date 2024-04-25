@@ -26,7 +26,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
+import {
+  Popover, PopoverContent, PopoverTrigger
+} from "@/components/ui/popover"
 
 
 function UserGameDataEditModal({game, modalState, setModalState}) { // game has UserGameData and Game details
@@ -40,6 +42,9 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
     playedStatus: game.playedStatus,
     notes: game.notes
   })
+
+
+
 
   const updateUserGameData = async (igdbId, updateData) => {
     updateData ? updateData : {}
@@ -81,13 +86,29 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
             <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
               Edit Log
             </DialogTitle>
-             {/*  TODO: Dates  */}
-            <div>
+
+
+             {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
+             <div className="mt-1">
+              <span>In list: </span>
+              <Popover>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>Place content for the popover here.</PopoverContent>
+              </Popover>
+            </div>
+
+
+
+
+
+             {/*  TODO: Dates  functionality */}
+            <div className="mt-4">
               <DateRangePicker handleFieldChange={handleFieldChange} />
                </div>
 
+
             {/* playingStatus    played status */}
-            <div className="flex space-x-4">
+            <div className="flex mt-4 space-x-4">
               <div className="flex-1 min-w-0 bg-gray-500">
               <DropdownMenu>
                 <DropdownMenuTrigger  className="w-full">{fieldData.playingStatus}</DropdownMenuTrigger>
