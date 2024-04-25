@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react'
 import GameCard from './GameCard'
-import UserBacklogContext from '@/contexts/UserBacklogContext'
+import UserPlayPileContext from '@/contexts/UserPlayPileContext'
 import ConfirmModal from '@/components/ConfirmModal'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import userGameService from '@/services/userGameService'
@@ -10,7 +10,7 @@ import userGameService from '@/services/userGameService'
 
 
 function GameCardList({games}) {
-  const {loading, fetchUserBacklog} = useContext(UserBacklogContext);
+  const {loading, fetchUserPlayPile} = useContext(UserPlayPileContext);
   const [modalState, setModalState] = useState('') // ['edit', 'remove'
   const [editGame, setEditGame] = useState({})
 
@@ -26,9 +26,9 @@ function GameCardList({games}) {
   const handleRemoveConfirm = async () => {
     console.log('handleRemoveConfirm -> editGame', editGame)
     try {
-      await userGameService.updateUserGameData(editGame.igdbId, {isInBacklog: "false"})
+      await userGameService.updateUserGameData(editGame.igdbId, {isInPlayPile: "false"})
       setModalState('');
-      fetchUserBacklog(); //refresh the backlog
+      fetchUserPlayPile(); //refresh the play pile games
     } catch (error) {
       console.log('handleRemoveConfirm -> error', error)
     }
@@ -63,7 +63,7 @@ function GameCardList({games}) {
         {modalState === 'remove' && (
           <ConfirmModal
             title="Remove Game"
-            description="Are you sure you want to remove this game from your backlog?"
+            description="Are you sure you want to remove this game from your Play Pile?"
             onConfirm={ handleRemoveConfirm }
             onCancel={() => setModalState('')}
           />

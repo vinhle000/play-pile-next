@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import userGameService from '@/services/userGameService';
-import UserBacklogContext from '@/contexts/UserBacklogContext';
+import UserPlayPileContext from '@/contexts/UserPlayPileContext';
 import useUserGameData from '@/hooks/useUserGameData';
-// import LogRocket from 'logrocket';
+import LogRocket from 'logrocket';
 
 const statuses = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -21,8 +21,8 @@ const platformsNames = {
 };
 
 function SearchResultsListItem({ game }) {
-  const { userBacklog, setUserBacklog, loading } =
-    useContext(UserBacklogContext);
+
+  const { userPlayPile, setUserPlayPile, loading } = useContext(UserPlayPileContext)
   const [userGameData, setUserGameData] = useUserGameData({
     status: game.status,
     isInPlayPile: game.isInPlayPile,
@@ -38,11 +38,10 @@ function SearchResultsListItem({ game }) {
       });
 
       setUserGameData({ ...userGameData, ...newData });
-      //  console.log('SearchResultsListItem -> updateBacklog -> newData', newData)
-      // LogRocket.log('userGameData updated successfully', newData);
+      LogRocket.log('userGameData updated successfully', newData);
     } catch (error) {
       console.error('Error updating UserGame Data ', error);
-      // LogRocket.error('Error updating UserGame Data ', error);
+      LogRocket.error('Error updating UserGame Data ', error);
     }
   };
 

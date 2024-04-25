@@ -13,7 +13,6 @@ import {
 
 
 import userGameService from "@/services/userGameService"
-import UserBacklogContext from '@/contexts/UserBacklogContext'
 import useUserGameData from '@/hooks/useUserGameData'
 import LogRocket from 'logrocket';
 
@@ -48,16 +47,13 @@ import LogRocket from 'logrocket';
 
 function GameCard ({ game, handleOpenEditModal, setModalState }) {
 
-
-  // const [modalState, setModalState] = useState(''); // '' or 'edit' or 'remove'
-  // console.log('GameCard -> modalState', modalState)
   const handleRemoveConfirm = async () => {
 
     try {
-      await userGameService.updateUserGameData(game.igdbId, {isInBacklog: "false"})
+      await userGameService.updateUserGameData(game.igdbId, {isInPlayPile: "false"})
 
     } catch (error) {
-      console.error('Error removing game from backlog', error)
+      console.error('Error removing game from pile', error)
     }
     setModalState('')
   }
@@ -67,13 +63,13 @@ function GameCard ({ game, handleOpenEditModal, setModalState }) {
 
     <li  className="relative group">
       <img
-        src={game.cover.url}
-        alt={game.name}
+        src={game.gameInfo.coverUrl}
+        alt={game.gameInfo.name}
         className="rounded-sm min-h-48 h-60 transition duration-300 ease-in-out transform group-hover:scale-110 group-hover:brightness-50 object-cover"
 
       />
       <div onClick={() => handleOpenEditModal(game)} className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <p className="text-white text-xl font-bold">{game.name}</p>
+        <p className="text-white text-xl font-bold">{game.gameInfo.name}</p>
       </div>
 
 

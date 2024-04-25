@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(true);
                 const response = await userService.getUserInfo();
                 setUser(response.data);
-                LogRocket.identify(response.data.id, {
+                LogRocket.identify(response.data._id, {
                     username: response.data.username,
                     email: response.data.email,
                 });

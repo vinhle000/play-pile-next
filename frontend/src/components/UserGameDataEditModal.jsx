@@ -44,14 +44,12 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
   const updateUserGameData = async (igdbId, updateData) => {
     updateData ? updateData : {}
     try {
-     console.log('GameCard -> updateBacklog -> updateData', updateData)
      let newData = await userGameService.updateUserGameData(igdbId, {...updateData})
-
      setUserGameData({...userGameData, ...newData})
-     console.log('GameCard -> updateBacklog -> newData', newData)
-
+      logRocket.log('userGameData updated successfully', newData)
     } catch (error) {
       console.error('Error updating UserGame Data ', error)
+      logRocket.error('Error updating UserGame Data ', error)
     }
   }
 
