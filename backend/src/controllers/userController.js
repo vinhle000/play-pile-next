@@ -36,8 +36,8 @@ const registerUser = asyncHandler(async (req, res) => {
       if (user) {
         res.cookie('userToken', generateToken(user.id), {
           httpOnly: true,
-          maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
-          sameSite: 'Lax'
+          maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+          sameSite: 'lax'
         })
 
         res.status(201).json({
@@ -64,8 +64,8 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.cookie('userToken', generateToken(user.id), {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30, // 10 days
-      sameSite: 'None',
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+      sameSite: 'lax',
     })
 
     logger.debug('userController -> res.cookie.userToken -> : ', res.cookie.userToken);

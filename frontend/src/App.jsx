@@ -7,17 +7,38 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import SearchPage from './pages/SearchPage'
 import PlayPileBoardPage from './pages/PlayPileBoardPage'
+
 import { UserProvider } from './contexts/UserContext'
-import { UserPlayPileProvider } from './contexts/UserPlayPileContext'
+import { UserPlayPileGamesProvider } from './contexts/UserPlayPileGamesContext'
+
+import PlayPileList from './components/PlayPileList'
+import { Sheet, SheetContent, SheetTrigger } from './components/ui/sheet'
+
+
 
 function App() {
-
+const [isPlayPilePanelOpen, setIsPlayPilePanelOpen] = useState(false)
 
   return (
     <div>
       <UserProvider>
-      <UserPlayPileProvider>
+      <UserPlayPileGamesProvider>
           <Router>
+            <Sheet open={isPlayPilePanelOpen} onOpenChange={setIsPlayPilePanelOpen}>
+
+              <SheetTrigger className="fixed top-0 left-0 z-10 p-4">
+                <span>
+                  {isPlayPilePanelOpen ? '←'  : '→' }
+                </span>
+              </SheetTrigger>
+
+              <SheetContent
+                side="left"
+                className="min-h-screen min-w-128 p-4 shadow-none transition-all duration-300 ease-in-out">
+                <PlayPileList />
+              </SheetContent>
+
+            </Sheet>
             <NavigationBar/>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -27,7 +48,7 @@ function App() {
               <Route path="/playPileBoard" element={<PlayPileBoardPage />} />
             </Routes>
           </Router>
-      </UserPlayPileProvider>
+      </UserPlayPileGamesProvider>
       </UserProvider>
     </div>
   );

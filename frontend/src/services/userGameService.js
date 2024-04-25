@@ -6,7 +6,7 @@ const API_URL = `${import.meta.env.VITE_REACT_APP_URL}/api/userGames`;
 const userGameService = {
 
 
-  async getUserPlayPile() {
+  async getUserPlayPileGames() {
     try {
       const response = await axios.get(`${API_URL}/playPile`, { withCredentials: true});
       return response.data;

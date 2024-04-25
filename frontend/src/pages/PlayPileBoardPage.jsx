@@ -1,19 +1,19 @@
 import React, {useState, useContext, useEffect} from 'react'
 import userGameService from "@/services/userGameService";
 import GameCardList from "@/components/GameCardList";
-import UserPlayPileContext from '@/contexts/UserPlayPileContext'
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 
-// TODO: Refacroting to use the "UserPlayPileGames"
+// TODO: Refacroting to use the "UserPlayPileGamesGames"
 
 // BUG: playPile games are not appearing on page
 function PlayPileBoardPage() {  //
 
-  const { userPlayPile, setUserPlayPile, loading } = useContext(UserPlayPileContext);
+  const { UserPlayPileGames, setUserPlayPileGames, loading } = useContext(UserPlayPileGamesContext);
 
 
   useEffect(() => {
-    userGameService.getUserPlayPile().then((response) => {
-      setUserPlayPile(response)
+    userGameService.getUserPlayPileGames().then((response) => {
+      setUserPlayPileGames(response)
     })
   }, [])
 
@@ -31,7 +31,7 @@ function PlayPileBoardPage() {  //
       <div>Sidebar</div>
 
       {!loading && (
-        <GameCardList games={userPlayPile} />
+        <GameCardList games={UserPlayPileGames} />
       )}
 
       {/* column items(<GameCard>)*/}
