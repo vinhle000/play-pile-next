@@ -30,11 +30,11 @@ class ColumnController {
 
   // Create a column
   // @desc  Create a column for user
-  // @route POST /api/board/columns/:title
+  // @route POST /api/board/columns/
   // @access Private
   createColumn = asyncHandler(async (req, res) => {
     let userId = req.user._id;
-    let columnTitle = req.params.title ? req.params.title : '';
+    let columnTitle = req.body.columnTitle ? req.body.columnTitle : '';
 
     logger.debug(`createColumn --> ${columnTitle}`)
 
@@ -52,11 +52,11 @@ class ColumnController {
 
 
   // @desc  Update column
-  // @route PATCH /api/board/columns/:columnId
+  // @route PATCH /api/board/columns
   // @access Private
   updateColumn = asyncHandler(async (req, res) => {
-    let userId = req.user_id;
-    let columnId = req.params.columnId;
+    let userId = req.user._id;
+    let columnId = req.body.columnId;
     let updateData = req.body;
 
     if (!columnId) res.status(400).json({ message: 'No columnId provided' });
@@ -87,6 +87,26 @@ class ColumnController {
     } catch (error) {
       logger.error(`Error deleting column: ${columnId}`);
       res.status(500).json({ message: 'Error deleting column' });
+    }
+  });
+
+  // @desc  Delete ALL column
+  // @route DELETE /api/board/columns/
+  // @access Private
+  deleteAllColumns = asyncHandler(async (req, res) => {
+    let userId = req.user._id;
+    let toDeleteAll = req.body.toDeleteAll;
+    console.log('deleteAllCollumns --> ', toDeleteAll)
+    if(!toDeleteAll) {
+      res.status(400).json({message: '"toDeleteAll" set to true must be provided in request body'})
+    } else {
+      try {
+        let result = await Column.deleteMany({ userId: userId });
+        res.status(200).json(result)
+      } catch (error) {
+        logger.error(`Error deleting all columns for user: ${userId}`);
+        res.status(500).json({ message: 'Error deleting all column' });
+      }
     }
   });
 
