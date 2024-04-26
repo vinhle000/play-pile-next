@@ -6,7 +6,7 @@ class ColumnController {
   // May help avoid extra filtering check for the active columns displayed board in frontend
 
   // @desc  Get all columns ofr user
-  // @route GET /api/board/column
+  // @route GET /api/board/columns
   // @access Private
   getColumns = asyncHandler(async (req, res) => {
     let userId = req.user._id;
@@ -25,12 +25,12 @@ class ColumnController {
 
   // TODO:
   // @desc  Get single column
-  // @route GET /api/board/column/:columnId
+  // @route GET /api/board/columns/:columnId
   // @access Private
 
   // Create a column
   // @desc  Create a column for user
-  // @route POST /api/board/column/:title
+  // @route POST /api/board/columns/:title
   // @access Private
   createColumn = asyncHandler(async (req, res) => {
     let userId = req.user._id;
@@ -52,7 +52,7 @@ class ColumnController {
 
 
   // @desc  Update column
-  // @route PATCH /api/board/column/:columnId
+  // @route PATCH /api/board/columns/:columnId
   // @access Private
   updateColumn = asyncHandler(async (req, res) => {
     let userId = req.user_id;
@@ -72,7 +72,7 @@ class ColumnController {
   });
 
   // @desc  Delete column
-  // @route DELETE /api/board/column/:columnId
+  // @route DELETE /api/board/columns/:columnId
   // @access Private
   deleteColumn = asyncHandler(async (req, res) => {
     let columnId = req.params.columnId;

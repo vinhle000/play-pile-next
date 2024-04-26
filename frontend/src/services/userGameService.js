@@ -19,7 +19,7 @@ const userGameService = {
     const requestBody = fields ? { ...fields, } : {};
 
     try {
-      const response = await axios.patch(`${API_URL}/${igdbId}`, fields, { withCredentials: true });
+      const response = await axios.patch(`${API_URL}/${igdbId}`, requestBody, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error(`Error updating user's game data`, error);

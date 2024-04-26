@@ -1,0 +1,53 @@
+import axios from 'axios'
+
+const API_URL = `${import.meta.env.VITE_REACT_APP_URL}/api/board/columns`;
+
+const columnService = {
+
+    async getColumns() {
+      try{
+        const response = await axios.get(`${API_URL}/`, { withCredentials: true});
+        return response.data;
+      } catch (error) {
+        console.error('Error getting columns for user ', error)
+        throw error; // Re-throw to handle it in the component
+      }
+    }
+
+    async createColumn(title) {
+      try{
+        const response = await axios.post(`${API_URL}/${title}`, { withCredentials: true});
+        return response.data;
+      } catch (error) {
+        console.error('Error getting columns for user ', error)
+        throw error;
+      }
+    }
+
+    async updateColumn(columnId, updateFields) {
+
+      const requestBody = updateFields ? { ...updateFields} : {}
+
+      try {
+        const response = await axios.patch(`${API_URL}/${columnId}`, requestBody, {withCredentials: true});
+        return response.data;
+      } catch (error) {
+        console.error(`Error updated column ${column} `, error)
+        throw error;
+      }
+    }
+
+    async deleteColumn(columnId) {
+      try {
+        const response = await axios.delete(`${API_URL}/${columnId}`, {withCredentials: true});
+        return response.data;
+      } catch (error) {
+        console.error(`Error deleting column ${column} `, error)
+        throw error;
+      }
+    }
+
+
+}
+
+export default columnService;
