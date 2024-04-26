@@ -28,6 +28,7 @@ app.use((req, res, next) => { // Middleware to log all requests
 app.use('/api/games/', require('./src/routes/gameRoutes'));
 app.use('/api/users/', require('./src/routes/userRoutes'))
 app.use('/api/userGames/', require('./src/routes/userGameRoutes'))
+app.use('/api/board/column', require('./src/routes/columnRoutes.js'))
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));

@@ -70,6 +70,7 @@ const UserGameSchema = new mongoose.Schema(
 UserGameSchema.index({ igdbId: 1 });
 UserGameSchema.index({ userId: 1});
 
+UserGameSchema.index({ userId: 1, isInPlayPile: 1 });  //All games in users play pile
 UserGameSchema.index({ userId: 1, igdbId: 1 }, { unique: true }); // Find specific userGame data for a user
 UserGameSchema.index({ userId: 1, columnId: 1 });  // Finding all userGame in a column
 UserGameSchema.index({ userId: 1, isOnBoard: 1 }); // Finding all userGame on the board
