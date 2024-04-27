@@ -2,38 +2,34 @@ import React, {useState, useContext, useEffect} from 'react'
 import userGameService from "@/services/userGameService";
 import GameCardList from "@/components/GameCardList";
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
-
+import ColumnsContext from '@/contexts/ColumnsContext'
+import Board from '@/components/Board'
 
 // TODO: switch to more generic name "BoardPage"
 function BoardPage() {  //
 
-  const { UserPlayPileGames, setUserPlayPileGames, loading } = useContext(UserPlayPileGamesContext);
+  const { UserPlayPileGames, setUserPlayPileGames, userPlayPileGamesLoading } = useContext(UserPlayPileGamesContext);
+  const { columns, setColumns, columnsLoading, fetchColumns } = useContext(ColumnsContext)
 
+  const onBoardColumns = columns.filter((col) => col.isOnBoard)
+  // get board Colium play pile games, get the columnID
 
+  const columnIds = onBoardColumns.map((col) => col._id )
+  console.log({columnIds})
   useEffect(() => {
     userGameService.getUserPlayPileGames().then((response) => {
       setUserPlayPileGames(response)
     })
   }, [])
 
-  if ( loading) {
+  if ( userPlayPileGamesLoading || columnsLoading) {
     return <div>Loading...</div>
   }
 
   return (
     <>
       <h1>PlayPile Board</h1>
-      {/* Side panel - PlayPile collection
-          Shows games added by user,
-          They can add the game to a column of their choice after clicking on the game
-      */}
-      <div>Sidebar</div>
-
-      {!loading && (
-        <GameCardList games={UserPlayPileGames} />
-      )}
-
-      {/* column items(<GameCard>)*/}
+      <Board columns={onBoardColumns} />
     </>
   )
 }

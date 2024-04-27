@@ -10,6 +10,7 @@ import BoardPage from './pages/BoardPage'
 
 import { UserProvider } from './contexts/UserContext'
 import { UserPlayPileGamesProvider } from './contexts/UserPlayPileGamesContext'
+import { ColumnsProvider } from './contexts/ColumnsContext'
 
 import PlayPileList from './components/PlayPileList'
 import { Sheet, SheetContent, SheetTrigger } from './components/ui/sheet'
@@ -23,6 +24,7 @@ const [isPlayPilePanelOpen, setIsPlayPilePanelOpen] = useState(false)
     <div>
       <UserProvider>
       <UserPlayPileGamesProvider>
+      <ColumnsProvider>
           <Router>
             <Sheet open={isPlayPilePanelOpen} onOpenChange={setIsPlayPilePanelOpen}>
 
@@ -48,6 +50,7 @@ const [isPlayPilePanelOpen, setIsPlayPilePanelOpen] = useState(false)
               <Route path="/playPileBoard" element={<BoardPage />} />
             </Routes>
           </Router>
+      </ColumnsProvider>
       </UserPlayPileGamesProvider>
       </UserProvider>
     </div>
