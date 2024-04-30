@@ -6,6 +6,9 @@ const UserPlayPileGamesContext = createContext({});
 export const UserPlayPileGamesProvider = ({children}) => {
 
   const [userPlayPileGames, setUserPlayPileGames] = useState([]);
+  const [userGamesOnBoard, setUserGameOnBoard] = useState({});
+      // map of columnId to games
+        // {columnId: [game1, game2, game3]}
   const [loading, setLoading] = useState(true);
 
   const fetchUserPlayPileGames = async () => {
@@ -20,12 +23,42 @@ export const UserPlayPileGamesProvider = ({children}) => {
     }
   }
 
+  const fetchGamesOnBoard = async () => {
+    try {
+      setLoading(true);
+      const gamesOnBoard = await userGameService.getUserGamesOnBoard();
+      //map of columnId to games
+      // {columnId: [game1, game2, game3]}
+      // FIXME: this is for testing only, going to assign a
+      if (!gamesOnBoard) {
+        setUserGameOnBoard({});
+        return;
+      }
+
+      console.log( 'UserPlayPileGamesProvider.jsx -> fetchGamesOnBoard() --> setGamesOnBoard: ', {gamesOnBoard});
+      setUserGameOnBoard(gamesOnBoard);
+
+    } catch (error) {
+      console.error('Error fetching user play pile', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchUserPlayPileGames();
+    fetchGamesOnBoard();
   }, [])
 
   return (
-    <UserPlayPileGamesContext.Provider value={{userPlayPileGames, setUserPlayPileGames, loading, fetchUserPlayPileGames}}>
+    <UserPlayPileGamesContext.Provider value={{
+      loading,
+      userPlayPileGames,
+      setUserPlayPileGames,
+      fetchUserPlayPileGames,
+      userGamesOnBoard,
+      setUserGameOnBoard,
+      fetchGamesOnBoard}}>
       {children}
     </UserPlayPileGamesContext.Provider>
   )

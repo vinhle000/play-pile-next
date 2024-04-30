@@ -1,5 +1,6 @@
 const UserGame = require('../models/userGameModel');
 const Game = require('../models/gameModel');
+const Column = require('../models/columnModel');
 const asyncHandler = require('express-async-handler');
 const logger = require('../../config/logger');
 const mongoose = require('mongoose');
@@ -27,6 +28,40 @@ class UserGameController {
     }
   })
 
+  // @desc get only the games that are in columns that are on the board
+  getUserGamesOnBoard = asyncHandler( async (req, res) => {
+    // getColumns of user,
+    // get Id's of columns that hav isOnBoard = true
+
+    const userId = req.user._id;
+    const columnsOnBoard = await Column.find({userId: userId, isOnBoard: true});
+    const columnIds = columnsOnBoard.map(column => column._id);
+    // console.log(' Usercontroller -> getUserGamesOnBoard --> ', {userId, columnsOnBoard, columnIds})
+    try {
+      const userGamesOnBoard = await UserGame.find({ userId: userId, columnId: columnIds });
+
+      //map games to each column id that they are in
+      // {columnId: [game1, game2, game3]
+         // columnId2: [game4, game5, game6]}
+      if (!userGamesOnBoard) {
+        res.status(200).json({});
+      }
+      const gamesOnBoard = {};
+      userGamesOnBoard.forEach((game) => {
+        if (gamesOnBoard[game.columnId]) {
+          gamesOnBoard[game.columnId].push(game);
+        } else {
+          gamesOnBoard[game.columnId] = [game];
+        }
+      })
+
+      res.status(200).json(gamesOnBoard);
+
+    } catch (error) {
+      logger.error(`Error getting user games on board ${error}`);
+      res.status(500).json({message: 'Error getting user games on board'});
+    }
+  })
 
   // BUG: Issue getting 401 when making PATCH request
   // @desc  Update user game data, can update multiple fields

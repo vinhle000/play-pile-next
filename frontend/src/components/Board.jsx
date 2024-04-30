@@ -1,26 +1,17 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useContext} from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Column from './Column'
 import columnService from '@/services/columnService'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import userGameService from '@/services/userGameService'
+import ColumnsContext from '@/contexts/ColumnsContext'
 
-function Board() {
+function Board({columns, userGamesOnBoard}) {
 
   /* //FIXME: Fetch columns from backend
-    PLAN: for now we well just use the testColumn object
-    1. get columns from backend for the user
-    2. Which columns are isOnBoard: true, will be displayed on the board
-    3. Take ids of the isOnBoard columns and fetch userGames for those columns
-      This is index by userId and columnId
-      // UserGameSchema.index({ userId: 1, columnId: 1 });  // Finding all userGame in a column
-
     4. Display the games in the columns ( will be handled in Columns.jsx)
-
-
   */
-
-  const [columns, setColumns] = useState([])
   const [inputTitle, setInputTitle] = useState('')
 
   const handleCreateColumn = () => {
@@ -32,27 +23,22 @@ function Board() {
     }
   }
 
+
+
   // result: dropResult
   const handleOnDragEnd = (result) => {
 
   }
 
-  useEffect(() => {
-    const fetchColumns = async () => {
-      try {
-        let columns = columnService.getColumns();
-        setColumns(columns);
 
-      } catch (error) {
-        console.error('Error fetching columns: ', error);
-      }
-    }
-    fetchColumns();
-  }, [])
+  // useEffect(() => {
+
+  // }, [])
 
   return (
     <>
       <div>Board</div>
+
       <div className="flex">
         <Input
           type='text'
@@ -66,6 +52,9 @@ function Board() {
           Create +
         </Button>
       </div>
+
+
+
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="board" direction="horizontal" type="column">
           {(provided, snapshot) =>
@@ -75,13 +64,13 @@ function Board() {
               ref={provided.innerRef}
             >{
               Array.from(Object.entries(columns)).map((column, index) => {
-                console.log('Board --> columnn map -> item ->', column)
+                // console.log('Board --> columnn map -> item ->', column)
                 return (
                   <Column
-                    key={column["_id"]}
-                    id={column["_id"]}
+                    key={column._id}
+                    id={column._id}
                     column={column}
-                    games={[]}
+                    games={ userGamesOnBoard[column._id] || []}
                     index={index}
                   />
 
@@ -92,7 +81,6 @@ function Board() {
             }</div>
           }
         </Droppable>
-
       </DragDropContext>
 
     </>
