@@ -30,7 +30,7 @@ function SearchPage() {
   }, [searchTerm])
   return (
     <div className="mx-10" >
-      <h1>Search Results for: {searchTerm}</h1>
+      <h1>Search Results for: {searchTerm}</h1> {/*//FIXME causing undefined error */}
       <br />
       <br />
       <br />

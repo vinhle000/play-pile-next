@@ -21,6 +21,10 @@ export function ColumnChangeRadioGroup() {
   const form = useForm()
 
   // TODO: will have to preserve state as the user makes more lists(columns)
+
+  // NOW:  fetch columns for user -> future make context for Columns
+      // fetchAllColumns, fetchColumnsOnBoard, fetchColumnsNotOnBoard
+
   const playPileColumns = ["Backlog", "PlanToPlay", "Playing", "Done"]
 
   function onSubmit(data) {

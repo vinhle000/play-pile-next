@@ -27,6 +27,7 @@ function AvatarDropdownMenu() {
   const { user, loading, logout } = useContext(UserContext);
   return (
     <div>
+
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
@@ -64,6 +65,22 @@ function NavigationBar() {
 
   return (
     <div as="header" className="bg-gray-800">
+      {/* <div
+        className="absolute
+        top-0
+        left-0
+        w-full-96
+        bg-gradient-to-br
+        from-pink-400
+        to-[#0055D1]
+        rounded-md
+        filter
+        blur-3xl
+        opacity-50
+        -z-500"
+      > */}
+
+
       <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex items-center px-2 lg:px-0">
@@ -130,6 +147,7 @@ function NavigationBar() {
             </NavigationMenu>
           </div>
         </div>
+      {/* </div> */}
       </div>
     </div>
   );

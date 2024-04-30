@@ -5,6 +5,10 @@ import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ColumnsContext from '@/contexts/ColumnsContext'
 import Board from '@/components/Board'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input';
+
+
+
 
 // TODO: switch to more generic name "BoardPage"
 function BoardPage() {  //
@@ -14,8 +18,6 @@ function BoardPage() {  //
   const { columns, setColumns, columnsLoading, fetchColumns } = useContext(ColumnsContext)
 
   const onBoardColumns = columns.filter((col) => col.isOnBoard)
-  //REMOVE this is now done in the backend
-  // const columnIds = onBoardColumns.map((col) => col._id )
 
 
   //REVISE: this is for testing only, going to assign all games to the first column
@@ -31,8 +33,26 @@ function BoardPage() {  //
     }
   }
 
-  useEffect(() => {
+  const [inputTitle, setInputTitle] = useState('');
 
+
+
+
+
+  const handleCreateColumn = async () => {
+    try {
+      await columnService.createColumn(inputTitle);
+      setInputTitle('');
+    } catch (error) {
+      console.error('Error creating column', error);
+    }
+  };
+
+
+
+
+
+  useEffect(() => {
     try {
       fetchUserPlayPileGames();
       fetchColumns()
@@ -53,9 +73,22 @@ function BoardPage() {  //
       <Button onClick={() => assignGamesToColumnsToFirstColumn(userGamesOnBoard)}>
           Assign Games to First Column, for testing
         </Button>
+        <div>Board</div>
+      <div className="flex">
+        <Input
+          type="text"
+          value={inputTitle}
+          onChange={(e) => setInputTitle(e.target.value)}
+          placeholder="Column Title"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        <Button onClick={handleCreateColumn}>Create +</Button>
+      </div>
 
+      <div className="mt-5">
+        <Board columns={onBoardColumns} userGamesOnBoard={userGamesOnBoard}col/>
 
-      <Board columns={onBoardColumns} userGamesOnBoard={userGamesOnBoard}col/>
+      </div>
     </>
   )
 }
