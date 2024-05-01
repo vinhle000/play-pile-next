@@ -6,7 +6,7 @@ import ColumnsContext from '@/contexts/ColumnsContext'
 import Board from '@/components/Board'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input';
-
+import columnService from '@/services/columnService'
 
 
 
@@ -15,9 +15,10 @@ function BoardPage() {  //
 
   const { userPlayPileGames, setUserPlayPileGames, fetchUserPlayPileGames, userPlayPileGamesLoading } = useContext(UserPlayPileGamesContext);
   const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, userGamesOnBoardLoading } = useContext(UserPlayPileGamesContext);
-  const { columns, setColumns, columnsLoading, fetchColumns } = useContext(ColumnsContext)
+  // const { columns, setColumns, columnsLoading, fetchColumns } = useContext(ColumnsContext)
+  const { columnsOnBoard, setColumnsOnBoard, columnsOnBoardLoading, fetchColumnsOnBoard } = useContext(ColumnsContext)
 
-  const onBoardColumns = columns.filter((col) => col.isOnBoard)
+
 
 
   //REVISE: this is for testing only, going to assign all games to the first column
@@ -36,9 +37,6 @@ function BoardPage() {  //
   const [inputTitle, setInputTitle] = useState('');
 
 
-
-
-
   const handleCreateColumn = async () => {
     try {
       await columnService.createColumn(inputTitle);
@@ -48,22 +46,18 @@ function BoardPage() {  //
     }
   };
 
-
-
-
-
   useEffect(() => {
     try {
       fetchUserPlayPileGames();
-      fetchColumns()
-      fetchGamesOnBoard()
+      fetchGamesOnBoard();
+      fetchColumnsOnBoard();
 
     } catch (error) {
       console.error('Error fetching columns and user games by column ids: ', error)
     }
   }, [])
 
-  if ( userGamesOnBoardLoading || columnsLoading) {
+  if ( userGamesOnBoardLoading || columnsOnBoardLoading) {
     return <div>Loading...</div>
   }
 
@@ -86,7 +80,7 @@ function BoardPage() {  //
       </div>
 
       <div className="mt-5">
-        <Board columns={onBoardColumns} userGamesOnBoard={userGamesOnBoard}col/>
+        <Board columns={columnsOnBoard} userGamesOnBoard={userGamesOnBoard}col/>
 
       </div>
     </>

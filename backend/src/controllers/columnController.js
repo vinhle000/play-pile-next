@@ -28,6 +28,27 @@ class ColumnController {
   // @route GET /api/board/columns/:columnId
   // @access Private
 
+
+  // @desc  Get columns that are to be displayed on board
+  // @route GET /api/board/columns/onBoard // NOTE: redo api name url
+  // @access Private
+  getColumnsOnBoard = asyncHandler(async (req, res) => {
+    let userId = req.user._id;
+
+    try {
+      const columns = await Column.find({
+        userId: userId,
+        isOnBoard: true,
+      }).sort('position');
+
+      res.status(200).json(columns);
+    } catch (error) {
+      logger.error(`Error getting columns on board ${error}`);
+      res.status(500).json({ message: 'Error getting columns on board' });
+    }
+
+  });
+
   // Create a column
   // @desc  Create a column for user
   // @route POST /api/board/columns/
@@ -38,10 +59,19 @@ class ColumnController {
 
     logger.debug(`createColumn --> ${columnTitle}`)
 
+    const currentColumnCount = await Column.countDocuments({
+      userId: userId,
+      isOnBoard: true,
+    });
+    console.log(`currentColumnCount --> `, currentColumnCount)
+
+
     try {
       const newColumn = await Column.create({
         userId: userId,
         title: columnTitle,
+        onBoard: true,
+        position: currentColumnCount + 1,
       });
       res.status(201).json(newColumn);
     } catch (error) {

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import ColumnsContext from '@/contexts/ColumnsContext';
 
 function Board({ columns, userGamesOnBoard }) {
-  const { setColumns, columnsLoading, fetchColumns } = useContext(ColumnsContext)
+  const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext)
 
   const [isDroppableReady, setDroppableReady] = useState(false);
 
@@ -33,7 +33,7 @@ function Board({ columns, userGamesOnBoard }) {
       const [removed] = newColumns.splice(source.index, 1);
       newColumns.splice(destination.index, 0, removed);
       console.log('newColumns', newColumns)
-      setColumns(newColumns);
+      setColumnsOnBoard(newColumns);
 
     }
     //   console.log('newColumns', newColumns)

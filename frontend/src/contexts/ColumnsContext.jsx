@@ -5,15 +5,15 @@ const ColumnsContext = createContext({})
 
 export const ColumnsProvider = ({children}) => {
   const [columns, setColumns] = useState([]);
+  const [columnsOnBoard, setColumnsOnBoard] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchColumns = async () => {
     try {
       setLoading(true);
-      const response = await columnService.getColumns();
-      setColumns(response);
-      console.log('Columns fetched: ', response)
-      return response.data;
+      const columns = await columnService.getColumns();
+      setColumns(columns);
+      return columns;
 
     } catch (error) {
       console.error('Error fetching user play pile', error)
@@ -21,12 +21,39 @@ export const ColumnsProvider = ({children}) => {
     }
   }
 
+  const fetchColumnsOnBoard = async () => {
+    try {
+      setLoading(true)
+      const columns = await columnService.getColumnsOnBoard();
+
+      console.log(`ColumnContext.jsx -> columns on board --> `, columns )
+      setColumnsOnBoard(columns);
+      return columns;
+
+    } catch (error) {
+      console.error(`Error fetching user play pile`, error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
+
   useEffect(() => {
     fetchColumns();
   }, [])
 
   return (
-    <ColumnsContext.Provider value={{columns, setColumns, loading, fetchColumns}}>
+    <ColumnsContext.Provider
+    value={{
+      loading,
+      columns,
+      setColumns,
+      fetchColumns,
+      columnsOnBoard,
+      setColumnsOnBoard,
+      fetchColumnsOnBoard,
+      }}>
       {children}
     </ColumnsContext.Provider>
   )

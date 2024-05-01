@@ -13,6 +13,15 @@ const columnService = {
     }
   },
 
+  async getColumnsOnBoard() {
+    try {
+      const response = await axios.get(`${API_URL}/onBoard`, { withCredentials: true});
+      return response.data;
+    } catch (error) {
+      console.error(`Error getting columns to be displayed on board`, error)
+    }
+  },
+
   async createColumn(title) {
     try{
       const response = await axios.post(`${API_URL}/`, {columnTitle: title}, {withCredentials: true});

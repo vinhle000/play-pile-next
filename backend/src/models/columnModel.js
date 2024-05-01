@@ -13,8 +13,8 @@ const ColumnSchema = new mongoose.Schema(
       required: true,
     },
     position: {
-      // Maybe do two fields for on board, and when off the board(on side panel list) order
       type: Number,
+      default: 0,
     },
     isOnBoard: {
       type: Boolean,
