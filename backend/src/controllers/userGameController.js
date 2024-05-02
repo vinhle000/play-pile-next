@@ -55,6 +55,11 @@ class UserGameController {
         }
       })
 
+      // Sort games by their position within the columns
+      for (const [columnId, games] of Object.entries(gamesOnBoard)){
+        gamesOnBoard[columnId] = games.sort((a, b) => a.columnPosition - b.columnPosition)
+      }
+
       res.status(200).json(gamesOnBoard);
 
     } catch (error) {
