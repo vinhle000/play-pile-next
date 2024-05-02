@@ -18,21 +18,24 @@ function Board({ columns, userGamesOnBoard }) {
     // check if user dragged card outside of board
     if(!destination) return;
 
+
+    // if user places it back to the same spot
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+
     // Handle column drag
     if (type === 'column') {
-      const [removed] = columns.splice(source.index, 1);
-      columns.splice(destination.index, 0, removed);
+      const newColumns = Array.from(columns);
+      const [removed] = newColumns.splice(source.index, 1);
+      newColumns.splice(destination.index, 0, removed);
 
-      setColumnsOnBoard(columns);
-      console.log('reordered list -->> ', columns)
-      columnService.updatePositions(columns.map((column, index) => {
-        return ({
-          _id: column._id,
-          position: index
-        })
-
-        }
-      ))
+      setColumnsOnBoard(newColumns);
+      columnService.updatePositions(newColumns.map( column => ({_id: column._id}) ));
 
 
     }

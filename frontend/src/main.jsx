@@ -12,6 +12,5 @@ import './utils/logRocket';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <App />,
-  document.getElementById('root')
 );
 

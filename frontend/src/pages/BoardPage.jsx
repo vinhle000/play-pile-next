@@ -25,7 +25,7 @@ function BoardPage() {  //
   const assignGamesToColumnsToFirstColumn = () => {
     console.log('Assigning games to columns --- FOR INITIAL TESTING', {userPlayPileGames})
     try {
-      const columnId = columns[0]._id
+      const columnId = columnsOnBoard[0]._id
       userPlayPileGames.forEach(async (game) => {
         await userGameService.updateUserGameData(game.igdbId, { columnId: columnId })
       })
