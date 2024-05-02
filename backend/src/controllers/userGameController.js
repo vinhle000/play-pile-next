@@ -89,6 +89,38 @@ class UserGameController {
     }
   });
 
+  // @desc  Update userGame card position in column
+  // @route PATCH /api/userGames/board/updatePositions
+  // @access Private
+  updateColumnPositions = asyncHandler(async (req, res) => {
+    // need columnId, userGameId, and positions (this will be provided as index of the array of userGameData items)
+
+    const userId = req.user._id;
+    const source = req.body.source;
+    const destination = req.body.destination;
+
+    if (!source || !destination) {
+      res.status(400).json({message: 'source and destination info no found'})
+    }
+
+    try {
+      const sourceColumnPromises = source.userGames.map((item, index) =>
+        UserGame.findOneAndUpdate({_id: item._id}, {$set: {columnId: source.columnId, columnPosition: index}}, { new: true } )
+      )
+
+      const destinationColumnPromises = destination.userGames.map((item, index) =>
+        UserGame.findOneAndUpdate({_id: item._id}, {$set: {columnId: destination.columnId, columnPosition: index}}, { new: true } )
+      )
+      await Promise.all([...sourceColumnPromises, ...destinationColumnPromises])
+
+      res.status(200).json({message: 'Updated game card position in column successfully'});
+
+    } catch (error){
+      logger.error(`Error updating game card positions in column ${error}`)
+      console.error(`Error updating game card positions in column ${error}`)
+      res.status(500).json({message: 'Error updating game card positions in column'})
+    }
+  });
 
   // ====================================================
   // CRUD OPERATIONS

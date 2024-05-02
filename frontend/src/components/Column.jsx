@@ -31,7 +31,7 @@ function Column({ id, column, games, index }) {
                 </h2>
                 {/* Game Cards */}
                 {games.map((game, index) => (
-                  <Draggable key={game._id.toString()} draggableId={game._id.toString()} index={index}>
+                  <Draggable key={game._id.toString()} draggableId={`gameCard-${game._id}`} index={index}>
                     {(provided) => (
                       <GameCard
                         innerRef={provided.innerRef}

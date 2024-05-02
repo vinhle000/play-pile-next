@@ -44,8 +44,6 @@ const columnService = {
 
   // will use the newly ordered list of columns, will use the element index to persist the position in mongoDB
   async updatePositions(columns) {
-
-    console.log(' clolumnService - updatePositions --> ', columns)
     const requestBody = { columns: columns ? columns : []}
     try {
       const response = await axios.patch(`${API_URL}/updatePositions`, requestBody, {withCredentials: true });

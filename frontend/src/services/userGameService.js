@@ -15,7 +15,7 @@ const userGameService = {
   },
 
   async getUserGameByColumnIds(columnIds) {
-    const requestBody = { columnIds: columnIds };
+    const body = { columnIds: columnIds };
     try {
       const response = await axios.post(`${API_URL}/column/`, requestBody, { withCredentials: true });
       return response.data;
@@ -33,16 +33,25 @@ const userGameService = {
     }
   },
 
-
   async updateUserGameData(igdbId, fields) {
-    const requestBody = fields ? { ...fields, } : {};
+    const body = fields ? { ...fields, } : {};
     try {
-      const response = await axios.patch(`${API_URL}/${igdbId}`, requestBody, { withCredentials: true });
+      const response = await axios.patch(`${API_URL}/${igdbId}`, body, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error(`Error updating user's game data`, error);
     }
-  }
+  },
+
+  async updateUserGameColumnPositions(updatedColumnUserGames) {
+    const body = updatedColumnUserGames;
+    try {
+      const response = await axios.patch(`${API_URL}/board/column/updatePositions`, body, { withCredentials: true });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating game card positions in column ${error}`)
+    }
+  },
 };
 
 export default userGameService;

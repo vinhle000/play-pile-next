@@ -6,7 +6,7 @@ const UserPlayPileGamesContext = createContext({});
 export const UserPlayPileGamesProvider = ({children}) => {
 
   const [userPlayPileGames, setUserPlayPileGames] = useState([]);
-  const [userGamesOnBoard, setUserGameOnBoard] = useState({});
+  const [userGamesOnBoard, setUserGamesOnBoard] = useState({});
       // map of columnId to games
         // {columnId: [game1, game2, game3]}
   const [loading, setLoading] = useState(true);
@@ -31,12 +31,10 @@ export const UserPlayPileGamesProvider = ({children}) => {
       // {columnId: [game1, game2, game3]}
       // FIXME: this is for testing only, going to assign a
       if (!gamesOnBoard) {
-        setUserGameOnBoard({});
+        setUserGamesOnBoard({});
         return;
       }
-
-      console.log( 'UserPlayPileGamesProvider.jsx -> fetchGamesOnBoard() --> setGamesOnBoard: ', {gamesOnBoard});
-      setUserGameOnBoard(gamesOnBoard);
+      setUserGamesOnBoard(gamesOnBoard);
 
     } catch (error) {
       console.error('Error fetching user play pile', error);
@@ -57,7 +55,7 @@ export const UserPlayPileGamesProvider = ({children}) => {
       setUserPlayPileGames,
       fetchUserPlayPileGames,
       userGamesOnBoard,
-      setUserGameOnBoard,
+      setUserGamesOnBoard,
       fetchGamesOnBoard}}>
       {children}
     </UserPlayPileGamesContext.Provider>

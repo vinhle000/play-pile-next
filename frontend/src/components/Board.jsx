@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useContext} from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Button } from '@/components/ui/button';
 import Column from './Column';
 import columnService from '@/services/columnService';
-import { Button } from '@/components/ui/button';
+import userGameService from '@/services/userGameService'
 import ColumnsContext from '@/contexts/ColumnsContext';
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
 function Board({ columns, userGamesOnBoard }) {
-  const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext)
+  const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
+  const { setUserGamesOnBoard, fetchUserGamesOnBoard } = useContext(UserPlayPileGamesContext);
 
-  const [isDroppableReady, setDroppableReady] = useState(false);
-
-
+  // FIXME: The games are not retaining their order in their respective columns after dropping
   const handleOnDragEnd = (result) => {
-    // TODO: Handle the actual reordering logic here
     const { source, destination, type } = result;
+    console.log(`handleOnDragEnd ---> result `, {source, destination, type})
 
-    // check if user dragged card outside of board
     if(!destination) return;
-
 
     // if user places it back to the same spot
     if (
@@ -27,7 +26,6 @@ function Board({ columns, userGamesOnBoard }) {
       return;
     }
 
-
     // Handle column drag
     if (type === 'column') {
       const newColumns = Array.from(columns);
@@ -36,23 +34,60 @@ function Board({ columns, userGamesOnBoard }) {
 
       setColumnsOnBoard(newColumns);
       columnService.updatePositions(newColumns.map( column => ({_id: column._id}) ));
+    }
+
+    // Handle game card drag
+    if (type === 'card') {
+      console.log( ' game card drop ------>>>> ' ,{userGamesOnBoard})
+      const sourceColumnId = source.droppableId.split('-')[1]
+      const destinationColumnId = destination.droppableId.split('-')[1]
+
+
+      if (!userGamesOnBoard[destinationColumnId]) {
+        userGamesOnBoard[destinationColumnId] = [];
+      }
+
+      const sourceList = [...userGamesOnBoard[sourceColumnId]]
+      const destinationList =  userGamesOnBoard[destinationColumnId] ? [...userGamesOnBoard[destinationColumnId]] : []
+
+      const [removed] = sourceList.splice(source.index, 1);
+
+      console.log( ' game card to be re position ---> ', removed)
+      console.log(` move from start: ${source.index}  ----> ${destination.index}`)
+
+      destinationList.splice(destination.index, 0, removed);
+
+      const newUserGamesOnBoard = {
+        ...userGamesOnBoard,
+        [sourceColumnId]: sourceList,
+        [destinationColumnId]: destinationList,
+      }
+
+      // console.log( ' game card drop ------>>>> ' ,{userGamesOnBoard, newUserGamesOnBoard})
+      // BUG: need to handle dragging card to a different position within in the same column
+
+
+
+      setUserGamesOnBoard(newUserGamesOnBoard)
+      const updatedColumnLists = {
+        source: {
+          columnId: sourceColumnId,
+          userGames: sourceList,
+        },
+        destination: {
+          columnId: destinationColumnId,
+          userGames: destinationList,
+        }
+      };
+
+      console.log(' updatedColumnLists ------> ', updatedColumnLists)
+      userGameService.updateUserGameColumnPositions(updatedColumnLists);
 
 
     }
 
   };
 
-
-  useEffect(() => {
-    // Use requestAnimationFrame to ensure Droppable is ready
-    const handle = requestAnimationFrame(() => setDroppableReady(true));
-    return () => cancelAnimationFrame(handle);
-  }, []);
-
-
-  if (!isDroppableReady) {
-    return null; // or a loading indicator
-  }
 
   return (
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -68,7 +103,10 @@ function Board({ columns, userGamesOnBoard }) {
                   key={column._id}
                   id={column._id}
                   column={column}
-                  games={userGamesOnBoard[column._id] || []}
+                  games={ userGamesOnBoard[column._id]
+                    ? userGamesOnBoard[column._id].sort((a, b) => a.columnPosition - b.columnPosition)
+                    : []
+                  }
                   index={index}
                 />
               ))}
