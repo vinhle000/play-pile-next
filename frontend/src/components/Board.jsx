@@ -7,9 +7,9 @@ import userGameService from '@/services/userGameService'
 import ColumnsContext from '@/contexts/ColumnsContext';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
-function Board({ columns, userGamesOnBoard }) {
+function Board({ columns,  }) {
   const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
-  const { setUserGamesOnBoard, fetchUserGamesOnBoard } = useContext(UserPlayPileGamesContext);
+  const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard } = useContext(UserPlayPileGamesContext);
 
   // FIXME: The games are not retaining their order in their respective columns after dropping
   const handleOnDragEnd = (result) => {
@@ -38,37 +38,24 @@ function Board({ columns, userGamesOnBoard }) {
 
     // Handle game card drag
     if (type === 'card') {
-      console.log( ' game card drop ------>>>> ' ,{userGamesOnBoard})
       const sourceColumnId = source.droppableId.split('-')[1]
       const destinationColumnId = destination.droppableId.split('-')[1]
 
+        const sourceList = Array.from(userGamesOnBoard[sourceColumnId]);
+        // Handling drag in same column
+        const destinationList = sourceColumnId === destinationColumnId ? sourceList : Array.from(userGamesOnBoard[destinationColumnId] || []);
 
-      if (!userGamesOnBoard[destinationColumnId]) {
-        userGamesOnBoard[destinationColumnId] = [];
-      }
+        const [removed] = sourceList.splice(source.index, 1);
+        destinationList.splice(destination.index, 0, removed);
 
-      const sourceList = [...userGamesOnBoard[sourceColumnId]]
-      const destinationList =  userGamesOnBoard[destinationColumnId] ? [...userGamesOnBoard[destinationColumnId]] : []
+        const newUserGamesOnBoard = {
+          ...userGamesOnBoard,
+          [sourceColumnId]: sourceList,
+          [destinationColumnId]: destinationList,
+        };
 
-      const [removed] = sourceList.splice(source.index, 1);
+        setUserGamesOnBoard(newUserGamesOnBoard);
 
-      console.log( ' game card to be re position ---> ', removed)
-      console.log(` move from start: ${source.index}  ----> ${destination.index}`)
-
-      destinationList.splice(destination.index, 0, removed);
-
-      const newUserGamesOnBoard = {
-        ...userGamesOnBoard,
-        [sourceColumnId]: sourceList,
-        [destinationColumnId]: destinationList,
-      }
-
-      // console.log( ' game card drop ------>>>> ' ,{userGamesOnBoard, newUserGamesOnBoard})
-      // BUG: need to handle dragging card to a different position within in the same column
-
-
-
-      setUserGamesOnBoard(newUserGamesOnBoard)
       const updatedColumnLists = {
         source: {
           columnId: sourceColumnId,
@@ -80,9 +67,7 @@ function Board({ columns, userGamesOnBoard }) {
         }
       };
 
-      console.log(' updatedColumnLists ------> ', updatedColumnLists)
       userGameService.updateUserGameColumnPositions(updatedColumnLists);
-
 
     }
 
@@ -103,10 +88,7 @@ function Board({ columns, userGamesOnBoard }) {
                   key={column._id}
                   id={column._id}
                   column={column}
-                  games={ userGamesOnBoard[column._id]
-                    ? userGamesOnBoard[column._id].sort((a, b) => a.columnPosition - b.columnPosition)
-                    : []
-                  }
+                  games={ userGamesOnBoard[column._id] || []}
                   index={index}
                 />
               ))}
