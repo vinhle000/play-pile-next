@@ -2,7 +2,7 @@ import React from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import GameCard from './GameCard';
 
-function Column({ id, column, games, index }) {
+function Column({ id, column, games, index, handleOpenEditModal }) {
   return (
     <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
@@ -41,8 +41,8 @@ function Column({ id, column, games, index }) {
                         draggableProps={provided.draggableProps}
                         dragHandleProps={provided.dragHandleProps}
                         game={game}
+                        handleOpenEditModal={handleOpenEditModal}
                       />
-
                     )}
                   </Draggable>
                 ))}

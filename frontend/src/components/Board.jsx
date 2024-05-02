@@ -7,24 +7,19 @@ import userGameService from '@/services/userGameService'
 import ColumnsContext from '@/contexts/ColumnsContext';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
-function Board({ columns,  }) {
+function Board({ columns,  handleOpenEditModal}) {
   const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
   const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard } = useContext(UserPlayPileGamesContext);
 
   // FIXME: The games are not retaining their order in their respective columns after dropping
   const handleOnDragEnd = (result) => {
     const { source, destination, type } = result;
-    console.log(`handleOnDragEnd ---> result `, {source, destination, type})
+    // console.log(`handleOnDragEnd ---> result `, {source, destination, type})
 
     if(!destination) return;
 
-    // if user places it back to the same spot
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
+    if (destination.droppableId === source.droppableId &&
+        destination.index === source.index) return;
 
     // Handle column drag
     if (type === 'column') {
@@ -41,20 +36,21 @@ function Board({ columns,  }) {
       const sourceColumnId = source.droppableId.split('-')[1]
       const destinationColumnId = destination.droppableId.split('-')[1]
 
-        const sourceList = Array.from(userGamesOnBoard[sourceColumnId]);
-        // Handling drag in same column
-        const destinationList = sourceColumnId === destinationColumnId ? sourceList : Array.from(userGamesOnBoard[destinationColumnId] || []);
+      const sourceList = Array.from(userGamesOnBoard[sourceColumnId]);
 
-        const [removed] = sourceList.splice(source.index, 1);
-        destinationList.splice(destination.index, 0, removed);
+      const destinationList = sourceColumnId === destinationColumnId // Handling drag in same column
+      ? sourceList : Array.from(userGamesOnBoard[destinationColumnId] || []);
 
-        const newUserGamesOnBoard = {
-          ...userGamesOnBoard,
-          [sourceColumnId]: sourceList,
-          [destinationColumnId]: destinationList,
-        };
+      const [removed] = sourceList.splice(source.index, 1);
+      destinationList.splice(destination.index, 0, removed);
 
-        setUserGamesOnBoard(newUserGamesOnBoard);
+      const newUserGamesOnBoard = {
+        ...userGamesOnBoard,
+        [sourceColumnId]: sourceList,
+        [destinationColumnId]: destinationList,
+      };
+
+      setUserGamesOnBoard(newUserGamesOnBoard);
 
       const updatedColumnLists = {
         source: {
@@ -68,9 +64,7 @@ function Board({ columns,  }) {
       };
 
       userGameService.updateUserGameColumnPositions(updatedColumnLists);
-
     }
-
   };
 
 
@@ -90,6 +84,7 @@ function Board({ columns,  }) {
                   column={column}
                   games={ userGamesOnBoard[column._id] || []}
                   index={index}
+                  handleOpenEditModal={handleOpenEditModal}
                 />
               ))}
               {provided.placeholder}
