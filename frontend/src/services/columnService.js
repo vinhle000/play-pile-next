@@ -42,6 +42,19 @@ const columnService = {
     }
   },
 
+  // will use the newly ordered list of columns, will use the element index to persist the position in mongoDB
+  async updatePositions(columns) {
+
+    console.log(' clolumnService - updatePositions --> ', columns)
+    const requestBody = { columns: columns ? columns : []}
+    try {
+      const response = await axios.patch(`${API_URL}/updatePositions`, requestBody, {withCredentials: true });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating column positions `, error);
+    }
+  },
+
   async deleteColumn(columnId) {
     try {
       const response = await axios.delete(`${API_URL}/${columnId}`, {withCredentials: true});

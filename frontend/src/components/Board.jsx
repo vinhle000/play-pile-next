@@ -12,36 +12,31 @@ function Board({ columns, userGamesOnBoard }) {
 
 
   const handleOnDragEnd = (result) => {
-    console.log('handleOnDragEnd -> result', result);
-
     // TODO: Handle the actual reordering logic here
-    const { destination, source, type } = result;
+    const { source, destination, type } = result;
 
     // check if user dragged card outside of board
     if(!destination) return;
 
-
-      //TODO: Keeping track of the columns order
-        // --> will also have to implement this for the game cards as well
-      //Should I update locally as a list of collumns and keep the state here?
-      // Or should I call the service to update the columns on the backend?, but it will be slow for it to render on front cause of the column context refresh
-      // columnService.updateColumns(newColumns);
-
     // Handle column drag
     if (type === 'column') {
-      const newColumns = Array.from(columns);
-      const [removed] = newColumns.splice(source.index, 1);
-      newColumns.splice(destination.index, 0, removed);
-      console.log('newColumns', newColumns)
-      setColumnsOnBoard(newColumns);
+      const [removed] = columns.splice(source.index, 1);
+      columns.splice(destination.index, 0, removed);
+
+      setColumnsOnBoard(columns);
+      console.log('reordered list -->> ', columns)
+      columnService.updatePositions(columns.map((column, index) => {
+        return ({
+          _id: column._id,
+          position: index
+        })
+
+        }
+      ))
+
 
     }
-    //   console.log('newColumns', newColumns)
 
-    // if( type === 'column') {
-    //   let columnId = result.draggableId;
-    //   let destinationIndex = result.destination.index;
-    // }
   };
 
 

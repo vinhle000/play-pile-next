@@ -96,8 +96,27 @@ class ColumnController {
       let updatedColumn = await this.updateColumnDocument(columnId, updateData);
       res.status(200).json(updatedColumn);
     } catch (error) {
-      logger.error(`Error updating column: ${columnId}`);
+      logger.error(`Error updating column: ${columnId}`, error);
       res.status(500).json({ message: 'Error updating column' });
+    }
+  });
+
+
+  // @desc  Update columns positions (after dragging and drop)
+  // @route PATCH /api/board/columns/updatePositions
+  // @access Private
+  updatePositions = asyncHandler(async (req, res) => {
+    let userId = req.user._id;
+    const updatedColumns = req.body.columns;
+    try {
+
+      await Promise.all(updatedColumns.map((column, index) => {
+        return Column.findByIdAndUpdate(column._id, {position: index });
+      }))
+      res.status(200).json({message:'Updated column positions successfully'})
+    } catch (error) {
+      logger.error(`Error update columns positions`, error)
+      res.status(500).json({message: `Error updating column positions`})
     }
   });
 
