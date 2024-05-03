@@ -4,6 +4,9 @@ const userGameController = require('../controllers/userGameController');
 const protectRoute  = require('../middleware/authMiddleware');
 
 router.get('/playPile', protectRoute, userGameController.getUserGamePile);
+// router.post('/playPile/column', protectRoute, userGameController.getUserGameByColumnIds);
+router.get('/board', protectRoute, userGameController.getUserGamesOnBoard);
+router.patch('/board/column/updatePositions', protectRoute, userGameController.updateColumnPositions);
 router.patch('/:igdbId', protectRoute, userGameController.updateUserGameData);
 
 module.exports = router;

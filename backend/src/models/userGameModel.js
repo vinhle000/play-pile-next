@@ -15,6 +15,10 @@ const UserGameSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Column',
     },
+    columnPosition: {
+      type: Number,
+      default: 0,
+    },
     isInPlayPile: {
       type: Boolean,
       default: false,
@@ -70,7 +74,10 @@ const UserGameSchema = new mongoose.Schema(
 UserGameSchema.index({ igdbId: 1 });
 UserGameSchema.index({ userId: 1});
 
+
+UserGameSchema.index({ userId: 1, isInPlayPile: 1 });  //All games in users play pile
 UserGameSchema.index({ userId: 1, igdbId: 1 }, { unique: true }); // Find specific userGame data for a user
 UserGameSchema.index({ userId: 1, columnId: 1 });  // Finding all userGame in a column
 UserGameSchema.index({ userId: 1, isOnBoard: 1 }); // Finding all userGame on the board
+UserGameSchema.index({ columnId: 1, columnPosition: 1 }); // Finding a specific userGame item
 module.exports = mongoose.model('UserGame', UserGameSchema);

@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import DateRangePicker from '@/components/DateRangePicker'
+import ColumnChangeRadioGroup from '@/components/ColumnChangeRadioGroup'
 
 import logRocket from 'logrocket'
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 import {
   Dialog,
@@ -26,7 +28,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import {
+  Popover, PopoverContent, PopoverTrigger
+} from "@/components/ui/popover"
 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 
 function UserGameDataEditModal({game, modalState, setModalState}) { // game has UserGameData and Game details
@@ -40,6 +46,10 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
     playedStatus: game.playedStatus,
     notes: game.notes
   })
+
+
+
+
 
   const updateUserGameData = async (igdbId, updateData) => {
     updateData ? updateData : {}
@@ -81,13 +91,41 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
             <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
               Edit Log
             </DialogTitle>
-             {/*  TODO: Dates  */}
-            <div>
+
+
+             {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
+             <div className="mt-1">
+              <span>In list: </span>
+              <Popover>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent className="w-auto">
+
+                  {/* map of the avaialble lists
+                      1. show which is currently selected
+                      2. upon select radio buttoon of user
+                      3. we either make a save button
+                            - useState for the updated value
+                            - implement submit/move/save button
+                            - Then update the list(column) of the game using
+                              updateUserGame(igdbId, {columnId: 'newColumnId'})
+                           */ }
+                  <ColumnChangeRadioGroup />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+
+
+
+
+             {/*  TODO: Dates  functionality */}
+            <div className="mt-4">
               <DateRangePicker handleFieldChange={handleFieldChange} />
                </div>
 
+
             {/* playingStatus    played status */}
-            <div className="flex space-x-4">
+            <div className="flex mt-4 space-x-4">
               <div className="flex-1 min-w-0 bg-gray-500">
               <DropdownMenu>
                 <DropdownMenuTrigger  className="w-full">{fieldData.playingStatus}</DropdownMenuTrigger>

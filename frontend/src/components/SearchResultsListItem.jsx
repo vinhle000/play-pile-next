@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import userGameService from '@/services/userGameService';
-import UserPlayPileContext from '@/contexts/UserPlayPileContext';
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 import useUserGameData from '@/hooks/useUserGameData';
 import LogRocket from 'logrocket';
 
@@ -22,7 +22,7 @@ const platformsNames = {
 
 function SearchResultsListItem({ game }) {
 
-  const { userPlayPile, setUserPlayPile, loading } = useContext(UserPlayPileContext)
+  const { UserPlayPileGames, setUserPlayPileGames, loading } = useContext(UserPlayPileGamesContext)
   const [userGameData, setUserGameData] = useUserGameData({
     status: game.status,
     isInPlayPile: game.isInPlayPile,

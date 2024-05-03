@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react'
 import GameCard from './GameCard'
-import UserPlayPileContext from '@/contexts/UserPlayPileContext'
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ConfirmModal from '@/components/ConfirmModal'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import userGameService from '@/services/userGameService'
@@ -10,7 +10,7 @@ import userGameService from '@/services/userGameService'
 
 
 function GameCardList({games}) {
-  const {loading, fetchUserPlayPile} = useContext(UserPlayPileContext);
+  const {loading, fetchUserPlayPileGames} = useContext(UserPlayPileGamesContext);
   const [modalState, setModalState] = useState('') // ['edit', 'remove'
   const [editGame, setEditGame] = useState({})
 
@@ -28,7 +28,7 @@ function GameCardList({games}) {
     try {
       await userGameService.updateUserGameData(editGame.igdbId, {isInPlayPile: "false"})
       setModalState('');
-      fetchUserPlayPile(); //refresh the play pile games
+      fetchUserPlayPileGames(); //refresh the play pile games
     } catch (error) {
       console.log('handleRemoveConfirm -> error', error)
     }
