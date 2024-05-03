@@ -2,14 +2,37 @@ import React, { useState, useEffect, useContext} from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { Button } from '@/components/ui/button';
 import Column from './Column';
+import ColumnForm from './ColumnForm';
+
 import columnService from '@/services/columnService';
 import userGameService from '@/services/userGameService'
+
 import ColumnsContext from '@/contexts/ColumnsContext';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
 function Board({ columns,  handleOpenEditModal}) {
   const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
   const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard } = useContext(UserPlayPileGamesContext);
+
+
+  const [showForm, setShowForm] = useState(false);
+
+  const handleShowForm = () => {
+    setShowForm(true);
+  };
+
+  const handleHideForm = () => {
+    setShowForm(false);
+  };
+
+
+  const handleCreateColumn = async (title) => {
+    try {
+      await columnService.createColumn(title);
+    } catch (error) {
+      console.error('Error creating column', error);
+    }
+  };
 
   // FIXME: The games are not retaining their order in their respective columns after dropping
   const handleOnDragEnd = (result) => {
@@ -75,8 +98,10 @@ function Board({ columns,  handleOpenEditModal}) {
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-7xl mx-auto"
+              className="flex flex-nowrap space-x-8 overflow-x-auto py-4 px-2"
+              style={{ minHeight: '80vh' }}  // Ensures that the droppable area is sufficiently tall
             >
+
               {columns.map((column, index) => (
                 <Column
                   key={column._id}
@@ -88,6 +113,24 @@ function Board({ columns,  handleOpenEditModal}) {
                 />
               ))}
               {provided.placeholder}
+
+              <div>
+                {showForm ? (
+                  <ColumnForm
+                    onSave={(newTitle) => {
+                      handleCreateColumn(newTitle);
+                      handleHideForm();
+                    }}
+                    onCancel={handleHideForm}
+                  />
+                ) : (
+                  <Button onClick={handleShowForm} className=" text-white font-semibold py-2 px-4 rounded inline-flex items-center">
+                    <span>Add list</span>
+                  </Button>
+                )}
+              </div>
+
+
             </div>
           )}
         </Droppable>

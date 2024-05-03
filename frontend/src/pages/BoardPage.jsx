@@ -29,7 +29,6 @@ function BoardPage() {  //
 
 
   const handleOpenEditModal = (event, game) => {
-    event.preventDefault();
     console.log('handleOpenEditModal -> game', game)
     setModalState('edit')
     setEditGame(game)
@@ -72,14 +71,6 @@ function BoardPage() {  //
 
 
 
-  const handleCreateColumn = async () => {
-    try {
-      await columnService.createColumn(inputTitle);
-      setInputTitle('');
-    } catch (error) {
-      console.error('Error creating column', error);
-    }
-  };
 
   useEffect(() => {
     try {
@@ -99,20 +90,10 @@ function BoardPage() {  //
   return (
     <>
       <h1>PlayPile Board</h1>
-      <Button onClick={() => assignGamesToColumnsToFirstColumn(userGamesOnBoard)}>
+       <Button onClick={() => assignGamesToColumnsToFirstColumn(userGamesOnBoard)}>
           Assign Games to First Column, for testing
         </Button>
-        <div>Board</div>
-      <div className="flex">
-        <Input
-          type="text"
-          value={inputTitle}
-          onChange={(e) => setInputTitle(e.target.value)}
-          placeholder="Column Title"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-        <Button onClick={handleCreateColumn}>Create +</Button>
-      </div>
+
 
       <div className="mt-5">
         <Board columns={columnsOnBoard} userGamesOnBoard={userGamesOnBoard} handleOpenEditModal={handleOpenEditModal}/>
