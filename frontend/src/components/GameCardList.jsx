@@ -1,86 +1,87 @@
-import React, {useState, useContext} from 'react'
-import GameCard from './GameCard'
-import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
-import ConfirmModal from '@/components/ConfirmModal'
-import UserGameDataEditModal from '@/components/UserGameDataEditModal'
-import userGameService from '@/services/userGameService'
-//TODO: Either create a specific component for the Search results gameCard,
-// or create a condition to render the gameCard differently
+import React, { useState, useContext } from 'react';
+import GameCard from './GameCard';
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
+import ConfirmModal from '@/components/ConfirmModal';
+import UserGameDataEditModal from '@/components/UserGameDataEditModal';
+import userGameService from '@/services/userGameService';
 
 
 
-function GameCardList({games}) {
-  const {loading, fetchUserPlayPileGames} = useContext(UserPlayPileGamesContext);
-  const [modalState, setModalState] = useState('') // ['edit', 'remove'
-  const [editGame, setEditGame] = useState({})
+
+function GameCardList({ games }) {
+  const { loading, fetchUserPlayPileGames } = useContext(UserPlayPileGamesContext);
+  const [modalState, setModalState] = useState('');
+  const [editGame, setEditGame] = useState({});
 
   if (loading) {
-    return <h3>Loading...</h3>
+    return <h3>Loading...</h3>;
   }
+
+  ///TODO - add more popover otopns to ch
 
   const handleOpenEditModal = (game) => {
-    setModalState('edit')
-    setEditGame(game)
-  }
+    setModalState('edit');
+    setEditGame(game);
+  };
 
   const handleRemoveConfirm = async () => {
-    console.log('handleRemoveConfirm -> editGame', editGame)
     try {
-      await userGameService.updateUserGameData(editGame.igdbId, {isInPlayPile: "false"})
+      await userGameService.updateUserGameData(editGame.igdbId, { isInPlayPile: "false" });
+      fetchUserPlayPileGames();
       setModalState('');
-      fetchUserPlayPileGames(); //refresh the play pile games
     } catch (error) {
-      console.log('handleRemoveConfirm -> error', error)
+      console.error('Error removing game:', error);
     }
+  };
 
-  }
   return (
-    <div className="mx-auto px-4 py-8 bg-gray-100 dark:bg-gray-800">
-    {/* <div className="grid grid-cols-1 gap-6"> */}
-      <div className="">
-      {/*list of games container*/}
-        {/*sorting component by name, release date, rating, etc.*/}
-        {/*filtering component by platform, genre, etc.*/}
-        {/*pagination component*/}
-        {/*game card component*/}
-        {/*spinner icon*/}
-       {/* <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        */}
-        <ul role="list" className="flex flex-wrap gap-4">
-        {games && (
-          games.map(game =>
-             <GameCard
-              key={game.igdbId}
-              game={game}
-              handleOpenEditModal={handleOpenEditModal}
-              setModalState={setModalState}
-             />
-
-          ))
-        }
-        </ul>
-
-        {modalState === 'remove' && (
-          <ConfirmModal
-            title="Remove Game"
-            description="Are you sure you want to remove this game from your Play Pile?"
-            onConfirm={ handleRemoveConfirm }
-            onCancel={() => setModalState('')}
-          />
-        )}
+    <div className="mx-auto px-4 py-8  dark:bg-gray-800">
+      <div className="flex flex-wrap justify-start items-stretch gap-4">
+        {games.map(game => (
 
 
-        {modalState === 'edit' && (
-          <UserGameDataEditModal
-            game={editGame}
-            modalState={modalState}
-            setModalState={setModalState}
-          />
-        )}
+             <div key={game.igdbId} className="rounded-md space-y-1 drop-shadow-md ">
+               <div className="flex justify-between items-center p-4"
+                  onClick={(e) => handleOpenEditModal(e, game)}
+               >
+                 <img
+                   src={game.gameInfo.coverUrl}
+                   alt={game.gameInfo.name}
+                   className="rounded-sm   min-w-12 h-15  transition duration-300 ease-in-out transform group-hover:scale-110 group-hover:brightness-50 object-cover"
+                 />
+                 <div
+                   onClick={() => handleOpenEditModal(game)}
+                   className="absolute inset-0 flex items-center
+                               justify-center opacity-0 group-hover:opacity-100
+                               transition-opacity duration-300"
+                 >
+                   {/* <p className="text-white text-xl font-bold">{game.gameInfo.name}</p> */}
+                 </div>
+               </div>
+             </div>
+            // <NewGameCard game={game} />
 
+        ))}
       </div>
+
+      {modalState === 'remove' && (
+        <ConfirmModal
+          title="Remove Game"
+          description="Are you sure you want to remove this game from your Play Pile?"
+          onConfirm={handleRemoveConfirm}
+          onCancel={() => setModalState('')}
+        />
+      )}
+
+      {modalState === 'edit' && (
+        <UserGameDataEditModal
+          game={editGame}
+          modalState={modalState}
+          setModalState={setModalState}
+        />
+      )}
     </div>
-  )
+  );
 }
 
-export default GameCardList
+export default GameCardList;

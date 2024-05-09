@@ -2,13 +2,15 @@ import React, {useState} from 'react'
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import DateRangePicker from '@/components/DateRangePicker'
-import ColumnChangeRadioGroup from '@/components/ColumnChangeRadioGroup'
+import MoveGameToColumnRadioGroup from '@/components/MoveGameToColumnRadioGroup'
 
 import logRocket from 'logrocket'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { useForm } from "react-hook-form"
 
 import {
   Dialog,
@@ -37,19 +39,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 function UserGameDataEditModal({game, modalState, setModalState}) { // game has UserGameData and Game details
 
-  console.log('UserGameDataEditModal -> game', game)
-  console.log('UserGameDataEditModal -> modalState', modalState)
-
   const [fieldData, setFieldData] = useState({
     playDates: game.playDates,
     playingStatus: game.playingStatus,
     playedStatus: game.playedStatus,
     notes: game.notes
   })
-
-
-
-
 
   const updateUserGameData = async (igdbId, updateData) => {
     updateData ? updateData : {}
@@ -84,100 +79,65 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
 
   return (
     <>
-      <Dialog className="fixed inset-0 z-100 overflow-y-auto">
+      <Dialog className="flex-col justify-betweenz-100 overflow-y-auto">
         <div className="fixed inset-0 flex items-center justify-center bg-black/30" >
           <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 
             <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
-              Edit Log
+             {game.gameInfo.name}
             </DialogTitle>
 
 
              {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
              <div className="mt-1">
-              <span>In list: </span>
               <Popover>
-                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverTrigger>ListName</PopoverTrigger>
                 <PopoverContent className="w-auto">
-
-                  {/* map of the avaialble lists
-                      1. show which is currently selected
-                      2. upon select radio buttoon of user
-                      3. we either make a save button
-                            - useState for the updated value
-                            - implement submit/move/save button
-                            - Then update the list(column) of the game using
-                              updateUserGame(igdbId, {columnId: 'newColumnId'})
-                           */ }
-                  <ColumnChangeRadioGroup />
+                  <MoveGameToColumnRadioGroup />
                 </PopoverContent>
               </Popover>
             </div>
 
-
-
-
-
              {/*  TODO: Dates  functionality */}
-            <div className="mt-4">
-              <DateRangePicker handleFieldChange={handleFieldChange} />
-               </div>
+             <DateRangePicker onChange={(dates) => handleFieldChange('playDates', dates)} />
 
-
-            {/* playingStatus    played status */}
-            <div className="flex mt-4 space-x-4">
-              <div className="flex-1 min-w-0 bg-gray-500">
-              <DropdownMenu>
-                <DropdownMenuTrigger  className="w-full">{fieldData.playingStatus}</DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Not started') }>No started</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Currently Playing') }>Currently Playing</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Endless') }>Endless</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Replaying') }>Replaying</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              </div>
-
-              <div className="flex-1 min-w-0">
                 <DropdownMenu>
-                <DropdownMenuTrigger  className="w-full">{fieldData.playedStatus}</DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'No status') }>No status</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Finished') }>Finished</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Completed') }>Completed</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Dropped') }>Dropped</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              </div>
-            </div>
+                  <DropdownMenuTrigger>{fieldData.playingStatus}</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Not started')}>Not started</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Currently Playing')}>Currently Playing</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Endless')}>Endless</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Replaying')}>Replaying</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
+                <DropdownMenu>
+                  <DropdownMenuTrigger>{fieldData.playedStatus}</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'No status')}>No status</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Finished')}>Finished</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Completed')}>Completed</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Dropped')}>Dropped</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
-              <div className="mt-4 space-y-4">
                 <div>
-                  <Label htmlFor="notes">Notes</Label>
-                  <Input
+                  <Textarea
                     id="notes"
                     name="notes"
                     value={fieldData.notes}
-                    onChange={()=> handleFieldChange('notes', event.target.value)}
+                    onChange={e => handleFieldChange('notes', e.target.value)}
                   />
                 </div>
-              </div>
 
-
-
-              <div className="mt-4 flex justify-between items-center gap-2 w-full">
-                <Button variant="destructive" onClick={() => setModalState('remove')}>
-                  Remove
-                </Button>
-                <div className="flex justify-end gap-2">
-                  <Button variant="secondary" onClick={() => setModalState('')}>
-                    Close
-                  </Button>
-                  <Button onClick={() => handleSave(game.igdbId)}>Save</Button>
-
+                <div className="flex justify-between">
+                  <Button onClick={()=> {}} variant="destructive">Remove</Button>
+                  <Button onClick={() => setModalState('')} variant="secondary">Close</Button>
+                  <Button onClick={handleSave} variant="primary">Save</Button>
                 </div>
-              </div>
+
+
+
 
            </div>
           </div>

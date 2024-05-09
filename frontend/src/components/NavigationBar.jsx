@@ -26,7 +26,6 @@ function AvatarDropdownMenu() {
 
   const { user, loading, logout } = useContext(UserContext);
   return (
-    <div>
 
       <DropdownMenu>
         <DropdownMenuTrigger>
@@ -42,10 +41,10 @@ function AvatarDropdownMenu() {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link to="/profile">Profile</Link>
+            <Link to="/profile">Board</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link to="/playPileBoard">My Pile</Link>
+            <Link to="/playPileBoard">Play Pile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link to="/settings">Settings</Link>
@@ -55,7 +54,6 @@ function AvatarDropdownMenu() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
   );
 }
 
@@ -64,93 +62,89 @@ function NavigationBar() {
   const { user, loading, logout } = React.useContext(UserContext);
 
   return (
-    <div as="header" className="bg-gray-800">
-      {/* <div
-        className="absolute
-        top-0
-        left-0
-        w-full-96
-        bg-gradient-to-br
-        from-pink-400
-        to-[#0055D1]
-        rounded-md
-        filter
-        blur-3xl
-        opacity-50
-        -z-500"
-      > */}
+    <>
+      <NavigationMenu className="w-full h-12 ">
 
+        <div className="w-full h-full flex items-center space-x-72">
 
-      <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="flex items-center px-2 lg:px-0">
-            <div className="flex-shrink-0">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                alt="Your Company"
-              />
-            </div>
-            <a
-              href="/"
-              className="rounded-md px-3 py-2 text-lg font-medium text-white"
-            >
-              Play Pile
-            </a>
-          </div>
+            {/*left side */}
+            <div className="">
+              <NavigationMenuList className={`flex flex-shrink-0 items-center justify-center gap-x-3 leading-[normal] `}>
+              <div className="w-px h-8 opacity-10 bg-black rounded-sm" />
+                <NavigationMenuItem className="origin-top-left -rotate-180 w-6 h-5 relative">
+                    {/* LOGO place holder */}
+                    <div className="w-4 h-5 left-0 top-0 absolute origin-top-left -rotate-180 bg-zinc-100 rounded-sm" />
+                </NavigationMenuItem>
 
-          <div className="flex items-center justify-between">
-            <NavigationMenu>
-            <SearchBar />
+                <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
+                <NavigationMenuItem key={'board'}>
+                <Link
+                    to={'/board'}
+                    className="w-14 h-6 font-medium text-black/60 hover:text-black/90"
+                  >
+                      <div>Board</div>
+                  </Link>
+                </NavigationMenuItem>
 
-
-              <NavigationMenuList>
-
-
-                {user ? (
-                  <>
-                    <NavigationMenuItem key={'playPileBoard'}>
-                    <Link
-                      to={'/playPileBoard'}
-                      className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      {'My PlayPile'}
-                    </Link>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem key={'avatar'}>
-                    <AvatarDropdownMenu></AvatarDropdownMenu>
-                  </NavigationMenuItem>
-                  </>
-                ) : (
-                  <>
-                    <NavigationMenuItem key={'register'}>
-                      <Link
-                        to={'/register'}
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        {'Sign Up'}
-
-                      </Link>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem key={'login'}>
-                      <Link
-                        to={'/login'}
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        {'Login'}
-                      </Link>
-                    </NavigationMenuItem>
-
-                  </>
-                )}
+                <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
+                <NavigationMenuItem key={'playPile'}>
+                <Link
+                    to={'/playPile'}
+                    className="w-14 h-6 font-medium text-black/60 hover:text-black/90"
+                  >
+                    {'Play Pile'}
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-        </div>
-      {/* </div> */}
+           </div>
+
+
+
+      {/*right side */}
+
+      <div className="">
+      <NavigationMenuList className="flex items-center justify-center self-stretch">
+        {user
+        ? (
+            <>
+              <SearchBar />
+              <AvatarDropdownMenu/>
+            </>
+          )
+        : (
+          <>
+            <div className="w-px h-8 opacity-10 bg-black rounded-sm" />
+            <NavigationMenuItem key={'board'}>
+            <Link
+                to={'/login'}
+                className="flex w-14 flex-shrink-0 flex-col font-medium text-black/30"
+              >
+                 Login
+              </Link>
+            </NavigationMenuItem>
+
+
+            <div className="w-px h-8 opacity-10 bg-black rounded-sm" />
+            <NavigationMenuItem key={'register'}>
+            <Link
+                to={'/register'}
+                className="flex w-14 flex-shrink-0 flex-col font-medium text-black/30"
+              >
+                Register
+              </Link>
+            </NavigationMenuItem>
+          </>
+        )}
+
+      </NavigationMenuList>
       </div>
-    </div>
-  );
+
+      </div>
+      </NavigationMenu>
+      <div className="w-full h-0.5 opacity-10 bg-black" />
+    </>
+  )
+
 }
 
 export default NavigationBar;

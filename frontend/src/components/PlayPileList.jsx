@@ -11,11 +11,10 @@ function PlayPileList() {
   console.log('PlayPileList -> UserPlayPileGames', userPlayPileGames)
   return (
     <>
-      <div className="flex grow flex-col gape-y-5 overflow-y-auto">
-        <h2 className="text-2xl font-bold">Play Pile</h2>
+      {/* <div className="flex grow flex-col gape-y-5 overflow-y-auto"> */}
         <GameCardList games={userPlayPileGames} loading={loading} />
 
-      </div>
+      {/* </div> */}
 
     </>
   )

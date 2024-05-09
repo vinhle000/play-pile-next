@@ -14,7 +14,7 @@ function ColumnForm({ onSave, onCancel }) {
   return (
     <form className="space-y-3" onSubmit={handleSubmit}>
       <Input
-        className="w-full p-2 text-sm border rounded shadow-inner resize-none"
+        className="w-full p-2 text-sm  rounded shadow-inner  bg-black/10 text-black/60 resize-none "
         placeholder="Enter list title…"
         value={title}
         onChange={(e) => setTitle(e.target.value)}

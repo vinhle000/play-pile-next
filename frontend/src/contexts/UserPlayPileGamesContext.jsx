@@ -43,6 +43,19 @@ export const UserPlayPileGamesProvider = ({children}) => {
     }
   }
 
+  const updateUserGameData = async (gameIgdbId, columnId, columnPosition) => {
+    try {
+      setLoading(true);
+      await userGameService.updateUserGameData(gameIgdbId, {
+        columnId: columnId,
+        columnPosition: columnPosition || 0,
+      })
+
+    } catch (error) {
+      console.error('Error updating userGame columnId ', error)
+    }
+  }
+
   useEffect(() => {
     fetchUserPlayPileGames();
     fetchGamesOnBoard();
@@ -56,7 +69,10 @@ export const UserPlayPileGamesProvider = ({children}) => {
       fetchUserPlayPileGames,
       userGamesOnBoard,
       setUserGamesOnBoard,
-      fetchGamesOnBoard}}>
+      fetchGamesOnBoard,
+      updateUserGameData,
+    }}
+      >
       {children}
     </UserPlayPileGamesContext.Provider>
   )

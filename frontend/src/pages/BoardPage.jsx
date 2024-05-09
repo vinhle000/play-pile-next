@@ -53,6 +53,16 @@ function BoardPage() {  //
     setModalState('')
   }
 
+  const handleRemoveColumnConfirm = async () => {
+    try {
+      await columnService.delete(columnId)
+    } catch (error) {
+      console.error('Error removing game from pile', error)
+    }
+    setModalState('')
+  }
+
+
 
 
 
@@ -89,11 +99,6 @@ function BoardPage() {  //
 
   return (
     <>
-      <h1>PlayPile Board</h1>
-       <Button onClick={() => assignGamesToColumnsToFirstColumn(userGamesOnBoard)}>
-          Assign Games to First Column, for testing
-        </Button>
-
 
       <div className="mt-5">
         <Board columns={columnsOnBoard} userGamesOnBoard={userGamesOnBoard} handleOpenEditModal={handleOpenEditModal}/>

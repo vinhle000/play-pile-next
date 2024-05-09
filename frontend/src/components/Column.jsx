@@ -23,7 +23,8 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
       console.error('Error deleting column', error);
     }
   }
-
+    //FIXME: backdrop-blur causing issues with the cards being dragged over appears behind the column
+    // And drag and drop is not as smooth as it should be
   return (
     <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
@@ -39,12 +40,12 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`w-72  p-2 rounded-2xl shadow-sm ${
-                  snapshot.isDraggingOver ? "bg-green-200" : "bg-gray-100"
+                className={`w-100 p-2 space-y-2  bg-gray-100/20 -z-20 rounded-2xl shadow-sm
+                backdrop-filter
                 }`}
               >
                {/* Column Header */}
-                <h2 className="column-title flex justify-between font-bold text-xl">
+                <h2 className="flex justify-between font-bold text-lg  text-black/60 p-x-5">
                   {column.title}
 
                   {/* Menu Button */}
@@ -68,14 +69,15 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
                 {/* Game Cards */}
                 {games.map((game, index) => (
                   <Draggable key={game._id.toString()} draggableId={`gameCard-${game._id}`} index={index}>
-                    {(provided) => (
+                   {(provided, snapshot) => (
                       <GameCard
                         innerRef={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="game-card-container m-4"  // Add styling as needed
+                        className="game-card-container"  // Add styling as needed
                         draggableProps={provided.draggableProps}
                         dragHandleProps={provided.dragHandleProps}
+                        snapshot={snapshot}
                         game={game}
                         handleOpenEditModal={handleOpenEditModal}
                       />
