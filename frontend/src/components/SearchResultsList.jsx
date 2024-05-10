@@ -12,7 +12,7 @@ function SearchResultsList({games}) {
     return <div>Loading...</div>
   }
     return (
-      <ul role="list" className="divide-y divide-gray-100">
+      <ul role="list" className="max-w-  border-red-500 divide-y space-y-2 divide-gray-100">
       {games.map((game) => (
         <SearchResultsListItem key={game.igdbId}   game={game} />
       ))}

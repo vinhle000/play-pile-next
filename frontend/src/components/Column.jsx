@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import columnService from "@/services/columnService";
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import ConfirmModal from './ConfirmModal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,19 +13,12 @@ import {
 import GameCard from './GameCard';
 import { EllipsisHorizontalIcon} from '@heroicons/react/24/solid';
 
-function Column({ id, column, games, index, handleOpenEditModal }) {
+function Column({ id, column, games, index, setSelectedColumn, setSelectedGame, setOpenModal }) {
 
 
-  // TODO: Implement safeguard modal to confirm column deletion
-  const handleDeleteColumn = async () => {
-    console.log('handleDeleteColumn -> id', id)
-    try {
-      await columnService.deleteColumn(id);
-    } catch {
-      console.error('Error deleting column', error);
-    }
-  }
 
+    //FIXME: backdrop-blur causing issues with the cards being dragged over appears behind the column
+    // And drag and drop is not as smooth as it should be
   return (
     <Draggable draggableId={id.toString()} index={index}>
       {(provided) => (
@@ -39,12 +34,12 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`w-72  p-2 rounded-2xl shadow-sm ${
-                  snapshot.isDraggingOver ? "bg-green-200" : "bg-gray-100"
+                className={`w-100 p-2 space-y-2  bg-gray-100/20 -z-20 rounded-2xl shadow-sm
+                backdrop-filter
                 }`}
               >
                {/* Column Header */}
-                <h2 className="column-title flex justify-between font-bold text-xl">
+                <h2 className="flex justify-between font-bold text-lg  text-black/60 p-x-5">
                   {column.title}
 
                   {/* Menu Button */}
@@ -57,7 +52,15 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
                       <EllipsisHorizontalIcon className="h-8 w-8 fill-current"/>
                       </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem onSelect={handleDeleteColumn} >Delete</DropdownMenuItem>
+                      <DropdownMenuItem onSelect={()=>
+                        {
+                          setSelectedColumn(column)
+                          setOpenModal('delete column')
+                        }
+                      }
+                     >
+                      Delete
+                    </DropdownMenuItem>
                       <DropdownMenuItem>Rename</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -68,16 +71,18 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
                 {/* Game Cards */}
                 {games.map((game, index) => (
                   <Draggable key={game._id.toString()} draggableId={`gameCard-${game._id}`} index={index}>
-                    {(provided) => (
+                   {(provided, snapshot) => (
                       <GameCard
                         innerRef={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="game-card-container m-4"  // Add styling as needed
+                        className="game-card-container"  // Add styling as needed
                         draggableProps={provided.draggableProps}
                         dragHandleProps={provided.dragHandleProps}
+                        snapshot={snapshot}
                         game={game}
-                        handleOpenEditModal={handleOpenEditModal}
+                        setSelectedGame={setSelectedGame}
+                        setOpenModal={setOpenModal}
                       />
                     )}
                   </Draggable>

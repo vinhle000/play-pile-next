@@ -22,18 +22,18 @@ const platformsNames = {
 
 function SearchResultsListItem({ game }) {
 
-  const { UserPlayPileGames, setUserPlayPileGames, loading } = useContext(UserPlayPileGamesContext)
+  const { userPlayPileGames, setUserPlayPileGames, loading, updateUserGameData } = useContext(UserPlayPileGamesContext)
   const [userGameData, setUserGameData] = useUserGameData({
     status: game.status,
     isInPlayPile: game.isInPlayPile,
   });
 
 
-  const updateUserGameData = async (igdbId, updateData) => {
+  const updateUserGame = async (igdbId, updateData) => {
     updateData ? updateData : {};
     try {
       //FIXME: Only update the listItem as User edits the their relationship with the game
-      let newData = await userGameService.updateUserGameData(igdbId, {
+      let newData = await updateUserGameData(igdbId, {
         ...updateData,
       });
 
@@ -119,7 +119,7 @@ function SearchResultsListItem({ game }) {
         {userGameData.isInPlayPile ? (
           <button
             onClick={() =>
-              updateUserGameData(game.igdbId, { isInPlayPile: false })
+              updateUserGame(game.igdbId, { isInPlayPile: false })
             }
             className="min-w-32 mx-5 px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-300 transition-colors"
           >
@@ -128,7 +128,7 @@ function SearchResultsListItem({ game }) {
         ) : (
           <button
             onClick={() =>
-              updateUserGameData(game.igdbId, { isInPlayPile: true })
+              updateUserGame(game.igdbId, { isInPlayPile: true })
             }
             className="min-w-32 mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
           >

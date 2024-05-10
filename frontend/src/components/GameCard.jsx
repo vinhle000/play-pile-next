@@ -3,6 +3,8 @@ import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
+import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
+
 
 import {
   Popover,
@@ -10,50 +12,88 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-
 import userGameService from "@/services/userGameService"
 import useUserGameData from '@/hooks/useUserGameData'
 import LogRocket from 'logrocket';
 
 
+//FIXME: Need to memoize this component with hook, so that we can rerend just the CARD that is being updated,
+// editModal saved changes dont appear until page refresh
 
-function GameCard ({ game, innerRef, draggableProps, dragHandleProps, handleOpenEditModal }) {
+function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, setSelectedGame, setOpenModal }) {
 
-  const handleOnDragEnd = (result) => {
-    console.log('handleOnDragEnd -> result', result);
-    // TODO: Handle the actual reordering logic here
-  };
+
+  const gameStatusIcon = (gameStatus) => {
+    switch (gameStatus) {
+      case 'Completed':
+        return <TrophyIcon className="w-6 h-6 text-gray-500" />
+      case 'Finished':
+          return <CheckIcon className="w-6 h-6 text-gray-500" />
+      case 'Playing':
+        // return <ControllerIcon className="w-6 h-6 text-gray-500" />
+      case 'Abandoned':
+        // return <XIcon className="w-6 h-6 text-gray-500" />
+      case 'Not Started':
+        // return <XIcon className="w-6 h-6 text-gray-500" />
+      default:
+        return <div className="text-xs  text-gray-500">Not Owned</div>
+    }
+  }
+
+
+  const draggingStyle = snapshot.isDragging ? { zIndex: 1000 } : {};
+
+
 
   return (
-    <>
 
-    <div className="rounded-md space-y-2 drop-shadow-md "
-      {...draggableProps}
-      {...dragHandleProps}
-      ref={innerRef}
-      >
-      <div className="flex justify-between items-center p-4"
-         onClick={(e) => handleOpenEditModal(e, game)}
-      >
-        <img
-          src={game.gameInfo.coverUrl}
-          alt={game.gameInfo.name}
-          className="rounded-sm min-h-48 h-60 transition duration-300 ease-in-out transform group-hover:scale-110 group-hover:brightness-50 object-cover"
-        />
-        <div
-          onClick={() => handleOpenEditModal(game)}
-          className="absolute inset-0 flex items-center
-                      justify-center opacity-0 group-hover:opacity-100
-                      transition-opacity duration-300"
-        >
-          {/* <p className="text-white text-xl font-bold">{game.gameInfo.name}</p> */}
-        </div>
+    <div className={`w-72 relative bg-white/70 rounded-xl backdrop-blur-sm shadow-lg`}
+          {...draggableProps}
+          {...dragHandleProps}
+          ref={innerRef}
+
+    >
+
+
+    <div className=" flex items-top justify-between"
+      onClick={() => {
+        setSelectedGame(game)
+        setOpenModal('edit')
+      }}
+    >
+
+          <div className=" object-cover">
+            <img
+              className="max-w-28 rounded-tl-xl rounded-bl-xl object-cover"
+              src={game.gameInfo.coverUrl}
+              alt={game.gameInfo.name}
+            />
+          </div>
+
+
+
+        <div className="flex flex-col flex-inline align-top justify-between items-center pr-3">
+          {/*  game title*/}
+            <div className="h-1/4 justify-start text-black text-sm font-normal pt-2">
+              {game.gameInfo.name}
+            </div>
+
+
+            {/* description or achievements */}
+            <div className="h-12 justify-start text-left  text-wrap
+                           text-black text-xs font-light leading-tight">
+              Achievement/Pinned Notes
+            </div>
+
+              {/*  game status */}
+            <div className="flex min-w-full p-2 justify-end">
+              {gameStatusIcon(game.playedStatus)}
+
+            </div>
+
+          </div>
       </div>
     </div>
-
-  </>
-
-
 
 
   )

@@ -27,9 +27,6 @@ export const UserPlayPileGamesProvider = ({children}) => {
     try {
       setLoading(true);
       const gamesOnBoard = await userGameService.getUserGamesOnBoard();
-      //map of columnId to games
-      // {columnId: [game1, game2, game3]}
-      // FIXME: this is for testing only, going to assign a
       if (!gamesOnBoard) {
         setUserGamesOnBoard({});
         return;
@@ -40,6 +37,28 @@ export const UserPlayPileGamesProvider = ({children}) => {
       console.error('Error fetching user play pile', error);
     } finally {
       setLoading(false);
+    }
+  }
+
+
+  const updateUserGameData = async (gameIgdbId, updateData) => {
+    try {
+      setLoading(true);
+      await userGameService.updateUserGameData(gameIgdbId, updateData)
+      fetchGamesOnBoard(); //NOTE: possible improvement to not have to fetch all games again using Memoization custom hook
+    } catch (error) {
+      console.error('Error updating userGame columnId ', error)
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const updateUserGameColumnPositions = async (updatedColumnUserGames) => {
+    try {
+      setLoading(true);
+      await userGameService.updateUserGameColumnPositions(updatedColumnUserGames)
+    } catch (error) {
+      console.error('Error updating userGame columnId ', error)
     }
   }
 
@@ -56,7 +75,11 @@ export const UserPlayPileGamesProvider = ({children}) => {
       fetchUserPlayPileGames,
       userGamesOnBoard,
       setUserGamesOnBoard,
-      fetchGamesOnBoard}}>
+      fetchGamesOnBoard,
+      updateUserGameData,
+      updateUserGameColumnPositions,
+    }}
+      >
       {children}
     </UserPlayPileGamesContext.Provider>
   )

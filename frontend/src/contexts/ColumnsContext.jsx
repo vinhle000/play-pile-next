@@ -37,6 +37,30 @@ export const ColumnsProvider = ({children}) => {
     }
   }
 
+  const updateColumn = async (columnId, updateData) => {
+    try {
+      await columnService.updateColumn(columnId, updateData);
+      fetchColumns();
+    } catch (error) {
+      console.error('Error updating column', error)
+    }
+  }
+
+  const deleteColumn = async (columnId) => {
+
+    try {
+      setLoading(true)
+      await columnService.deleteColumn(columnId);
+      //optimistic update for UI responsiveness
+      setColumnsOnBoard(columnsOnBoard.filter(column => column._id !== columnId));
+    } catch (error) {
+      console.error('Error deleting column', error)
+    } finally {
+
+      setLoading(false);
+    }
+  }
+
 
 
   useEffect(() => {
@@ -50,6 +74,8 @@ export const ColumnsProvider = ({children}) => {
       columns,
       setColumns,
       fetchColumns,
+      updateColumn,
+      deleteColumn,
       columnsOnBoard,
       setColumnsOnBoard,
       fetchColumnsOnBoard,

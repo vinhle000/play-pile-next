@@ -2,52 +2,36 @@ import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/NavigationBar'
+
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import SearchPage from './pages/SearchPage'
 import BoardPage from './pages/BoardPage'
+import PlayPilePage from './pages/PlayPilePage'
 
 import { UserProvider } from './contexts/UserContext'
 import { UserPlayPileGamesProvider } from './contexts/UserPlayPileGamesContext'
 import { ColumnsProvider } from './contexts/ColumnsContext'
 
-import PlayPileList from './components/PlayPileList'
-import { Sheet, SheetContent, SheetTrigger } from './components/ui/sheet'
-
-
 
 function App() {
-const [isPlayPilePanelOpen, setIsPlayPilePanelOpen] = useState(false)
 
   return (
-    <div>
+    <div className="min-h-lvh">
       <UserProvider>
       <UserPlayPileGamesProvider>
       <ColumnsProvider>
           <Router>
-            <Sheet open={isPlayPilePanelOpen} onOpenChange={setIsPlayPilePanelOpen}>
-
-              <SheetTrigger className="fixed top-0 left-0 z-10 p-4">
-                <span>
-                  {isPlayPilePanelOpen ? '←'  : '→' }
-                </span>
-              </SheetTrigger>
-
-              <SheetContent
-                side="left"
-                className="min-h-screen min-w-128 overflow-auto p-4 shadow-none transition-all duration-300 ease-in-out">
-                <PlayPileList />
-              </SheetContent>
-
-            </Sheet>
             <NavigationBar/>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/games/search" element={<SearchPage />} />
-              <Route path="/playPileBoard" element={<BoardPage />} />
+              <Route path="/board" element={<BoardPage />} />
+              <Route path="/playPile" element={<PlayPilePage />} />
+
             </Routes>
           </Router>
       </ColumnsProvider>
