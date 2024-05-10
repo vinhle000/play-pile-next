@@ -17,25 +17,28 @@ import { Input } from '@/components/ui/input';
 // TODO: switch to more generic name "BoardPage"
 function BoardPage() {  //
 
-  const { userPlayPileGames, setUserPlayPileGames, fetchUserPlayPileGames, userPlayPileGamesLoading } = useContext(UserPlayPileGamesContext);
+  const { userPlayPileGames, setUserPlayPileGames, fetchUserPlayPileGames, userPlayPileGamesLoading, updateUserGameData } = useContext(UserPlayPileGamesContext);
   const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, userGamesOnBoardLoading } = useContext(UserPlayPileGamesContext);
-  const { columnsOnBoard, setColumnsOnBoard, columnsOnBoardLoading, fetchColumnsOnBoard } = useContext(ColumnsContext)
+  const { columnsOnBoard, setColumnsOnBoard, columnsOnBoardLoading, fetchColumnsOnBoard, deleteColumn } = useContext(ColumnsContext)
 
 
-  const [modalState, setModalState] = useState('') // ['edit' ||'remove' || '']
-  const [editGame, setEditGame] = useState({})
+  const [openModal, setOpenModal] = useState('') // ['edit' ||'remove' || '']
+  const [selectedGame, setSelectedGame] = useState(null)
+  const [selectedColumn, setSelectedColumn] = useState(null) //
   const [inputTitle, setInputTitle] = useState('');
 
 
+
+  /// FIXME: This is not working, making flexible method to open all types of modals setOpenModal('edit' || 'remove' || '')
   const handleOpenEditModal = (game) => {
     console.log('handleOpenEditModal -> game', game)
-    setModalState('edit')
-    setEditGame(game)
+    setOpenModal('edit')
+    setSelectedGame(game)
   }
 
-  const handleRemoveConfirm = async () => {
+  const handleRemoveGameConfirm = async () => {
     try {
-      await userGameService.updateUserGameData(editGame.igdbId,
+      await updateUserGameData(selectedGame.igdbId,
         {
           isInPlayPile: "false",
           columnId: null,
@@ -49,16 +52,28 @@ function BoardPage() {  //
     } catch (error) {
       console.error('Error removing game from pile', error)
     }
-    setModalState('')
+    setOpenModal('')
   }
 
-  const handleRemoveColumnConfirm = async () => {
+  const handleDeleteColumn = async () => {
+
+
+    // TODO: set  column related fields to default values for userGames items in this columns.
+      // A) Use selectedColumn to and use endpoint to delete it using columnId
+
+      // B) Use selectedColumnn to get list of games
+          // userGamesList =  userGamesOnBoard[selectedColumn.id]
+          // need create new API endpoint to update multiple games at once
+          // Send list of gameIgdbIds as request body.
+
+    //
     try {
-      await columnService.delete(columnId)
-    } catch (error) {
-      console.error('Error removing game from pile', error)
+      await deleteColumn(selectedColumn._id);
+    } catch {
+      console.error('Error deleting column', error);
+    } finally {
+      setOpenModal('');
     }
-    setModalState('')
   }
 
 
@@ -81,24 +96,38 @@ function BoardPage() {  //
 
   return (
     <>
-
       <div className="mt-5">
-        <Board columns={columnsOnBoard} userGamesOnBoard={userGamesOnBoard} handleOpenEditModal={handleOpenEditModal}/>
+        <Board
+        columns={columnsOnBoard}
+        userGamesOnBoard={userGamesOnBoard}
+        setSelectedColumn={setSelectedColumn}
+        setSelectedGame={setSelectedGame}
+        setOpenModal={setOpenModal}
+        />
       </div>
-      {modalState === 'remove' && (
-      <ConfirmModal
-        title="Remove Game"
-        description="Are you sure you want to remove this game from your Play Pile?"
-        onConfirm={ handleRemoveConfirm }
-        onCancel={() => setModalState('')}
-      />
-    )}
-    {modalState === 'edit' && (
+
+      {openModal === 'remove game' && (
+        <ConfirmModal
+          title="Remove Game"
+          description="Are you sure you want to remove this game from your Play Pile?"
+          onConfirm={ handleRemoveGameConfirm }
+          onCancel={() => setOpenModal('')}
+        />
+      )}
+     {openModal === 'delete column' && (
+        <ConfirmModal
+          title="Delete Column"
+          description="Are you sure you want to delete this column? All games in this column will be still remain Play Pile."
+          onConfirm={ handleDeleteColumn }
+          onCancel={() => setOpenModal('')}
+        />
+      )}
+    {openModal === 'edit' && (
       <UserGameDataEditModal
-        game={editGame}
-        modalState={modalState}
-        setModalState={setModalState}
-        handleRemoveConfirm
+        game={selectedGame}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+
       />
     )}
     </>

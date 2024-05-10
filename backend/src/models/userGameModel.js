@@ -14,6 +14,7 @@ const UserGameSchema = new mongoose.Schema(
     columnId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Column',
+      default: null,
     },
     columnPosition: {
       type: Number,

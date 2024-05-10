@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import columnService from "@/services/columnService";
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import ConfirmModal from './ConfirmModal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,18 +13,10 @@ import {
 import GameCard from './GameCard';
 import { EllipsisHorizontalIcon} from '@heroicons/react/24/solid';
 
-function Column({ id, column, games, index, handleOpenEditModal }) {
+function Column({ id, column, games, index, setSelectedColumn, setSelectedGame, setOpenModal }) {
 
 
-  // TODO: Implement safeguard modal to confirm column deletion
-  const handleDeleteColumn = async () => {
-    console.log('handleDeleteColumn -> id', id)
-    try {
-      await columnService.deleteColumn(id);
-    } catch {
-      console.error('Error deleting column', error);
-    }
-  }
+
     //FIXME: backdrop-blur causing issues with the cards being dragged over appears behind the column
     // And drag and drop is not as smooth as it should be
   return (
@@ -58,7 +52,15 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
                       <EllipsisHorizontalIcon className="h-8 w-8 fill-current"/>
                       </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem onSelect={handleDeleteColumn} >Delete</DropdownMenuItem>
+                      <DropdownMenuItem onSelect={()=>
+                        {
+                          setSelectedColumn(column)
+                          setOpenModal('delete column')
+                        }
+                      }
+                     >
+                      Delete
+                    </DropdownMenuItem>
                       <DropdownMenuItem>Rename</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -79,7 +81,8 @@ function Column({ id, column, games, index, handleOpenEditModal }) {
                         dragHandleProps={provided.dragHandleProps}
                         snapshot={snapshot}
                         game={game}
-                        handleOpenEditModal={handleOpenEditModal}
+                        setSelectedGame={setSelectedGame}
+                        setOpenModal={setOpenModal}
                       />
                     )}
                   </Draggable>

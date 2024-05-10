@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import { useState, useContext } from 'react'
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
-import DateRangePicker from '@/components/DateRangePicker'
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 
 import logRocket from 'logrocket'
 
@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 
+import DateRangePicker from '@/components/DateRangePicker'
 import {
   Dialog,
   DialogContent,
@@ -36,20 +37,24 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 
-function UserGameDataEditModal({game, modalState, setModalState}) { // game has UserGameData and Game details
+
+function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has UserGameData and Game details
+
+  const {setUserPlayPileGames, userPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext) // {playDates, playingStatus, playedStatus, notes}
 
   const [fieldData, setFieldData] = useState({
+    columnId: game.columnId,
     playDates: game.playDates,
     playingStatus: game.playingStatus,
     playedStatus: game.playedStatus,
     notes: game.notes
   })
 
-  const updateUserGameData = async (igdbId, updateData) => {
+  const updateGame = async (igdbId, updateData) => {
     updateData ? updateData : {}
     try {
-     let newData = await userGameService.updateUserGameData(igdbId, {...updateData})
-     setUserGameData({...userGameData, ...newData})
+     let newData = await updateUserGameData(igdbId, {...updateData})
+     setUserPlayPileGames({...userPlayPileGames, ...newData})
       logRocket.log('userGameData updated successfully', newData)
     } catch (error) {
       console.error('Error updating UserGame Data ', error)
@@ -59,12 +64,13 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
 
 
   const handleSave = async (igdbId) => {
+    console.log( 'handleSave -----> fieldData', fieldData)
     try {
-      await updateUserGameData(igdbId, fieldData)
+      await updateGame(igdbId, fieldData)
     } catch (error) {
       console.error('Error saving(updating) UserGame Data ', error)
     }
-    setModalState('')
+    setOpenModal('')
   }
 
   const handleFieldChange = (field, value) => {
@@ -122,8 +128,8 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
 
                 <div className="flex justify-end ">
                   {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
-                  <Button onClick={() => setModalState('')} variant="secondary">Close</Button>
-                  <Button onClick={handleSave}>Save</Button>
+                  <Button onClick={() => setOpenModal('')} variant="secondary">Close</Button>
+                  <Button onClick={() => handleSave(game.igdbId)}>Save</Button>
                 </div>
 
 

@@ -7,7 +7,7 @@ import UserPlayPileGamesContext  from '@/contexts/UserPlayPileGamesContext'
 
 function PlayPileGameList() {
 
-  const {userPlayPileGames, loading, fetchUserPlayPileGames} = useContext(UserPlayPileGamesContext);
+  const {userPlayPileGames, loading, fetchUserPlayPileGames, updateUserGameData} = useContext(UserPlayPileGamesContext);
 
   const [deleteModalState, setDeleteModalState] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -16,14 +16,14 @@ function PlayPileGameList() {
   console.log('PlayPileList -> UserPlayPileGames', userPlayPileGames)
 
 
-
+  //NOTE: May not need
   const handleDeleteConfirm = async () => {
     try {
-      await userGameService.updateUserGameData(editGame.igdbId, { isInPlayPile: "false" });
+      await updateUserGameData(selectedGame.igdbId, { isInPlayPile: "false" });
       fetchUserPlayPileGames();
       setModalState('');
     } catch (error) {
-      console.error('Error removing game:', error);
+      console.error('Error deleting game:', error);
     }
   };
 

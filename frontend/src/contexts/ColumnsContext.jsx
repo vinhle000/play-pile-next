@@ -37,6 +37,30 @@ export const ColumnsProvider = ({children}) => {
     }
   }
 
+  const updateColumn = async (columnId, updateData) => {
+    try {
+      await columnService.updateColumn(columnId, updateData);
+      fetchColumns();
+    } catch (error) {
+      console.error('Error updating column', error)
+    }
+  }
+
+  const deleteColumn = async (columnId) => {
+
+    //FIXME: Working, but need to refresh page to see changes.
+    // Could be this context not updating realtime?
+    try {
+      setLoading(true)
+      await columnService.deleteColumn(columnId);
+    } catch (error) {
+      console.error('Error deleting column', error)
+    } finally {
+      fetchColumns()
+      setLoading(false);
+    }
+  }
+
 
 
   useEffect(() => {
@@ -50,6 +74,8 @@ export const ColumnsProvider = ({children}) => {
       columns,
       setColumns,
       fetchColumns,
+      updateColumn,
+      deleteColumn,
       columnsOnBoard,
       setColumnsOnBoard,
       fetchColumnsOnBoard,

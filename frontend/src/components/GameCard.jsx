@@ -17,16 +17,20 @@ import useUserGameData from '@/hooks/useUserGameData'
 import LogRocket from 'logrocket';
 
 
-function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, handleOpenEditModal }) {
+//FIXME: Need to memoize this component with hook, so that we can rerend just the CARD that is being updated,
+// editModal saved changes dont appear until page refresh
+
+function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, setSelectedGame, setOpenModal }) {
+
 
   const gameStatusIcon = (gameStatus) => {
     switch (gameStatus) {
       case 'Completed':
         return <TrophyIcon className="w-6 h-6 text-gray-500" />
       case 'Finished':
-          return <TrophyIcon className="w-6 h-6 text-gray-500" />
+          return <CheckIcon className="w-6 h-6 text-gray-500" />
       case 'Playing':
-        return <ControllerIcon className="w-6 h-6 text-gray-500" />
+        // return <ControllerIcon className="w-6 h-6 text-gray-500" />
       case 'Abandoned':
         // return <XIcon className="w-6 h-6 text-gray-500" />
       case 'Not Started':
@@ -52,7 +56,10 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
 
 
     <div className=" flex items-top justify-between"
-      onClick={() => handleOpenEditModal(game)}
+      onClick={() => {
+        setSelectedGame(game)
+        setOpenModal('edit')
+      }}
     >
 
           <div className=" object-cover">

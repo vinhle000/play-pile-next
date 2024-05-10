@@ -43,14 +43,22 @@ export const UserPlayPileGamesProvider = ({children}) => {
     }
   }
 
-  const updateUserGameData = async (gameIgdbId, columnId, columnPosition) => {
+
+  //BUG this is this is wrong, we are  setting the columnId as the field, this was for the drag n drop, but we need it as a general updated
+  const updateUserGameData = async (gameIgdbId, updateData) => {
     try {
       setLoading(true);
-      await userGameService.updateUserGameData(gameIgdbId, {
-        columnId: columnId,
-        columnPosition: columnPosition || 0,
-      })
+      await userGameService.updateUserGameData(gameIgdbId, updateData)
 
+    } catch (error) {
+      console.error('Error updating userGame columnId ', error)
+    }
+  }
+
+  const updateUserGameColumnPositions = async (updatedColumnUserGames) => {
+    try {
+      setLoading(true);
+      await userGameService.updateUserGameColumnPositions(updatedColumnUserGames)
     } catch (error) {
       console.error('Error updating userGame columnId ', error)
     }
@@ -71,6 +79,7 @@ export const UserPlayPileGamesProvider = ({children}) => {
       setUserGamesOnBoard,
       fetchGamesOnBoard,
       updateUserGameData,
+      updateUserGameColumnPositions,
     }}
       >
       {children}

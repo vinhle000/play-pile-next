@@ -10,9 +10,9 @@ import userGameService from '@/services/userGameService'
 import ColumnsContext from '@/contexts/ColumnsContext';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
-function Board({ columns,  handleOpenEditModal}) {
+function Board({ columns, setSelectedColumn, setSelectedGame, setOpenModal}) {
   const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
-  const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard } = useContext(UserPlayPileGamesContext);
+  const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, updateUserGameColumnPositions } = useContext(UserPlayPileGamesContext);
 
 
   const [showForm, setShowForm] = useState(false);
@@ -86,7 +86,7 @@ function Board({ columns,  handleOpenEditModal}) {
         }
       };
 
-      userGameService.updateUserGameColumnPositions(updatedColumnLists);
+      updateUserGameColumnPositions(updatedColumnLists);
     }
   };
 
@@ -109,7 +109,9 @@ function Board({ columns,  handleOpenEditModal}) {
                   column={column}
                   games={ userGamesOnBoard[column._id] || []}
                   index={index}
-                  handleOpenEditModal={handleOpenEditModal}
+                  setSelectedColumn={setSelectedColumn}
+                  setSelectedGame={setSelectedGame}
+                  setOpenModal={setOpenModal}
                 />
               ))}
               {provided.placeholder}
