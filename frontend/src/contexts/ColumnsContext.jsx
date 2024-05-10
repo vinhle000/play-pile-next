@@ -48,15 +48,15 @@ export const ColumnsProvider = ({children}) => {
 
   const deleteColumn = async (columnId) => {
 
-    //FIXME: Working, but need to refresh page to see changes.
-    // Could be this context not updating realtime?
     try {
       setLoading(true)
       await columnService.deleteColumn(columnId);
+      //optimistic update for UI responsiveness
+      setColumnsOnBoard(columnsOnBoard.filter(column => column._id !== columnId));
     } catch (error) {
       console.error('Error deleting column', error)
     } finally {
-      fetchColumns()
+
       setLoading(false);
     }
   }

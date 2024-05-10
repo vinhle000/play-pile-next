@@ -29,6 +29,7 @@ function Board({ columns, setSelectedColumn, setSelectedGame, setOpenModal}) {
   const handleCreateColumn = async (title) => {
     try {
       await columnService.createColumn(title);
+      fetchColumnsOnBoard();
     } catch (error) {
       console.error('Error creating column', error);
     }

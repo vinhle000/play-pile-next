@@ -45,14 +45,11 @@ function BoardPage() {  //
           columnPosition: 0,
         })
 
-        // FIXME
-        // fetchGamesOnBoard()?
-        // we need handle each edit to the gamec ards to not have to rerender every card in teh column again
-        // Memoize?
     } catch (error) {
       console.error('Error removing game from pile', error)
+    } finally {
+      setOpenModal('')
     }
-    setOpenModal('')
   }
 
   const handleDeleteColumn = async () => {

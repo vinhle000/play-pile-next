@@ -27,9 +27,6 @@ export const UserPlayPileGamesProvider = ({children}) => {
     try {
       setLoading(true);
       const gamesOnBoard = await userGameService.getUserGamesOnBoard();
-      //map of columnId to games
-      // {columnId: [game1, game2, game3]}
-      // FIXME: this is for testing only, going to assign a
       if (!gamesOnBoard) {
         setUserGamesOnBoard({});
         return;
@@ -44,14 +41,15 @@ export const UserPlayPileGamesProvider = ({children}) => {
   }
 
 
-  //BUG this is this is wrong, we are  setting the columnId as the field, this was for the drag n drop, but we need it as a general updated
   const updateUserGameData = async (gameIgdbId, updateData) => {
     try {
       setLoading(true);
       await userGameService.updateUserGameData(gameIgdbId, updateData)
-
+      fetchGamesOnBoard(); //NOTE: possible improvement to not have to fetch all games again using Memoization custom hook
     } catch (error) {
       console.error('Error updating userGame columnId ', error)
+    } finally {
+      setLoading(false);
     }
   }
 
