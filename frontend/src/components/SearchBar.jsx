@@ -16,11 +16,11 @@ function SearchBar() {
 
   return (
 
-    <div className="flex flex-grow  w-96 h-10 rounded-3xl px-3.5 py-1" >
-       <form onSubmit={handleSubmit} className="w-full max-w-lg lg:max-w-xs">
+    <div className="flex flex-grow  w-80 h-10 rounded-3xl px-3.5 py-1" >
+       <form onSubmit={handleSubmit} className="w-full">
         <div className="relative">
           <div className="absolute inset-y-0 left-2  flex items-center pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="gray" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>
 
@@ -28,9 +28,9 @@ function SearchBar() {
           <input
             id="search"
             name="search"
-            className="block w-full rounded-md border-0 bg-gray-100/30  py-1.5 pl-10 pr-3 text-gray-300
-             placeholder:text-gray-400
-             focus:bg-white focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 bg-gray-100/20  py-1.5 pl-10 pr-3 text-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
             placeholder="Search for games"
             type="search"
             value={searchTerm}

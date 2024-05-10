@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import DateRangePicker from '@/components/DateRangePicker'
-import MoveGameToColumnRadioGroup from '@/components/MoveGameToColumnRadioGroup'
 
 import logRocket from 'logrocket'
 
@@ -79,7 +78,7 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
 
   return (
     <>
-      <Dialog className="flex-col justify-betweenz-100 overflow-y-auto">
+      <Dialog className="flex flex-col justify-between z-50 ">
         <div className="fixed inset-0 flex items-center justify-center bg-black/30" >
           <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 
@@ -89,35 +88,26 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
 
 
              {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
-             <div className="mt-1">
-              <Popover>
-                <PopoverTrigger>ListName</PopoverTrigger>
-                <PopoverContent className="w-auto">
-                  <MoveGameToColumnRadioGroup />
-                </PopoverContent>
-              </Popover>
+
+             <div className="my-3">
+             {/*  TODO: Dates  functionality */}
+              <DateRangePicker className="bg-white/95" onChange={(dates) => handleFieldChange('playDates', dates)} />
             </div>
 
-             {/*  TODO: Dates  functionality */}
-             <DateRangePicker onChange={(dates) => handleFieldChange('playDates', dates)} />
 
                 <DropdownMenu>
-                  <DropdownMenuTrigger>{fieldData.playingStatus}</DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Not started')}>Not started</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Currently Playing')}>Currently Playing</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Endless')}>Endless</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playingStatus', 'Replaying')}>Replaying</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <div className="my-2 p-2 border round-md border-gray-500">
+                      {fieldData.playedStatus}
+                      </div>
+                      </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-white/95">
 
-                <DropdownMenu>
-                  <DropdownMenuTrigger>{fieldData.playedStatus}</DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'No status')}>No status</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Not Started')}>No Started</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Playing')}>Playing</DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Finished')}>Finished</DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Completed')}>Completed</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Dropped')}>Dropped</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Abandoned')}>Abandoned</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
 
@@ -130,10 +120,10 @@ function UserGameDataEditModal({game, modalState, setModalState}) { // game has 
                   />
                 </div>
 
-                <div className="flex justify-between">
-                  <Button onClick={()=> {}} variant="destructive">Remove</Button>
+                <div className="flex justify-end ">
+                  {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
                   <Button onClick={() => setModalState('')} variant="secondary">Close</Button>
-                  <Button onClick={handleSave} variant="primary">Save</Button>
+                  <Button onClick={handleSave}>Save</Button>
                 </div>
 
 

@@ -3,7 +3,6 @@ import columnService from '@/services/columnService'
 import userGameService from "@/services/userGameService";
 
 import Board from '@/components/Board'
-import GameCardList from "@/components/GameCardList";
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import ConfirmModal from '@/components/ConfirmModal'
 
@@ -28,7 +27,7 @@ function BoardPage() {  //
   const [inputTitle, setInputTitle] = useState('');
 
 
-  const handleOpenEditModal = (event, game) => {
+  const handleOpenEditModal = (game) => {
     console.log('handleOpenEditModal -> game', game)
     setModalState('edit')
     setEditGame(game)
@@ -60,23 +59,6 @@ function BoardPage() {  //
       console.error('Error removing game from pile', error)
     }
     setModalState('')
-  }
-
-
-
-
-
-  //REVISE: this is for testing only, going to assign all games to the first column
-  const assignGamesToColumnsToFirstColumn = () => {
-    console.log('Assigning games to columns --- FOR INITIAL TESTING', {userPlayPileGames})
-    try {
-      const columnId = columnsOnBoard[0]._id
-      userPlayPileGames.forEach(async (game) => {
-        await userGameService.updateUserGameData(game.igdbId, { columnId: columnId })
-      })
-    } catch (error) {
-      console.error('Error assigning games to columns', error)
-    }
   }
 
 

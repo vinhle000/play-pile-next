@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import SearchPage from './pages/SearchPage'
 import BoardPage from './pages/BoardPage'
+import PlayPilePage from './pages/PlayPilePage'
 
 import { UserProvider } from './contexts/UserContext'
 import { UserPlayPileGamesProvider } from './contexts/UserPlayPileGamesContext'
@@ -17,7 +18,7 @@ import { ColumnsProvider } from './contexts/ColumnsContext'
 function App() {
 
   return (
-    <div>
+    <div className="min-h-lvh">
       <UserProvider>
       <UserPlayPileGamesProvider>
       <ColumnsProvider>
@@ -29,6 +30,8 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/games/search" element={<SearchPage />} />
               <Route path="/board" element={<BoardPage />} />
+              <Route path="/playPile" element={<PlayPilePage />} />
+
             </Routes>
           </Router>
       </ColumnsProvider>

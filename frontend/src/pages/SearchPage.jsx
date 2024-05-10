@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useLocation} from 'react-router-dom'
 import gameService from '../services/gameService'
-// import GameCard from '../components/GameCard'
-// import GameCardsList from '../components/GameCardList'
+
 import SearchResultsList from '../components/SearchResultsList'
 
 //TODOS:
@@ -29,12 +28,9 @@ function SearchPage() {
     fetchGames();
   }, [searchTerm])
   return (
-    <div className="mx-10" >
+    <div  >
       <h1>Search Results for: {searchTerm}</h1> {/*//FIXME causing undefined error */}
-      <br />
-      <br />
-      <br />
-      <br />
+
       <SearchResultsList games={games} />
 
     </div>

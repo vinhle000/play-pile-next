@@ -3,6 +3,8 @@ import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/20/solid'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
+import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
+
 
 import {
   Popover,
@@ -16,10 +18,32 @@ import LogRocket from 'logrocket';
 
 
 function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, handleOpenEditModal }) {
+
+  const gameStatusIcon = (gameStatus) => {
+    switch (gameStatus) {
+      case 'Completed':
+        return <TrophyIcon className="w-6 h-6 text-gray-500" />
+      case 'Finished':
+          return <TrophyIcon className="w-6 h-6 text-gray-500" />
+      case 'Playing':
+        return <ControllerIcon className="w-6 h-6 text-gray-500" />
+      case 'Abandoned':
+        // return <XIcon className="w-6 h-6 text-gray-500" />
+      case 'Not Started':
+        // return <XIcon className="w-6 h-6 text-gray-500" />
+      default:
+        return <div className="text-xs  text-gray-500">Not Owned</div>
+    }
+  }
+
+
   const draggingStyle = snapshot.isDragging ? { zIndex: 1000 } : {};
+
+
+
   return (
 
-    <div className={`w-72 relative bg-zinc-300 rounded-lg z-50`}
+    <div className={`w-72 relative bg-white/70 rounded-xl backdrop-blur-sm shadow-lg`}
           {...draggableProps}
           {...dragHandleProps}
           ref={innerRef}
@@ -27,54 +51,41 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
     >
 
 
-    <div className=" flex content- items-top">
-      <div className="m-1">
+    <div className=" flex items-top justify-between"
+      onClick={() => handleOpenEditModal(game)}
+    >
+
           <div className=" object-cover">
             <img
-              className="max-w-28 rounded-lg object-cover"
+              className="max-w-28 rounded-tl-xl rounded-bl-xl object-cover"
               src={game.gameInfo.coverUrl}
               alt={game.gameInfo.name}
             />
           </div>
 
-      </div>
 
 
-            {/*  game title*/}
-        <div className="flex flex-col flex-inline align-top justify-between items-center">
+        <div className="flex flex-col flex-inline align-top justify-between items-center pr-3">
+          {/*  game title*/}
             <div className="h-1/4 justify-start text-black text-sm font-normal pt-2">
               {game.gameInfo.name}
             </div>
 
 
-            {/* description */}
+            {/* description or achievements */}
             <div className="h-12 justify-start text-left  text-wrap
                            text-black text-xs font-light leading-tight">
-              Acheivement place holder
-              </div>
-
-          <div className="w-12 h-7 ">
-            <div className="w-212 h-7 pr-2.5 pb-1 justify-start items-start gap-8 inline-flex">
-            <div className="w-6 h-6 relative flex-col justify-start items-start flex" />
-            <div className="w-6 h-6 relative flex-col justify-start items-start flex" />
+              Achievement/Pinned Notes
             </div>
-          </div>
+
+              {/*  game status */}
+            <div className="flex min-w-full p-2 justify-end">
+              {gameStatusIcon(game.playedStatus)}
+
+            </div>
 
           </div>
       </div>
-
-       {/* <div className="w-full h-60 left-0 top-0 absolute bg-zinc-300 rounded-lg" /> */}
-
-    {/*  tages */}
-    {/* <div className="justify-evenly inline-flex w-full  ">
-        <div className="w-4 h-1 bg-red-500 rounded" />
-        <div className="w-4 h-1 bg-purple-600 rounded" />
-        <div className="w-4 h-1 bg-emerald-400 rounded" />
-        <div className="w-4 h-1 bg-cyan-600 rounded" />
-      </div> */}
-
-
-
     </div>
 
 

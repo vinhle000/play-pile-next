@@ -124,7 +124,7 @@ function Board({ columns,  handleOpenEditModal}) {
                     onCancel={handleHideForm}
                   />
                 ) : (
-                  <Button onClick={handleShowForm} className=" text-white font-semibold py-2 px-4 rounded inline-flex items-center">
+                  <Button onClick={handleShowForm} className=" text-white font-semibold py-2 px-4 rounded inline-flex items-center focus:ring-0">
                     <span>Add list</span>
                   </Button>
                 )}
