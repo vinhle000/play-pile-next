@@ -60,7 +60,7 @@ function SearchResultsListItem({ game }) {
             <img
               src={game.cover.url}
               alt={game.name}
-              className="max-h-32 object-cover rounded-tl-xl rounded-bl-xl" />
+              className="max-h-48 object-cover rounded-tl-xl rounded-bl-xl" />
           </Link>
         </div>
 
