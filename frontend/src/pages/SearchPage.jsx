@@ -28,12 +28,15 @@ function SearchPage() {
     fetchGames();
   }, [searchTerm])
   return (
-    <div  >
-      <h1>Search Results for: {searchTerm}</h1> {/*//FIXME causing undefined error */}
+        <>
+        <h1>Results for: {searchTerm}</h1> {/*//FIXME causing undefined error */}
+        <div className="flex flex-col items-center mt-12 ">
 
-      <SearchResultsList games={games} />
-
-    </div>
+        <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
+          <SearchResultsList games={games} />
+        </div>
+      </div>
+      </>
   )
 }
 

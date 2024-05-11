@@ -17,12 +17,17 @@ const platformsNames = {
   'Family Computer': 'Famicom',
   'Family Computer Disk System': 'Famicom Disk System',
   'Super Nintendo': 'SNES',
+  'Super Nintendo Entertainment System': 'SNES',
+  'Super Famicom': 'SNES (JP)',
   'Nintendo 64': 'N64',
+  'Nintendo GameCube': 'GameCube',
+  'Nintendo Switch': 'Switch',
 };
 
 function SearchResultsListItem({ game }) {
 
   const { userPlayPileGames, setUserPlayPileGames, loading, updateUserGameData } = useContext(UserPlayPileGamesContext)
+
   const [userGameData, setUserGameData] = useUserGameData({
     status: game.status,
     isInPlayPile: game.isInPlayPile,
@@ -46,35 +51,36 @@ function SearchResultsListItem({ game }) {
   };
 
   return (
-    <li className="flex items-center justify-between py-5">
-      <div className="flex gap-x-6">
-        <div>
+    <li className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl">
+      <div className="flex gap-x-4">
+
+        <div className="flex items-center">
           <Link to={'/games/' + game.igdbId}>
             <img
               src={game.cover.url}
-              alt=""
-              className="rounded-sm min-w-48 h-60 object-cover" />
+              alt={game.name}
+              className="max-h-32 object-cover rounded-tl-xl rounded-bl-xl" />
           </Link>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-between">
 
-          <div className="flex justify-start gap-x-2">
+          <div className="flex justify-start h-1/5">
           <Link to={'/games/' + game.igdbId}>
-            <p className="text-2xl font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-black/80">
               {game.name}
             </p>
           </Link>
 
           </div>
 
-          <div className="flex mt-4 text-gray-500">
-            <p>PlayStatus</p>
+          <div className="flex text-gray-500 text-xs">
+            <p>Placeholder</p>
           </div>
 
-          <div className="flex-col justify-between mt-6 max-w-120">
-            <div className="flex items-center  gap-x-2 text font-medium leading-5 text-gray-900">
-              Initial Release:
+          <div className="flex-col justify-between max-w-120">
+            <div className="flex items-center  gap-x-2 text-xs leading-5 text-black/90">
+              Releases:
               <p className="whitespace-nowrap font-light">
                 <time>
                   {new Date(game.firstReleaseDate).toLocaleDateString(
@@ -85,24 +91,24 @@ function SearchResultsListItem({ game }) {
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-normal mt-2.5 font-medium leading-5 ">
-              <p className="py-1 text-m">Genres: </p>
+            <div className="flex flex-wrap justify-normal font-medium leading-5 ">
+              <p className="flex items-center text-xs font-light">Genres: </p>
               {game.genres.map((genre) => (
                 <div
                   key={genre.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2 py-0.5 text-xs font-medium ring-2 ring-inset"
+                  className="rounded-md whitespace-nowrap m-1 px-2  text-xs ring-1 ring-inset"
                 >
                   {genre.name}
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-wrap justify-normal mt-2.5 font-medium leading-5 max-w-80">
-              <p className="py-1 text-m"> Platforms: </p>
+            <div className="flex flex-wrap justify-normal  leading-5 max-w-80">
+              <p className="flex items-center text-xs"> Platforms: </p>
               {game.platforms.map((platform) => (
                 <div
                   key={platform.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2 py-0.5 text-xs font-medium ring-2 ring-inset"
+                  className="rounded-md whitespace-nowrap m-1 px-2 text-xs  ring-1 ring-inset"
                 >
                   {platformsNames[platform.name]
                     ? platformsNames[platform.name]
@@ -130,11 +136,12 @@ function SearchResultsListItem({ game }) {
             onClick={() =>
               updateUserGame(game.igdbId, { isInPlayPile: true })
             }
-            className="min-w-32 mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
+            className="mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
           >
             Add
           </button>
         )}
+
       </div>
     </li>
   );
