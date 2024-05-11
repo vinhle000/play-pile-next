@@ -51,7 +51,8 @@ function SearchResultsListItem({ game }) {
   };
 
   return (
-    <li className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl">
+    <li className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl
+                  transition-transform duration-300 ease-in-out hover:scale-105">
       <div className="flex gap-x-4">
 
         <div className="flex items-center">
