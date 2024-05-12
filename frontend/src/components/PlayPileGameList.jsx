@@ -36,7 +36,7 @@ function PlayPileGameList() {
   return (
     <div className="mx-6 rounded-2xl  bg-gray-100/20  shadow-md backdrop-filter">
       <div className="flex flex-wrap items-center">
-        {userPlayPileGames.map(game => (
+        {userPlayPileGames && userPlayPileGames.map(game => (
           <PlayPileGameCard key={game.igdbId} game={game} />
         ))}
       </div>

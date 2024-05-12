@@ -3,7 +3,6 @@ import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 
-import logRocket from 'logrocket'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,10 +54,8 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     try {
      let newData = await updateUserGameData(igdbId, {...updateData})
      setUserPlayPileGames({...userPlayPileGames, ...newData})
-      logRocket.log('userGameData updated successfully', newData)
     } catch (error) {
       console.error('Error updating UserGame Data ', error)
-      logRocket.error('Error updating UserGame Data ', error)
     }
   }
 

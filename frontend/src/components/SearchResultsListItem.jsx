@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import userGameService from '@/services/userGameService';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 import useUserGameData from '@/hooks/useUserGameData';
-import LogRocket from 'logrocket';
 
 const statuses = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -43,10 +42,8 @@ function SearchResultsListItem({ game }) {
       });
 
       setUserGameData({ ...userGameData, ...newData });
-      LogRocket.log('userGameData updated successfully', newData);
     } catch (error) {
       console.error('Error updating UserGame Data ', error);
-      LogRocket.error('Error updating UserGame Data ', error);
     }
   };
 

@@ -1,8 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import LogRocket from 'logrocket';
-
-
 import userService from '@/services/userService';
 const UserContext = createContext({});
 
@@ -18,10 +15,6 @@ export const UserProvider = ({ children }) => {
                 setLoading(true);
                 const response = await userService.getUserInfo();
                 setUser(response.data);
-                LogRocket.identify(response.data._id, {
-                    username: response.data.username,
-                    email: response.data.email,
-                });
             } catch (error) {
                 console.error('Error fetching user data', error);
                 setUser(null);

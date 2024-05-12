@@ -10,8 +10,8 @@ import userGameService from '@/services/userGameService'
 import ColumnsContext from '@/contexts/ColumnsContext';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
-function Board({ columns, setSelectedColumn, setSelectedGame, setOpenModal}) {
-  const { setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
+function Board({ setSelectedColumn, setSelectedGame, setOpenModal}) {
+  const { columnsOnBoard, setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
   const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, updateUserGameColumnPositions } = useContext(UserPlayPileGamesContext);
 
 
@@ -103,7 +103,7 @@ function Board({ columns, setSelectedColumn, setSelectedGame, setOpenModal}) {
               style={{ minHeight: '80vh' }}  // Ensures that the droppable area is sufficiently tall
             >
 
-              {columns.map((column, index) => (
+              {columnsOnBoard && columnsOnBoard.map((column, index) => (
                 <Column
                   key={column._id}
                   id={column._id}
