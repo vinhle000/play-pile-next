@@ -45,7 +45,8 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
 
   return (
 
-    <div className={`w-72 relative bg-white/70 rounded-xl backdrop-blur-sm shadow-lg`}
+    <div className={`w-72 relative bg-white/70 rounded-xl backdrop-blur-sm shadow-lg
+    transition-transform duration-300 ease-in-out hover:scale-105`}
           {...draggableProps}
           {...dragHandleProps}
           ref={innerRef}

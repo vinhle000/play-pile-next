@@ -1,8 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import userGameService from '@/services/userGameService';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
-import useUserGameData from '@/hooks/useUserGameData';
+import ColumnsContext from '@/contexts/ColumnsContext';
+
+
+import { Button } from "@/components/ui/button"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+
 
 const statuses = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -23,13 +38,13 @@ const platformsNames = {
   'Nintendo Switch': 'Switch',
 };
 
-function SearchResultsListItem({ game }) {
+function SearchResultsListItem({ game, userPlayPileGameData }) {
 
-  const { userPlayPileGames, setUserPlayPileGames, loading, updateUserGameData } = useContext(UserPlayPileGamesContext)
-
-  const [userGameData, setUserGameData] = useUserGameData({
-    status: game.status,
-    isInPlayPile: game.isInPlayPile,
+  const { loading, fetchUserPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext)
+  const { columns, fetchColumns } = useContext(ColumnsContext);
+  const [selectedColumnId, setSelectedColumnId ] = useState(userPlayPileGameData?.columnId  || null)
+  const [userGameData, setUserGameData] = useState({
+    ...userPlayPileGameData //FIXME: This is not one game
   });
 
 
@@ -40,7 +55,11 @@ function SearchResultsListItem({ game }) {
       let newData = await updateUserGameData(igdbId, {
         ...updateData,
       });
+      if (updateData.columnId) {
+        fetchUserPlayPileGames();
+        setSelectedColumnId(updateData.columnId);
 
+      }
       setUserGameData({ ...userGameData, ...newData });
     } catch (error) {
       console.error('Error updating UserGame Data ', error);
@@ -78,7 +97,7 @@ function SearchResultsListItem({ game }) {
 
           <div className="flex-col justify-between max-w-120">
             <div className="flex items-center  gap-x-2 text-xs leading-5 text-black/90">
-              Releases:
+              Released:
               <p className="whitespace-nowrap font-light">
                 <time>
                   {new Date(game.firstReleaseDate).toLocaleDateString(
@@ -118,27 +137,41 @@ function SearchResultsListItem({ game }) {
         </div>
       </div>
 
-      <div className="flex items-center">
-        {/* //FIXME: Remove button does not appear after page refresh */}
-        {userGameData.isInPlayPile ? (
-          <button
-            onClick={() =>
-              updateUserGame(game.igdbId, { isInPlayPile: false })
-            }
-            className="min-w-32 mx-5 px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-300 transition-colors"
-          >
-            Remove
-          </button>
-        ) : (
-          <button
-            onClick={() =>
-              updateUserGame(game.igdbId, { isInPlayPile: true })
-            }
-            className="mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
-          >
-            Add
-          </button>
-        )}
+      <div className="flex items-center ">
+      <DropdownMenu className="flex justify-center items-center">
+            <DropdownMenuTrigger >
+              {userPlayPileGameData
+                ?  <Button variant="secondary" className="" >Edit</Button>
+                : <Button className="" >Add</Button>
+              }
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-auto bg-zinc-100 drop-shadow-2xl">
+              <DropdownMenuItem className="flex justify-center text-xs">Play Pile</DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-gray-300"/>
+
+              <DropdownMenuRadioGroup value={selectedColumnId} onValueChange={(columnId) => {
+
+                updateUserGame(game.igdbId, {
+                  columnId: columnId,
+                  isInPlayPile: true
+
+                })
+              }}>
+
+                {columns && columns.map((column) => (
+                  <DropdownMenuRadioItem
+                  key={column._id}
+                  value={column._id}
+                  >
+                    {column.title}
+                  </DropdownMenuRadioItem>))
+                }
+
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+
+
 
       </div>
     </li>
