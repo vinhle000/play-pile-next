@@ -34,7 +34,7 @@ const UserGameSchema = new mongoose.Schema(
       enum: ['No status', 'Finished', 'Completed', 'Dropped'],
       default: 'No status',
     },
-    dates: {
+    playDates: {
       type: [
         {
           from: {
@@ -45,6 +45,7 @@ const UserGameSchema = new mongoose.Schema(
           },
         },
       ],
+      default: [],
     },
     hoursPlayed: {
       type: Number,

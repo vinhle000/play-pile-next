@@ -10,12 +10,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-function DateRangePicker({className, handleFieldChange}) {
 
-  const [date, setDate] = React.useState({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  })
+//Maybe Get Localtime of user, if not, default to UTC
+function DateRangePicker({className, handleDateChange, date, setDate }) {
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -43,22 +41,27 @@ function DateRangePicker({className, handleFieldChange}) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0 bg-white shadow-2xl" align="start">
           <Calendar
             initialFocus
             mode="range"
             defaultMonth={date?.from}
             selected={date}
             onSelect={(date) => {
-              // FIXME: handle date change properly
-              setDate({
-                from: date[0],
-                to: date[1],
-              })
-              handleFieldChange('playDates', [{
-                from: date[0],
-                to: date[1],
-              }])
+              if (date?.from && date?.to) {
+                handleDateChange({
+                  from: date?.from,
+                  to: date?.to,
+                })
+             } else if (date?.from) { //handle event when the user picks the same one day
+                handleDateChange({
+                  from: date.from,
+                  to: null,
+                })
+              }
+
+              setDate(date)
+
             }}
             numberOfMonths={2}
           />
