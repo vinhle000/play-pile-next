@@ -1,7 +1,15 @@
-import {useState, useContext} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import PlayPileGameList from '../components/PlayPileGameList'
+import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
+
 
 function PlayPilePage() {
+  const { fetchUserPlayPileGames } = useContext(UserPlayPileGamesContext);
+
+  useEffect(() => {
+    fetchUserPlayPileGames
+  },[])
+
   return (
 
     <div className="mt-10">

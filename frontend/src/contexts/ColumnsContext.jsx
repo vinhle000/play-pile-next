@@ -24,11 +24,9 @@ export const ColumnsProvider = ({children}) => {
   const fetchColumnsOnBoard = async () => {
     try {
       setLoading(true)
-      const columns = await columnService.getColumnsOnBoard();
-
-      console.log(`ColumnContext.jsx -> columns on board --> `, columns )
-      setColumnsOnBoard(columns);
-      return columns;
+      const columnsOnBoard = await columnService.getColumnsOnBoard();
+      setColumnsOnBoard(columnsOnBoard);
+      return columnsOnBoard;
 
     } catch (error) {
       console.error(`Error fetching user play pile`, error)

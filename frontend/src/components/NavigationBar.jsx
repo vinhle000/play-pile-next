@@ -23,25 +23,28 @@ import  UserContext  from '../contexts/UserContext';
   //useContext to get userLoggedIn state
 
 function AvatarDropdownMenu() {
-
   const { user, loading, logout } = useContext(UserContext);
+  console.log(user)
   return (
 
       <DropdownMenu>
         <DropdownMenuTrigger>
+            <div className="h-full w-full">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>
-              <UserCircleIcon className="px-3 py-2 text-gray-400 rounded-lg hover:bg-gray-700" />{' '}
-              {/*//FIXME styling*/}
+
+            <AvatarImage src="https://github.com/shadcn.pn" />
+            <AvatarFallback className="w-full h-full flex justify-center items-center
+               text-white bg-blue-800 rounded-x hover:bg-gray-700" >
+                {user.username[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>
+            </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link to="/profile">Board</Link>
+            <Link to="/board">Board</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link to="/playPileBoard">Play Pile</Link>
@@ -70,31 +73,29 @@ function NavigationBar() {
             {/*left side */}
             <div className="">
               <NavigationMenuList className={`flex flex-shrink-0 items-center justify-center gap-x-3 leading-[normal] `}>
-              <div className="w-px h-8 opacity-10 bg-black rounded-sm" />
-                <NavigationMenuItem className="origin-top-left -rotate-180 w-6 h-5 relative">
-                    {/* LOGO place holder */}
-                    <div className="w-4 h-5 left-0 top-0 absolute origin-top-left -rotate-180 bg-zinc-100 rounded-sm" />
+
+
+                <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
+                <NavigationMenuItem key={'playPile'}>
+                <Link
+                    to={'/playPile'}
+                    className="w-14 h-6 font-extrabold text-2xl text-black/60 hover:text-white/60"
+                  >
+                    {'PlayPile'}
+                  </Link>
                 </NavigationMenuItem>
 
                 <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
                 <NavigationMenuItem key={'board'}>
                 <Link
                     to={'/board'}
-                    className="w-14 h-6 font-medium text-black/60 hover:text-black/90"
+                    className="w-14 h-6 font-medium text-lg text-black/60 hover:text-white/60"
                   >
                       <div>Board</div>
                   </Link>
                 </NavigationMenuItem>
 
-                <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
-                <NavigationMenuItem key={'playPile'}>
-                <Link
-                    to={'/playPile'}
-                    className="w-14 h-6 font-medium text-black/60 hover:text-black/90"
-                  >
-                    {'Play Pile'}
-                  </Link>
-                </NavigationMenuItem>
+
               </NavigationMenuList>
            </div>
 
@@ -106,10 +107,10 @@ function NavigationBar() {
       <NavigationMenuList className="flex items-center justify-center self-stretch">
         {user
         ? (
-            <>
+            <div className="flex space-x-3">
               <SearchBar />
               <AvatarDropdownMenu/>
-            </>
+            </div>
           )
         : (
           <>

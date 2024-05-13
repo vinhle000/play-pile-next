@@ -1,9 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import userGameService from '@/services/userGameService';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
-import useUserGameData from '@/hooks/useUserGameData';
-import LogRocket from 'logrocket';
+import ColumnsContext from '@/contexts/ColumnsContext';
+
+
+import { Button } from "@/components/ui/button"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+
 
 const statuses = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -17,15 +31,20 @@ const platformsNames = {
   'Family Computer': 'Famicom',
   'Family Computer Disk System': 'Famicom Disk System',
   'Super Nintendo': 'SNES',
+  'Super Nintendo Entertainment System': 'SNES',
+  'Super Famicom': 'SNES (JP)',
   'Nintendo 64': 'N64',
+  'Nintendo GameCube': 'GameCube',
+  'Nintendo Switch': 'Switch',
 };
 
-function SearchResultsListItem({ game }) {
+function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, setOpenModal }) {
 
-  const { userPlayPileGames, setUserPlayPileGames, loading, updateUserGameData } = useContext(UserPlayPileGamesContext)
-  const [userGameData, setUserGameData] = useUserGameData({
-    status: game.status,
-    isInPlayPile: game.isInPlayPile,
+  const { loading, fetchUserPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext)
+  const { columns, fetchColumns } = useContext(ColumnsContext);
+  const [selectedColumnId, setSelectedColumnId ] = useState(userPlayPileGameData?.columnId  || null)
+  const [userGameData, setUserGameData] = useState({
+    ...userPlayPileGameData //FIXME: This is not one game
   });
 
 
@@ -36,45 +55,49 @@ function SearchResultsListItem({ game }) {
       let newData = await updateUserGameData(igdbId, {
         ...updateData,
       });
+      if (updateData.columnId) {
+        fetchUserPlayPileGames();
+        setSelectedColumnId(updateData.columnId);
 
+      }
       setUserGameData({ ...userGameData, ...newData });
-      LogRocket.log('userGameData updated successfully', newData);
     } catch (error) {
       console.error('Error updating UserGame Data ', error);
-      LogRocket.error('Error updating UserGame Data ', error);
     }
   };
 
   return (
-    <li className="flex items-center justify-between py-5">
-      <div className="flex gap-x-6">
-        <div>
+    <li className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl
+                  transition-transform duration-300 ease-in-out hover:scale-105">
+      <div className="flex gap-x-4">
+
+        <div className="flex items-center">
           <Link to={'/games/' + game.igdbId}>
             <img
               src={game.cover.url}
-              alt=""
-              className="rounded-sm min-w-48 h-60 object-cover" />
+              alt={game.name}
+              className="max-h-48 object-cover rounded-tl-xl rounded-bl-xl" />
           </Link>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-between">
 
-          <div className="flex justify-start gap-x-2">
+          <div className="flex justify-start h-1/5">
           <Link to={'/games/' + game.igdbId}>
-            <p className="text-2xl font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-black/80">
               {game.name}
             </p>
           </Link>
 
           </div>
 
-          <div className="flex mt-4 text-gray-500">
-            <p>PlayStatus</p>
+          <div className="flex text-gray-500 text-xs">
+            <p>Placeholder</p>
           </div>
 
-          <div className="flex-col justify-between mt-6 max-w-120">
-            <div className="flex items-center  gap-x-2 text font-medium leading-5 text-gray-900">
-              Initial Release:
+          <div className="flex-col justify-between max-w-120">
+            <div className="flex items-center  gap-x-2 text-xs leading-5 text-black/90">
+              Released:
               <p className="whitespace-nowrap font-light">
                 <time>
                   {new Date(game.firstReleaseDate).toLocaleDateString(
@@ -85,24 +108,24 @@ function SearchResultsListItem({ game }) {
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-normal mt-2.5 font-medium leading-5 ">
-              <p className="py-1 text-m">Genres: </p>
+            <div className="flex flex-wrap justify-normal font-medium leading-5 ">
+              <p className="flex items-center text-xs font-light">Genres: </p>
               {game.genres.map((genre) => (
                 <div
                   key={genre.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2 py-0.5 text-xs font-medium ring-2 ring-inset"
+                  className="rounded-md whitespace-nowrap m-1 px-2  text-xs ring-1 ring-inset"
                 >
                   {genre.name}
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-wrap justify-normal mt-2.5 font-medium leading-5 max-w-80">
-              <p className="py-1 text-m"> Platforms: </p>
+            <div className="flex flex-wrap justify-normal  leading-5 max-w-80">
+              <p className="flex items-center text-xs"> Platforms: </p>
               {game.platforms.map((platform) => (
                 <div
                   key={platform.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2 py-0.5 text-xs font-medium ring-2 ring-inset"
+                  className="rounded-md whitespace-nowrap m-1 px-2 text-xs  ring-1 ring-inset"
                 >
                   {platformsNames[platform.name]
                     ? platformsNames[platform.name]
@@ -114,27 +137,52 @@ function SearchResultsListItem({ game }) {
         </div>
       </div>
 
-      <div className="flex items-center">
-        {/* //FIXME: Remove button does not appear after page refresh */}
-        {userGameData.isInPlayPile ? (
-          <button
-            onClick={() =>
-              updateUserGame(game.igdbId, { isInPlayPile: false })
-            }
-            className="min-w-32 mx-5 px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-300 transition-colors"
-          >
-            Remove
-          </button>
-        ) : (
-          <button
-            onClick={() =>
-              updateUserGame(game.igdbId, { isInPlayPile: true })
-            }
-            className="min-w-32 mx-5 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-600 transition-colors"
-          >
-            Add
-          </button>
-        )}
+      <div className="flex items-center ">
+      <DropdownMenu className="flex justify-center items-center">
+            <DropdownMenuTrigger className="min-w-24 py-1 ">
+              {userPlayPileGameData
+                ?  <div className="bg-gray-400 rounded-2xl" >Edit</div>
+                : <div className=" bg-blue-300 rounded-2xl" >Add</div>
+              }
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-auto bg-zinc-100 drop-shadow-2xl">
+              <DropdownMenuLabel className="flex justify-center font-bold ">Add To List</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-gray-300"/>
+
+              <DropdownMenuRadioGroup value={selectedColumnId} onValueChange={(columnId) => {
+
+                updateUserGame(game.igdbId, {
+                  columnId: columnId,
+                  isInPlayPile: true
+
+                })
+              }}>
+
+                {columns && columns.map((column) => (
+                  <DropdownMenuRadioItem
+                  key={column._id}
+                  value={column._id}
+                  >
+                    {column.title}
+                  </DropdownMenuRadioItem>))
+                }
+              </DropdownMenuRadioGroup>
+                {userPlayPileGameData?.isInPlayPile &&
+                  <>
+                    <DropdownMenuSeparator className="bg-gray-300"/>
+                    <DropdownMenuItem
+                      className="flex justify-center text-sm font-bold text-red-400"
+                      onClick={()=> {
+                      setSelectedGame(userPlayPileGameData)
+                      setOpenModal('remove')
+                    }}
+                    >
+                      Remove
+                   </DropdownMenuItem>
+                  </>
+                }
+            </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </li>
   );

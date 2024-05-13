@@ -5,16 +5,18 @@ import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import SearchResultsListItem from './SearchResultsListItem'
 import { Link } from 'react-router-dom'
 
+function SearchResultsList({games, userPlayPileGamesByIgdbId, setSelectedGame, setOpenModal}) {
 
-function SearchResultsList({games}) {
-
-  if(!games) {
-    return <div>Loading...</div>
-  }
     return (
-      <ul role="list" className="max-w-  border-red-500 divide-y space-y-2 divide-gray-100">
-      {games.map((game) => (
-        <SearchResultsListItem key={game.igdbId}   game={game} />
+      <ul role="list" className="mx-4 py-5 space-y-4 divide-gray-100">
+      {games && games.map((game) => (
+        <SearchResultsListItem
+          key={game.igdbId}
+          game={game}
+          userPlayPileGameData={userPlayPileGamesByIgdbId[game.igdbId]}
+          setSelectedGame={setSelectedGame}
+          setOpenModal={setOpenModal}
+        />
       ))}
       </ul>
     )

@@ -7,8 +7,6 @@ export const UserPlayPileGamesProvider = ({children}) => {
 
   const [userPlayPileGames, setUserPlayPileGames] = useState([]);
   const [userGamesOnBoard, setUserGamesOnBoard] = useState({});
-      // map of columnId to games
-        // {columnId: [game1, game2, game3]}
   const [loading, setLoading] = useState(true);
 
   const fetchUserPlayPileGames = async () => {
@@ -59,6 +57,8 @@ export const UserPlayPileGamesProvider = ({children}) => {
       await userGameService.updateUserGameColumnPositions(updatedColumnUserGames)
     } catch (error) {
       console.error('Error updating userGame columnId ', error)
+    } finally {
+      setLoading(false)
     }
   }
 

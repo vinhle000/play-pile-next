@@ -14,8 +14,6 @@ import {
 
 import userGameService from "@/services/userGameService"
 import useUserGameData from '@/hooks/useUserGameData'
-import LogRocket from 'logrocket';
-
 
 //FIXME: Need to memoize this component with hook, so that we can rerend just the CARD that is being updated,
 // editModal saved changes dont appear until page refresh
