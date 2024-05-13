@@ -1,12 +1,13 @@
 import {useState, useEffect, useContext} from 'react'
 import { useLocation} from 'react-router-dom'
-import gameService from '../services/gameService'
+import { TailSpin } from "react-loader-spinner"
+
 import SearchResultsList from '@/components/SearchResultsList'
 import ConfirmModal from '@/components/ConfirmModal'
+
+import gameService from '../services/gameService'
 import UserPlayPileGamesContext from '../contexts/UserPlayPileGamesContext'
 
-//TODOS:
-// Spinner icon
 
 function SearchPage() {
   const [games, setGames] = useState(null);
@@ -14,7 +15,7 @@ function SearchPage() {
   const params = new URLSearchParams(location.search);
   const searchTerm = params.get('q');
 
-  const { userPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext);
+  const { userPlayPileGames, updateUserGameData, loading } = useContext(UserPlayPileGamesContext);
   const [selectedGame, setSelectedGame] = useState(null)
   const [openModal, setOpenModal] = useState('') // 'remove' || '']
 
@@ -36,6 +37,9 @@ function SearchPage() {
       setOpenModal('')
     }
   }
+
+
+
    useEffect(() => {
     const fetchGames = async () => {
       try {
@@ -49,20 +53,27 @@ function SearchPage() {
     }
     fetchGames();
   }, [searchTerm])
+
+
   return (
         <>
-        <h1>Results for: {searchTerm}</h1> {/*//FIXME causing undefined error */}
-        <div className="flex flex-col items-center mt-12 ">
+            <div className="flex flex-col items-center mt-12 ">
+            {loading
+               ? <TailSpin color="black" radius="1rem"/>
+               : <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
+                  <SearchResultsList
+                    games={games}
+                    userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId}
+                    setSelectedGame={setSelectedGame}
+                    setOpenModal={setOpenModal}
+                  />
+                </div>
+            }
+          </div>
 
-        <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
-          <SearchResultsList
-            games={games}
-            userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId}
-            setSelectedGame={setSelectedGame}
-            setOpenModal={setOpenModal}
-          />
-        </div>
-      </div>
+
+
+
       {openModal === 'remove' &&
           <ConfirmModal
             title="Remove Game"

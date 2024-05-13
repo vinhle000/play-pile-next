@@ -57,6 +57,8 @@ export const UserPlayPileGamesProvider = ({children}) => {
       await userGameService.updateUserGameColumnPositions(updatedColumnUserGames)
     } catch (error) {
       console.error('Error updating userGame columnId ', error)
+    } finally {
+      setLoading(false)
     }
   }
 

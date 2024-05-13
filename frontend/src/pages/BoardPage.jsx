@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react'
+import { TailSpin } from 'react-loader-spinner'
 import columnService from '@/services/columnService'
-import userGameService from "@/services/userGameService";
+import userGameService from "@/services/userGameService"
 
 import Board from '@/components/Board'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
@@ -13,8 +14,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input';
 
 
-
-// TODO: switch to more generic name "BoardPage"
 function BoardPage() {  //
 
   const { userPlayPileGames, setUserPlayPileGames, fetchUserPlayPileGames, userPlayPileGamesLoading, updateUserGameData } = useContext(UserPlayPileGamesContext);
@@ -88,7 +87,7 @@ function BoardPage() {  //
   }, [])
 
   if ( userGamesOnBoardLoading || columnsOnBoardLoading) {
-    return <div>Loading...</div>
+    return <TailSpin color="black" radius="1rem"/>
   }
 
   return (

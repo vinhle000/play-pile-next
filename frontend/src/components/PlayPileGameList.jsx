@@ -4,6 +4,8 @@ import PlayPileGameCard from '@/components/PlayPileGameCard';
 import ConfirmModal from '@/components/ConfirmModal';
 import userGameService from '@/services/userGameService';
 import UserPlayPileGamesContext  from '@/contexts/UserPlayPileGamesContext'
+import { TailSpin } from "react-loader-spinner"
+
 
 function PlayPileGameList() {
 
@@ -30,7 +32,7 @@ function PlayPileGameList() {
 
 
   if (loading) {
-    return <h3>Loading...</h3>;
+    return <TailSpin color="black" radius="1rem"/>
   }
 
   return (
