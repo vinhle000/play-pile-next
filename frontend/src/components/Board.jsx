@@ -35,7 +35,7 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal}) {
     }
   };
 
-  // FIXME: The games are not retaining their order in their respective columns after dropping
+
   const handleOnDragEnd = (result) => {
     const { source, destination, type } = result;
     // console.log(`handleOnDragEnd ---> result `, {source, destination, type})
@@ -47,7 +47,7 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal}) {
 
     // Handle column drag
     if (type === 'column') {
-      const newColumns = Array.from(columns);
+      const newColumns = [...columnsOnBoard];
       const [removed] = newColumns.splice(source.index, 1);
       newColumns.splice(destination.index, 0, removed);
 
