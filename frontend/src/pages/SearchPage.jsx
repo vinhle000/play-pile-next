@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import { useLocation} from 'react-router-dom'
 import gameService from '../services/gameService'
-import SearchResultsList from '../components/SearchResultsList'
+import SearchResultsList from '@/components/SearchResultsList'
+import ConfirmModal from '@/components/ConfirmModal'
 import UserPlayPileGamesContext from '../contexts/UserPlayPileGamesContext'
 
 //TODOS:
@@ -13,8 +14,11 @@ function SearchPage() {
   const params = new URLSearchParams(location.search);
   const searchTerm = params.get('q');
 
-  const { userPlayPileGames } = useContext(UserPlayPileGamesContext);
+  const { userPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext);
+  const [selectedGame, setSelectedGame] = useState(null)
+  const [openModal, setOpenModal] = useState('') // 'remove' || '']
 
+  //Mapping by ID to find each userGame data, instead of scanning array
   let userPlayPileGamesByIgdbId = {};
   if (userPlayPileGames.length > 0) {
     userPlayPileGamesByIgdbId = userPlayPileGames.reduce((acc, game) => {
@@ -23,8 +27,15 @@ function SearchPage() {
     });
   }
 
-
-
+  const handleRemoveGameFromPlayPile = async () => {
+    try {
+      await  updateUserGameData(selectedGame.igdbId, {isInPlayPile: false})
+    } catch (error) {
+      console.error('Error removing game from play pile', error)
+    } finally {
+      setOpenModal('')
+    }
+  }
    useEffect(() => {
     const fetchGames = async () => {
       try {
@@ -44,9 +55,22 @@ function SearchPage() {
         <div className="flex flex-col items-center mt-12 ">
 
         <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
-          <SearchResultsList games={games} userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId} />
+          <SearchResultsList
+            games={games}
+            userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId}
+            setSelectedGame={setSelectedGame}
+            setOpenModal={setOpenModal}
+          />
         </div>
       </div>
+      {openModal === 'remove' &&
+          <ConfirmModal
+            title="Remove Game"
+            description="This game will be removed from your play pile. But your data with game still remain. In case, you change your mind :) " //To permanetly delete?
+            onConfirm={handleRemoveGameFromPlayPile}
+            onCancel={()=> setOpenModal('')}
+          />
+        }
       </>
   )
 }

@@ -6,7 +6,7 @@ import SearchResultsListItem from './SearchResultsListItem'
 import { Link } from 'react-router-dom'
 
 
-function SearchResultsList({games, userPlayPileGamesByIgdbId}) {
+function SearchResultsList({games, userPlayPileGamesByIgdbId, setSelectedGame, setOpenModal}) {
 
   if(!games) {
     return <div>Loading...</div>
@@ -14,7 +14,13 @@ function SearchResultsList({games, userPlayPileGamesByIgdbId}) {
     return (
       <ul role="list" className="mx-4 py-5 space-y-4 divide-gray-100">
       {games.map((game) => (
-        <SearchResultsListItem key={game.igdbId}   game={game} userPlayPileGameData={userPlayPileGamesByIgdbId[game.igdbId]}/>
+        <SearchResultsListItem
+          key={game.igdbId}
+          game={game}
+          userPlayPileGameData={userPlayPileGamesByIgdbId[game.igdbId]}
+          setSelectedGame={setSelectedGame}
+          setOpenModal={setOpenModal}
+        />
       ))}
       </ul>
     )

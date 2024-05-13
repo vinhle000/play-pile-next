@@ -38,7 +38,7 @@ const platformsNames = {
   'Nintendo Switch': 'Switch',
 };
 
-function SearchResultsListItem({ game, userPlayPileGameData }) {
+function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, setOpenModal }) {
 
   const { loading, fetchUserPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext)
   const { columns, fetchColumns } = useContext(ColumnsContext);
@@ -139,14 +139,14 @@ function SearchResultsListItem({ game, userPlayPileGameData }) {
 
       <div className="flex items-center ">
       <DropdownMenu className="flex justify-center items-center">
-            <DropdownMenuTrigger >
+            <DropdownMenuTrigger className="min-w-24 py-1 ">
               {userPlayPileGameData
-                ?  <Button variant="secondary" className="" >Edit</Button>
-                : <Button className="" >Add</Button>
+                ?  <div className="bg-gray-400 rounded-2xl" >Edit</div>
+                : <div className=" bg-blue-300 rounded-2xl" >Add</div>
               }
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-auto bg-zinc-100 drop-shadow-2xl">
-              <DropdownMenuItem className="flex justify-center text-xs">Play Pile</DropdownMenuItem>
+              <DropdownMenuLabel className="flex justify-center font-bold ">Add To List</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-gray-300"/>
 
               <DropdownMenuRadioGroup value={selectedColumnId} onValueChange={(columnId) => {
@@ -166,13 +166,23 @@ function SearchResultsListItem({ game, userPlayPileGameData }) {
                     {column.title}
                   </DropdownMenuRadioItem>))
                 }
-
               </DropdownMenuRadioGroup>
+                {userPlayPileGameData?.isInPlayPile &&
+                  <>
+                    <DropdownMenuSeparator className="bg-gray-300"/>
+                    <DropdownMenuItem
+                      className="flex justify-center text-sm font-bold text-red-400"
+                      onClick={()=> {
+                      setSelectedGame(userPlayPileGameData)
+                      setOpenModal('remove')
+                    }}
+                    >
+                      Remove
+                   </DropdownMenuItem>
+                  </>
+                }
             </DropdownMenuContent>
         </DropdownMenu>
-
-
-
       </div>
     </li>
   );
