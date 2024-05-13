@@ -1,13 +1,14 @@
 import { useState, useContext } from 'react'
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
+import Note from '@/components/Note'
+
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ColumnsContext from '@/contexts/ColumnsContext'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 
 import DateRangePicker from '@/components/DateRangePicker'
@@ -150,12 +151,9 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 </DropdownMenu>
 
                 <div>
-                  <Textarea
-                    id="notes"
-                    name="notes"
-                    value={fieldData.notes}
-                    onChange={e => handleFieldChange('notes', e.target.value)}
-                  />
+                  <Label>Notes:</Label>
+                  {/*FUTURE: Eventually make a list of notes*/}
+                  <Note initialText={fieldData.notes} handleFieldChange={handleFieldChange}/>
                 </div>
 
                 <div className="flex justify-end ">
