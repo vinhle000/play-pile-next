@@ -3,8 +3,7 @@ import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import Note from '@/components/Note'
 import LinkEmbedder from '@/components/LinkEmbedder'
-import AttachmentInput from '@/components/AttachmentInput'
-import AttachmentsList from '@/components/AttachmentsList'
+
 
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ColumnsContext from '@/contexts/ColumnsContext'
@@ -116,8 +115,8 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
   return (
     <>
-      <Dialog className="flex flex-col justify-between z-50 overflow-auto">
-        <div className="fixed inset-0 flex items-center justify-center bg-black/30" >
+      <Dialog className="flex flex-col justify-between z-50 ">
+        <div className="fixed inset-0 flex items-center justify-center  bg-black/30" >
           <div className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 
             <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
@@ -161,16 +160,10 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                   <Note initialText={fieldData.notes} handleFieldChange={handleFieldChange}/>
                 </div>
 
+
                 <div>
                   <Label>Links:</Label>
-
                   <LinkEmbedder embeddedLinks={embeddedLinks} setEmbeddedLinks={setEmbeddedLinks} />
-                  {/* <Label>lists:</Label> */}
-
-{/*
-                    <AttachmentInput onChange={handleAddAttachment} />
-                    <AttachmentsList attachments={attachments} /> */}
-
                  </div>
 
                 <div className="flex justify-end ">
