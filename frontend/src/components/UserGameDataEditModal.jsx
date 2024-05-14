@@ -6,7 +6,9 @@ import LinkEmbedder from '@/components/LinkEmbedder'
 
 import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
 import { XCircleIcon, PlayIcon, ArrowPathIcon, PauseIcon, CheckCircleIcon, CheckBadgeIcon, XMarkIcon } from '@heroicons/react/24/solid'
-import { FaInfinity } from "react-icons/fa6";
+import { FaInfinity, FaCircleStop } from "react-icons/fa6";
+import { HiXMark } from "react-icons/hi2";
+import { FaCheck } from "react-icons/fa";
 
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ColumnsContext from '@/contexts/ColumnsContext'
@@ -54,11 +56,11 @@ const gameStatusIcon = (gameStatus) => {
     case 'Paused':
       return <PauseIcon className="w-5 h-6"/>
     case 'Finished':
-      return <CheckCircleIcon className="w-5 h-6"/>
+      return <FaCheck className="w-5 h-6"/>
     case 'Completed':
       return <TrophyIcon className="w-5 h-6"/>
     case 'Abandoned':
-      return <XMarkIcon className="w-5 h-6"/>
+      return <FaCircleStop className="w-5 h-6"/>
     default:
       return <div></div>
   }
@@ -94,14 +96,15 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     notes: game.notes
   })
 
-
-
   //For now just using the first date in the array
   const [newPlayDate, setNewPlayDate] = useState(
     {...fieldData.playDates[0]} || { from: new Date(), to: new Date()}
   );
 
   const [embeddedLinks, setEmbeddedLinks] = useState([])
+
+
+
 
   const updateGame = async (igdbId, updateData) => {
     updateData ? updateData : {}
@@ -110,42 +113,60 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
      setUserPlayPileGames({...userPlayPileGames, ...newData})
     } catch (error) {
       console.error('Error updating UserGame Data ', error)
+      throw error
     }
   }
+
+
+  const handlePlayStatusChange = async (status) => {
+    try {
+       await updateGame(game.igdbId, {playStatus: status})
+
+       setFieldData((prevState) => {
+         return {
+          ...prevState,
+          playStatus: status
+         }
+       })
+    } catch (error) {
+      console.error('Error updating Play Status of UserGame', error)
+    }
+  }
+
+
 
   const handleDateChange = async (date) => {
     if (fieldData.playDates) {
       if (fieldData.playDates[0] != date ) {
-        setFieldData((prevState) => {
-          //TODO: Implement pushing the new Date the the playDates array
-          return {
-            ...prevState,
-            'playDates': [date]
-           }
-        });
+        try {
+          await updateGame(game.igdbId, {playDates: [date]})
+             // Optimistic update - for faster UI response
+          setFieldData((prevState) => {
+            //TODO: Implement pushing the new Date the the playDates array
+            return {
+              ...prevState,
+              'playDates': [date]
+            }
+          });
+        } catch (error) {
+          console.error('Error saving(updating) Date of UserGame', error)
+        }
       }
     }
   }
 
 
-  const handleSave = async (igdbId) => {
-    console.log( 'handleSave -----> fieldData', fieldData)
+  // const handleSave = async (igdbId) => {
+  //   console.log( 'handleSave -----> fieldData', fieldData)
 
-    try {
-      await updateGame(igdbId, fieldData)
-    } catch (error) {
-      console.error('Error saving(updating) UserGame Data ', error)
-    }
-    setOpenModal('')
-  }
+  //   try {
+  //     await updateGame(igdbId, fieldData)
+  //   } catch (error) {
+  //     console.error('Error saving(updating) UserGame Data ', error)
+  //   }
+  //   setOpenModal('')
+  // }
 
-  const handleFieldChange = (field, value) => {
-    setFieldData((prevState) => {
-      return {
-        ...prevState, [field]: value
-      }
-    })
-  }
 
 
   return (
@@ -175,32 +196,33 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 <DropdownMenu>
                   <Label>Status: </Label>
                   <DropdownMenuTrigger>
-                    <div className="flex justify-between my-1 p-1 border rounded-lg shadow-sm border-gray-500">
+                    <div className="flex gap-2 my-1 p-1 border rounded-lg shadow-sm border-gray-500">
                       {fieldData.playStatus} {gameStatusIcon(fieldData.playStatus)}
                     </div>
                       </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white/95">
-
                     {gameStatusList.map((status) => {
                       return (
                         <DropdownMenuItem
                           key={status}
-                          onSelect={() => handleFieldChange('playStatus', status)}
+                          onSelect={() => handlePlayStatusChange(status)}
                           className="flex justify-between"
                         >
                           {status} {gameStatusIcon(status)}
                         </DropdownMenuItem>
                       )
                     })}
-
-
                   </DropdownMenuContent>
                 </DropdownMenu>
 
                 <div>
                   <Label>Notes:</Label>
                   {/*FUTURE: Eventually make a list of notes*/}
-                  <Note initialText={fieldData.notes} handleFieldChange={handleFieldChange}/>
+                  <Note
+                    gameIgdbId={game.igdbId}
+                    initialText={fieldData.notes}
+                    updateGame={updateGame}
+                  />
                 </div>
 
                 {/*TODO: NOW - persist the links to the server! and implement the remove userGame from list button */}
@@ -212,7 +234,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 <div className="flex justify-end ">
                   {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
                   <Button onClick={() => setOpenModal('')} variant="secondary">Close</Button>
-                  <Button onClick={() => handleSave(game.igdbId)}>Save</Button>
+                  {/* <Button onClick={() => handleSave(game.igdbId)}>Save</Button> */}
                 </div>
 
 

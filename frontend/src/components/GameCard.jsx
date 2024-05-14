@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
 import { XCircleIcon, PlayIcon, ArrowPathIcon, PauseIcon, CheckCircleIcon, CheckBadgeIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { FaInfinity, FaCircleStop } from "react-icons/fa6";
+import { FaInfinity, FaCircleStop } from "react-icons/fa6"
+import { FaCheck } from "react-icons/fa"
 
 import {
   Popover,
@@ -34,7 +35,7 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
       case 'Paused':
         return <PauseIcon className="w-5 h-6"/>
       case 'Finished':
-        return <CheckCircleIcon className="w-5 h-6"/>
+        return <FaCheck className="w-5 h-6"/>
       case 'Completed':
         return <TrophyIcon className="w-5 h-6"/>
       case 'Abandoned':

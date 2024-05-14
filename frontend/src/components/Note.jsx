@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-
+import { HiXMark } from "react-icons/hi2";
 
 
 function Note({gameIgdbId, initialText, updateGame}) {
@@ -22,13 +22,13 @@ function Note({gameIgdbId, initialText, updateGame}) {
     <div className="p-2">
       {isEditing ? (
         <Textarea
-          className="w-full min-h-[80px] resize-y bg-white border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700"
+          className="w-full min-h-36 resize-y overflow-auto bg-white border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700"
           value={text}
           onChange={handleChange}
         />
       ) : (
         <div
-          className="w-full min-h-[80px] bg-white border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700"
+          className="w-full min-h-36  bg-white border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700"
           onClick={toggleEdit}
         >
           {text ||
@@ -37,18 +37,18 @@ function Note({gameIgdbId, initialText, updateGame}) {
         </div>
       )}
     {isEditing && (
-      <div>
+      <div className="flex justify-end">
 
             <Button
             variant='secondary'
-            className="px-4 py-2"
+            className="bg-transparent m-1"
             onClick={handleSave}
             >
-            x
+            <HiXMark />
           </Button>
 
         <Button
-          className="px-4 py-2"
+          className="px-4 py-2 m-1"
           onClick={handleSave}
           >
           Save
