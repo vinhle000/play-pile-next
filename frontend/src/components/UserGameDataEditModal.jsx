@@ -156,19 +156,6 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
   }
 
 
-  // const handleSave = async (igdbId) => {
-  //   console.log( 'handleSave -----> fieldData', fieldData)
-
-  //   try {
-  //     await updateGame(igdbId, fieldData)
-  //   } catch (error) {
-  //     console.error('Error saving(updating) UserGame Data ', error)
-  //   }
-  //   setOpenModal('')
-  // }
-
-
-
   return (
     <>
       <Dialog className="flex flex-col justify-between z-50 ">
@@ -182,10 +169,11 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
              {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
 
-             <div className="my-3">
+             <div className="play-dates my-3 flex gap-2 items-center">
+              <Label>Dates:</Label>
              {/*  TODO: Dates  functionality */}
               <DateRangePicker
-                className="bg-white/95"
+                className="bg-white/95  rounded-lg shadow-md border border-gray-500"
                 handleDateChange={handleDateChange}
                 date={newPlayDate}
                 setDate={setNewPlayDate}
@@ -193,10 +181,11 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
             </div>
 
             {/*enum: ['No status', 'Not owned', 'Playing', 'Replaying', 'Endless', 'Paused', 'Finished', 'Completed', 'Dropped'],  */}
+            <div className="play-status flex gap-2 items-center">
                 <DropdownMenu>
                   <Label>Status: </Label>
                   <DropdownMenuTrigger>
-                    <div className="flex gap-2 my-1 p-1 border rounded-lg shadow-sm border-gray-500">
+                    <div className="flex gap-2 my-1 p-1 rounded-lg shadow-md border border-gray-500">
                       {fieldData.playStatus} {gameStatusIcon(fieldData.playStatus)}
                     </div>
                       </DropdownMenuTrigger>
@@ -214,8 +203,9 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                     })}
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
 
-                <div>
+                <div className="notes ">
                   <Label>Notes:</Label>
                   {/*FUTURE: Eventually make a list of notes*/}
                   <Note
