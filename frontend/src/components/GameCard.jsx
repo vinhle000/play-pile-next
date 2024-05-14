@@ -85,7 +85,7 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
 
               {/*  game status */}
             <div className="flex min-w-full p-2 justify-end">
-              {gameStatusIcon(game.playedStatus)}
+              {gameStatusIcon(game.playStatus)}
 
             </div>
 

@@ -42,19 +42,17 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has UserGameData and Game details
 
-  const {setUserPlayPileGames, userPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext) // {playDates, playingStatus, playedStatus, notes}
+  const {setUserPlayPileGames, userPlayPileGames, updateUserGameData } = useContext(UserPlayPileGamesContext) // {playDates,  playStatus, notes}
 
 
   // TODO: Making this modal persist upon change immediately without the save button to submit
   //
   const [fieldData, setFieldData] = useState({
-    columnId: game.columnId,
     //BUG: after moving the game to a diffenrt colunn on the board. Updating the game data through this modal with save,
     // reasigns its old values. So the game moves back to its previous column
-
+    // columnId: game.columnId,
     playDates: game?.playDates || [{ from: new Date(), to: new Date()}], // This is an array of Dates,
-    playingStatus: game.playingStatus,
-    playedStatus: game.playedStatus,
+    playStatus: game.playStatus,
     notes: game.notes
   })
 
@@ -136,21 +134,25 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
               />
             </div>
 
-
+            {/*enum: ['No status', 'Not owned', 'Playing', 'Replaying', 'Endless', 'Paused', 'Finished', 'Completed', 'Dropped'],  */}
                 <DropdownMenu>
                   <Label>Status: </Label>
                   <DropdownMenuTrigger>
                     <div className="my-2 p-2 border round-md border-gray-500">
-                      {fieldData.playedStatus}
+                      {fieldData.playStatus}
                       </div>
                       </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white/95">
 
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Not Started')}>No Started</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Playing')}>Playing</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Finished')}>Finished</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Completed')}>Completed</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playedStatus', 'Abandoned')}>Abandoned</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Not started')}>Not started</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Not owned' )}>Not owned</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Playing')}>Playing</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Replaying')}>Replaying</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Endless')}>Endless</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Paused')}>Paused</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Finished')}>Finished</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Completed')}>Completed</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Abandoned')}>Abandoned</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
 
@@ -160,7 +162,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                   <Note initialText={fieldData.notes} handleFieldChange={handleFieldChange}/>
                 </div>
 
-
+                {/*TODO: NOW - persist the links to the server! and implement the remove userGame from list button */}
                 <div>
                   <Label>Links:</Label>
                   <LinkEmbedder embeddedLinks={embeddedLinks} setEmbeddedLinks={setEmbeddedLinks} />
