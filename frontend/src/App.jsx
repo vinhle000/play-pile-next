@@ -15,6 +15,9 @@ import { UserPlayPileGamesProvider } from './contexts/UserPlayPileGamesContext'
 import { ColumnsProvider } from './contexts/ColumnsContext'
 
 
+//FIXME: NOTE: to handle Warning for react-beautiful-dnd
+//Warning: Connect(Droppable): Support for defaultProps will be removed from memo components in a future major release. Use JavaScript default parameters instead.
+
 function App() {
 
   return (

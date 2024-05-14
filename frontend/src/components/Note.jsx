@@ -4,16 +4,19 @@ import { Button } from '@/components/ui/button'
 
 
 
-function Note({initialText, handleFieldChange}) {
+function Note({gameIgdbId, initialText, updateGame}) {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(initialText);
 
   const toggleEdit = () => setIsEditing(!isEditing);
   const handleChange = (e) => setText(e.target.value);
-  const handleSave = () => {
-
-    handleFieldChange('notes', text)
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      await updateGame(gameIgdbId, {notes: text})
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating Notes of UserGame ', error)
+    }
   }
   return (
     <div className="p-2">

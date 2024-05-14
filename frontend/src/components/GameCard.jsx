@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
 import { XCircleIcon, PlayIcon, ArrowPathIcon, PauseIcon, CheckCircleIcon, CheckBadgeIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { FaInfinity } from "react-icons/fa6";
+import { FaInfinity, FaCircleStop } from "react-icons/fa6";
 
 import {
   Popover,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/popover"
 
 import userGameService from "@/services/userGameService"
-import useUserGameData from '@/hooks/useUserGameData'
+// import useUserGameData from '@/hooks/useUserGameData' Hook for memo
 
 //FIXME: Need to memoize this component with hook, so that we can rerend just the CARD that is being updated,
 // editModal saved changes dont appear until page refresh
@@ -38,7 +38,7 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
       case 'Completed':
         return <TrophyIcon className="w-5 h-6"/>
       case 'Abandoned':
-        return <XMarkIcon className="w-5 h-6"/>
+        return <FaCircleStop className="w-5 h-6"/>
       default:
         return <div></div>
     }
