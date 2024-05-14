@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
-
+import { XCircleIcon, PlayIcon, ArrowPathIcon, PauseIcon, CheckCircleIcon, CheckBadgeIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { FaInfinity } from "react-icons/fa6";
 
 import {
   Popover,
@@ -20,24 +21,28 @@ import useUserGameData from '@/hooks/useUserGameData'
 
 function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, setSelectedGame, setOpenModal }) {
 
-
   const gameStatusIcon = (gameStatus) => {
     switch (gameStatus) {
-      case 'Completed':
-        return <TrophyIcon className="w-6 h-6 text-gray-500" />
-      case 'Finished':
-          return <CheckIcon className="w-6 h-6 text-gray-500" />
+      case 'Not owned':
+        return <XCircleIcon className="w-5 h-6"/>;
       case 'Playing':
-        // return <ControllerIcon className="w-6 h-6 text-gray-500" />
+        return <PlayIcon className="w-5 h-6"/>;
+      case 'Replaying':
+        return <ArrowPathIcon className="w-5 h-6"/>
+      case 'Endless':
+        return <FaInfinity className="w-5 h-6"/>
+      case 'Paused':
+        return <PauseIcon className="w-5 h-6"/>
+      case 'Finished':
+        return <CheckCircleIcon className="w-5 h-6"/>
+      case 'Completed':
+        return <TrophyIcon className="w-5 h-6"/>
       case 'Abandoned':
-        // return <XIcon className="w-6 h-6 text-gray-500" />
-      case 'Not Started':
-        // return <XIcon className="w-6 h-6 text-gray-500" />
+        return <XMarkIcon className="w-5 h-6"/>
       default:
-        return <div className="text-xs  text-gray-500">Not Owned</div>
+        return <div></div>
     }
   }
-
 
   const draggingStyle = snapshot.isDragging ? { zIndex: 1000 } : {};
 

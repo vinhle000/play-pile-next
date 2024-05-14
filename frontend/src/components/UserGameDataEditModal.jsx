@@ -4,6 +4,9 @@ import ConfirmModal from '@/components/ConfirmModal'
 import Note from '@/components/Note'
 import LinkEmbedder from '@/components/LinkEmbedder'
 
+import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
+import { XCircleIcon, PlayIcon, ArrowPathIcon, PauseIcon, CheckCircleIcon, CheckBadgeIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { FaInfinity } from "react-icons/fa6";
 
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ColumnsContext from '@/contexts/ColumnsContext'
@@ -37,6 +40,41 @@ import {
 } from "@/components/ui/popover"
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+
+const gameStatusIcon = (gameStatus) => {
+  switch (gameStatus) {
+    case 'Not owned':
+      return <XCircleIcon className="w-5 h-6"/>;
+    case 'Playing':
+      return <PlayIcon className="w-5 h-6"/>;
+    case 'Replaying':
+      return <ArrowPathIcon className="w-5 h-6"/>
+    case 'Endless':
+      return <FaInfinity className="w-5 h-6"/>
+    case 'Paused':
+      return <PauseIcon className="w-5 h-6"/>
+    case 'Finished':
+      return <CheckCircleIcon className="w-5 h-6"/>
+    case 'Completed':
+      return <TrophyIcon className="w-5 h-6"/>
+    case 'Abandoned':
+      return <XMarkIcon className="w-5 h-6"/>
+    default:
+      return <div></div>
+  }
+}
+
+const gameStatusList = [
+  'Not started',
+  'Not owned',
+  'Playing',
+  'Replaying',
+  'Endless',
+  'Paused',
+  'Finished',
+  'Completed',
+  'Abandoned'
+]
 
 
 
@@ -87,7 +125,6 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
         });
       }
     }
-
   }
 
 
@@ -138,21 +175,25 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 <DropdownMenu>
                   <Label>Status: </Label>
                   <DropdownMenuTrigger>
-                    <div className="my-2 p-2 border round-md border-gray-500">
-                      {fieldData.playStatus}
-                      </div>
+                    <div className="flex justify-between my-1 p-1 border rounded-lg shadow-sm border-gray-500">
+                      {fieldData.playStatus} {gameStatusIcon(fieldData.playStatus)}
+                    </div>
                       </DropdownMenuTrigger>
                   <DropdownMenuContent className="bg-white/95">
 
-                  <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Not started')}>Not started</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Not owned' )}>Not owned</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Playing')}>Playing</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Replaying')}>Replaying</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Endless')}>Endless</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Paused')}>Paused</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Finished')}>Finished</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Completed')}>Completed</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleFieldChange('playStatus', 'Abandoned')}>Abandoned</DropdownMenuItem>
+                    {gameStatusList.map((status) => {
+                      return (
+                        <DropdownMenuItem
+                          key={status}
+                          onSelect={() => handleFieldChange('playStatus', status)}
+                          className="flex justify-between"
+                        >
+                          {status} {gameStatusIcon(status)}
+                        </DropdownMenuItem>
+                      )
+                    })}
+
+
                   </DropdownMenuContent>
                 </DropdownMenu>
 
