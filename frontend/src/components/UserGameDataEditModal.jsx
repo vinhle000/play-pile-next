@@ -2,6 +2,9 @@ import { useState, useContext } from 'react'
 import userGameService from '@/services/userGameService'
 import ConfirmModal from '@/components/ConfirmModal'
 import Note from '@/components/Note'
+import LinkEmbedder from '@/components/LinkEmbedder'
+import AttachmentInput from '@/components/AttachmentInput'
+import AttachmentsList from '@/components/AttachmentsList'
 
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext'
 import ColumnsContext from '@/contexts/ColumnsContext'
@@ -56,14 +59,16 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     notes: game.notes
   })
 
+
+
   //For now just using the first date in the array
   const [newPlayDate, setNewPlayDate] = useState(
     {...fieldData.playDates[0]} || { from: new Date(), to: new Date()}
   );
 
-  const updateGame = async (igdbId, updateData) => {
+  const [embeddedLinks, setEmbeddedLinks] = useState([])
 
-    console.log('UPDATE GAME DATA -----> updateData', updateData)
+  const updateGame = async (igdbId, updateData) => {
     updateData ? updateData : {}
     try {
      let newData = await updateUserGameData(igdbId, {...updateData})
@@ -74,7 +79,6 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
   }
 
   const handleDateChange = async (date) => {
-    console.log('handleDateChange ---- date  ------> ', date)
     if (fieldData.playDates) {
       if (fieldData.playDates[0] != date ) {
         setFieldData((prevState) => {
@@ -112,9 +116,9 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
   return (
     <>
-      <Dialog className="flex flex-col justify-between z-50 ">
+      <Dialog className="flex flex-col justify-between z-50 overflow-auto">
         <div className="fixed inset-0 flex items-center justify-center bg-black/30" >
-          <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+          <div className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 
             <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
              {game.gameInfo.name}
@@ -135,6 +139,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
 
                 <DropdownMenu>
+                  <Label>Status: </Label>
                   <DropdownMenuTrigger>
                     <div className="my-2 p-2 border round-md border-gray-500">
                       {fieldData.playedStatus}
@@ -155,6 +160,18 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                   {/*FUTURE: Eventually make a list of notes*/}
                   <Note initialText={fieldData.notes} handleFieldChange={handleFieldChange}/>
                 </div>
+
+                <div>
+                  <Label>Links:</Label>
+
+                  <LinkEmbedder embeddedLinks={embeddedLinks} setEmbeddedLinks={setEmbeddedLinks} />
+                  {/* <Label>lists:</Label> */}
+
+{/*
+                    <AttachmentInput onChange={handleAddAttachment} />
+                    <AttachmentsList attachments={attachments} /> */}
+
+                 </div>
 
                 <div className="flex justify-end ">
                   {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
