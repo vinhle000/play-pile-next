@@ -33,16 +33,16 @@ function AvatarDropdownMenu() {
           <Avatar>
 
             <AvatarImage src="https://github.com/shadcn.pn" />
-            <AvatarFallback className="w-full h-full flex justify-center items-center
-               text-white bg-blue-800 rounded-x hover:bg-gray-700" >
+            <AvatarFallback className="w-full h-full flex justify-center items-center  bg-gray-100/20 shadow-sm
+               text-white  rounded-xl hover:bg-gray-700/20 " >
                 {user.username[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>
             </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="bg-white/90">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-gray-300"/>
           <DropdownMenuItem>
             <Link to="/board">Board</Link>
           </DropdownMenuItem>
@@ -66,84 +66,56 @@ function NavigationBar() {
 
   return (
     <>
-      <NavigationMenu className="w-full h-12 ">
 
-        <div className="w-full h-full flex items-center space-x-72">
+    <div className="h-12 flex items-center justify-between px-4">
+      <NavigationMenu className="w-full h-full">
+        {/* Left side of the navigation bar */}
+        <div className="flex items-center gap-x-3">
+        </div>
+        <NavigationMenuList className="flex items-center gap-x-3">
+          <NavigationMenuItem key="playPile">
+            <Link to="/playPile" className="font-extrabold text-xl text-black/60 hover:text-black/30">
+              PlayPile
+            </Link>
+          </NavigationMenuItem>
+          <div className="w-px h-8 opacity-90 bg-black rounded-sm"></div>
+          <NavigationMenuItem key="board">
+            <Link to="/board" className="font-medium text-lg text-black/60 hover:text-black/30">
+              Board
+            </Link>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+        </NavigationMenu>
 
-            {/*left side */}
-            <div className="">
-              <NavigationMenuList className={`flex flex-shrink-0 items-center justify-center gap-x-3 leading-[normal] `}>
-
-
-                <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
-                <NavigationMenuItem key={'playPile'}>
-                <Link
-                    to={'/playPile'}
-                    className="w-14 h-6 font-extrabold text-2xl text-black/60 hover:text-white/60"
-                  >
-                    {'PlayPile'}
-                  </Link>
-                </NavigationMenuItem>
-
-                <div className="w-px h-8 opacity-10 bg-black rounded-sm"></div>
-                <NavigationMenuItem key={'board'}>
-                <Link
-                    to={'/board'}
-                    className="w-14 h-6 font-medium text-lg text-black/60 hover:text-white/60"
-                  >
-                      <div>Board</div>
-                  </Link>
-                </NavigationMenuItem>
-
-
-              </NavigationMenuList>
-           </div>
-
-
-
-      {/*right side */}
-
-      <div className="">
-      <NavigationMenuList className="flex items-center justify-center self-stretch">
-        {user
-        ? (
-            <div className="flex space-x-3">
+        {/* Right side of the navigation bar */}
+        <NavigationMenu>
+        <NavigationMenuList className="flex items-center gap-x-3">
+          {user ? (
+            <>
               <SearchBar />
-              <AvatarDropdownMenu/>
-            </div>
-          )
-        : (
-          <>
-            <div className="w-px h-8 opacity-10 bg-black rounded-sm" />
-            <NavigationMenuItem key={'board'}>
-            <Link
-                to={'/login'}
-                className="flex w-14 flex-shrink-0 flex-col font-medium text-black/30"
-              >
-                 Login
-              </Link>
-            </NavigationMenuItem>
+              <AvatarDropdownMenu />
+            </>
+          ) : (
+            <>
 
-
-            <div className="w-px h-8 opacity-10 bg-black rounded-sm" />
-            <NavigationMenuItem key={'register'}>
-            <Link
-                to={'/register'}
-                className="flex w-14 flex-shrink-0 flex-col font-medium text-black/30"
-              >
-                Register
-              </Link>
-            </NavigationMenuItem>
-          </>
-        )}
-
-      </NavigationMenuList>
-      </div>
-
-      </div>
+              <NavigationMenuItem key="login">
+                <Link to="/login" className="font-medium text-lg text-black/60 hover:text-black/30">
+                  Login
+                </Link>
+              </NavigationMenuItem>
+              <div className="w-px h-8 opacity-90 bg-black rounded-sm"></div>
+              <NavigationMenuItem key="register">
+                <Link to="/register" className="font-medium text-lg text-black/60 hover:text-black/30">
+                  Register
+                </Link>
+              </NavigationMenuItem>
+            </>
+          )}
+        </NavigationMenuList>
       </NavigationMenu>
-      <div className="w-full h-0.5 opacity-10 bg-black" />
-    </>
+    </div>
+      <div className="my-1 w-full h-0.5 bg-black/80 rounded-2xl opacity-30" />
+      </>
   )
 
 }
