@@ -155,37 +155,48 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     }
   }
 
-
   return (
     <>
-      <Dialog className="flex flex-col justify-between z-50 ">
-        <div className="fixed inset-0 flex items-center justify-center  bg-black/30" >
-          <div className="w-full max-w-md transform overflow-auto rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-
-            <DialogTitle className="text-lg font-medium leading-6 text-gray-900">
-             {game.gameInfo.name}
-            </DialogTitle>
+      <Dialog className="relative z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20" >
 
 
+          <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 text-left align-middle shadow-xl transition-all">
+
+            <div className="relative bg-cover bg-center h-40 rounded-t-xl"
+                     style={{ backgroundImage: `url(${game.gameInfo.coverUrl})`}} >
+
+                {/* Overlay that creates the blur effect towards the bottom */}
+               <div className="absolute inset-0 flex items-end justify-center">
+                <div
+                  className="relative w-full h-3/4 backdrop-filter bg-gradient-to-b from-transparent via-transparent to-white/90"
+                >
+                    <DialogTitle className="absolute top-16 bg-transparent  my-8 mx-4 text-xl font-bold text-gray-900">
+                        {game.gameInfo.name}
+                      </DialogTitle>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div className="p-4">
              {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
-
              <div className="play-dates my-3 flex gap-2 items-center">
               <Label>Dates:</Label>
-             {/*  TODO: Dates  functionality */}
               <DateRangePicker
-                className="bg-white/95  rounded-lg shadow-md border border-gray-500"
+                className="bg-white/95 rounded-lg shadow-md border border-gray-500 "
                 handleDateChange={handleDateChange}
                 date={newPlayDate}
                 setDate={setNewPlayDate}
               />
             </div>
 
-            {/*enum: ['No status', 'Not owned', 'Playing', 'Replaying', 'Endless', 'Paused', 'Finished', 'Completed', 'Dropped'],  */}
             <div className="play-status flex gap-2 items-center">
                 <DropdownMenu>
                   <Label>Status: </Label>
                   <DropdownMenuTrigger>
-                    <div className="flex gap-2 my-1 p-1 rounded-lg shadow-md border border-gray-500">
+                    <div className="flex gap-2 my-1 p-1 rounded-lg shadow-md border border-gray-500 max-w-max">
                       {fieldData.playStatus} {gameStatusIcon(fieldData.playStatus)}
                     </div>
                       </DropdownMenuTrigger>
@@ -226,7 +237,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                   <Button onClick={() => setOpenModal('')} variant="secondary">Close</Button>
                   {/* <Button onClick={() => handleSave(game.igdbId)}>Save</Button> */}
                 </div>
-
+                </div>
 
 
 
