@@ -13,10 +13,10 @@ function ConfirmModal({title, description, onConfirm, onCancel}) {
             {description}
         </DialogDescription>
         <div className="mt-4 flex justify-end gap-2">
-          <Button variant="secondary" onClick={onCancel}>
+          <Button className="text-white/90"  variant="secondary" onClick={onCancel}>
             Close
           </Button>
-          <Button  onClick={onConfirm}>
+          <Button className="text-white/90" onClick={onConfirm}>
             Confirm
           </Button>
         </div>

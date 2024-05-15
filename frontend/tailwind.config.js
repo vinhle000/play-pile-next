@@ -18,9 +18,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        'primary': '#2580b3', // Example primary color from gradient
-        'secondary': '#cbbacc', // Example secondary color from gradient
-        'accent': '#f39f86', // Button background color
+        'primary': '#d1a7fa',
+        'secondary': '#afb9cc',
+        'accent': '#afe5ff', // Button background color
         'dark': '#222222', // A dark color for text or backgrounds
       },
       backgroundImage: {

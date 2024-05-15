@@ -16,8 +16,8 @@ import { Input } from '@/components/ui/input';
 
 function BoardPage() {  //
 
-  const { userPlayPileGames, setUserPlayPileGames, fetchUserPlayPileGames, userPlayPileGamesLoading, updateUserGameData } = useContext(UserPlayPileGamesContext);
-  const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, userGamesOnBoardLoading } = useContext(UserPlayPileGamesContext);
+  //TODO: cleanup and refactor this page
+  const { userPlayPileGames, setUserPlayPileGames, fetchUserPlayPileGames, userPlayPileGamesLoading, updateUserGameData, userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, userGamesOnBoardLoading  } = useContext(UserPlayPileGamesContext);
   const { columnsOnBoard, setColumnsOnBoard, columnsOnBoardLoading, fetchColumnsOnBoard, deleteColumn } = useContext(ColumnsContext)
 
 

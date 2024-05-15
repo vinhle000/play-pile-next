@@ -54,21 +54,24 @@ function SearchPage() {
     fetchGames();
   }, [searchTerm])
 
-
+    //FIXME: Loading spinner, will be added when memoizing the searched result games and userPlayPileGames
+    // Currently rerendering the whole component
+    // if (loading) { return <TailSpin color="black" radius="1rem"/> }
   return (
         <>
+
             <div className="flex flex-col items-center mt-12 ">
-            {loading
-               ? <TailSpin color="black" radius="1rem"/>
-               : <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
+
+               <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
                   <SearchResultsList
                     games={games}
                     userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId}
                     setSelectedGame={setSelectedGame}
                     setOpenModal={setOpenModal}
-                  />
+                    />
                 </div>
-            }
+
+
           </div>
 
 

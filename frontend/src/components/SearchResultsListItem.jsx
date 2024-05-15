@@ -36,6 +36,12 @@ const platformsNames = {
   'Nintendo 64': 'N64',
   'Nintendo GameCube': 'GameCube',
   'Nintendo Switch': 'Switch',
+  'PC (Microsoft Windows)': 'Windows',
+  'PlayStation': 'PS1',
+  'PlayStation 2': 'PS2',
+  'PlayStation 3': 'PS3',
+  'PlayStation 4': 'PS4',
+  'PlayStation 5': 'PS5',
 };
 
 function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, setOpenModal }) {
@@ -84,7 +90,7 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
 
           <div className="flex justify-start h-1/5 mt-2">
           <Link to={'/games/' + game.igdbId}>
-            <p className="text-lg font-semibold text-black/80">
+            <p className="text-lg font-semibold text-gray-800">
               {game.name}
             </p>
           </Link>
@@ -96,7 +102,7 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
           </div> */}
 
           <div className="flex-col justify-between max-w-120">
-            <div className="flex items-center  gap-x-2 text-xs leading-5 font-bold text-black/90">
+            <div className="flex items-center  gap-x-2 text-xs leading-5 font-bold  text-gray-800">
               Released:
               <p className="whitespace-nowrap font-light">
                 <time>
@@ -113,7 +119,7 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
               {game.genres.map((genre) => (
                 <div
                   key={genre.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2  text-xs "
+                  className="rounded-md whitespace-nowrap m-1  text-xs "
                 >
                   {genre.name}
                 </div>
@@ -125,7 +131,7 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
               {game.platforms.map((platform) => (
                 <div
                   key={platform.id}
-                  className="rounded-md whitespace-nowrap m-1 px-1 text-xs  "
+                  className="rounded-md whitespace-nowrap m-1 text-xs  "
                 >
                   {platformsNames[platform.name]
                     ? platformsNames[platform.name]
@@ -141,9 +147,9 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
       <DropdownMenu className="flex justify-center items-center">
             <DropdownMenuTrigger className="min-w-24 py-1 mr-8">
               {userPlayPileGameData
-                ?  <div className="x-4 py-2 rounded-lg font-semibold bg-gray-800/30 hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60 shadow-lg transition duration-300 ease-in-out" >Edit</div>
-                : <div className="px-4 py-2 rounded-lg font-semibold bg-purple-800/30 hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60 shadow-lg transition duration-300 ease-in-out"
-                style={{ backdropFilter: 'saturate(180%) blur(5px)' }}>add</div>
+                ?  <div className="x-4 py-2 rounded-lg font-semibold text-white/90  bg-gray-800/40 hover:bg-gray-800/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60  transition duration-300 ease-in-out" >Edit</div>
+                : <div className="px-4 py-2 rounded-lg font-semibold text-white/90 bg-purple-500/50  hover:bg-purple-500/80 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60 transition duration-300 ease-in-out"
+                style={{ backdropFilter: 'saturate(180%) blur(5px)' }}>Add</div>
               }
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-auto bg-zinc-100 drop-shadow-2xl">

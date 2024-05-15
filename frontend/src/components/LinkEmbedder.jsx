@@ -91,7 +91,7 @@ function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
           className={`p-2 bg-transparent rounded-md w-full
                     border ${inputUrlError ? 'border-red-500' : 'border-gray-300'} `}
         />
-        <Button onClick={() => handleAddEmbeddedLink(inputUrl)} className=" text-white rounded-md">
+        <Button onClick={() => handleAddEmbeddedLink(inputUrl)} className=" text-white/90  bg-purple-500/50  hover:bg-purple-500/80  rounded-md">
           +
         </Button>
       </div>

@@ -50,7 +50,7 @@ function RegisterPage() {
     register(values.username, values.email, values.password, values.confirmPassword)
     .then((response) => {
       console.log('User registered', response)
-      navigate("/")
+      navigate("/board")
     })
     .catch((error) => {
       console.error('Error registering user', error)
@@ -58,74 +58,86 @@ function RegisterPage() {
   }
 
   return (
-    <div className="flex justify-center align h-screen mt-14">
-    <Form {...form} className=" flex-row block ">
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-4">
-        <FormField
+    <div className="flex justify-center mt-10">
 
-        control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem className="flex flex-col items-start" >
-              <FormLabel className="text-xs px-1 -mb-1.5">Username</FormLabel>
-              <FormControl>
-                <Input className="block w-full bg-gray-300
-             placeholder:text-black/50
-             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="username" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="w-full max-w-xs p-6 bg-white/20 backdrop-blur-xl rounded-xl shadow-xl">
+     <h2 className="text-gray-700 text-lg font-bold mb-6 text-center">Register</h2>
+      <Form {...form} className=" flex-row block ">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-4">
+          <FormField
 
-          <FormField
           control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="flex flex-col items-start">
-                <FormLabel className="text-xs px-1 -mb-1.5">Email</FormLabel>
-              <FormControl>
-                <Input className="block w-full bg-gray-300
-             placeholder:text-black/50
-             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            name="username"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start" >
+                {/* <FormLabel className="text-xs px-1 -mb-1.5">Username</FormLabel> */}
+                <FormControl>
+                  <Input className="bg-white bg-opacity-30 rounded w-full py-2 px-3 text-gray-700
+                    leading-tight focus:outline-none border-none focus:bg-white/60 focus:opacity-75" placeholder="Username" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="flex flex-col items-start">
-            <FormLabel className="text-xs px-1 -mb-1.5">Password</FormLabel>
-              <FormControl>
-                <Input className="block w-full bg-gray-300
-             placeholder:text-black/50
-             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Password" {...field} />
-              </FormControl>
-              <FormMessage className="flex-col justify-center"/>
-            </FormItem>
-          )}
-        />
-          <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem className="flex items-center">
-              <FormControl>
-                <Input className="block w-full bg-gray-300
-             placeholder:text-black/50
-             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Confirm Password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Register</Button>
-      </form>
-    </Form>
+            <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+                  {/* <FormLabel className="text-xs px-1 -mb-1.5">Email</FormLabel> */}
+                <FormControl>
+                <Input
+                  type="text"
+                  className=" bg-white bg-opacity-30 rounded w-full py-2 px-3 text-gray-700
+                  leading-tight focus:outline-none border-none focus:ring-0 focus:bg-white/60 focus:opacity-75"
+                  placeholder="Email" {...field}
+                />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+            <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+              {/* <FormLabel className="text-xs px-1 -mb-1.5">Password</FormLabel> */}
+                <FormControl>
+                <Input
+                  type="password"
+                  className=" bg-white bg-opacity-30 rounded w-full py-2 px-3 text-gray-700 text-sm
+                  leading-tight focus:outline-none border-none focus:ring-0 focus:bg-white/60 focus:opacity-75"
+                  placeholder="Password" {...field}
+                />
+                </FormControl>
+                <FormMessage className="flex-col justify-center"/>
+              </FormItem>
+            )}
+          />
+            <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+                <FormControl>
+                <Input
+                  type="password"
+                  className=" bg-white bg-opacity-30 rounded w-full py-2 px-3 text-gray-700
+                  leading-tight focus:outline-none border-none focus:ring-0 focus:bg-white/60 focus:opacity-75"
+                  placeholder="Confirm Password" {...field}
+                />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+             <Button type="submit" className="w-full bg-purple-600/50 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</Button>
+        </form>
+      </Form>
+    </div>
   </div>
   )
 }
