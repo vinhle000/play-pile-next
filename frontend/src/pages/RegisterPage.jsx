@@ -58,7 +58,7 @@ function RegisterPage() {
   }
 
   return (
-    <div className="flex justify-center align h-screen">
+    <div className="flex justify-center align h-screen mt-14">
     <Form {...form} className=" flex-row block ">
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-4">
         <FormField
@@ -66,10 +66,12 @@ function RegisterPage() {
         control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem className="flex items-center" >
-              <FormLabel className="mr-4">Username</FormLabel>
+            <FormItem className="flex flex-col items-start" >
+              <FormLabel className="text-xs px-1 -mb-1.5">Username</FormLabel>
               <FormControl>
-                <Input placeholder="username" {...field} />
+                <Input className="block w-full bg-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,10 +82,12 @@ function RegisterPage() {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="flex items-center">
-              <FormLabel className="block w-1/4">Email</FormLabel>
+            <FormItem className="flex flex-col items-start">
+                <FormLabel className="text-xs px-1 -mb-1.5">Email</FormLabel>
               <FormControl>
-                <Input className="block w-3/4" placeholder="Email" {...field} />
+                <Input className="block w-full bg-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,10 +98,12 @@ function RegisterPage() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="flex items-center">
-              <FormLabel className="block w-1/4">Password</FormLabel>
+            <FormItem className="flex flex-col items-start">
+            <FormLabel className="text-xs px-1 -mb-1.5">Password</FormLabel>
               <FormControl>
-                <Input className="block w-3/4" placeholder="Password" {...field} />
+                <Input className="block w-full bg-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Password" {...field} />
               </FormControl>
               <FormMessage className="flex-col justify-center"/>
             </FormItem>
@@ -108,9 +114,10 @@ function RegisterPage() {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem className="flex items-center">
-              <FormLabel className="block w-1/4"></FormLabel>
               <FormControl>
-                <Input className="block w-3/4" placeholder="Confirm Password" {...field} />
+                <Input className="block w-full bg-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Confirm Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

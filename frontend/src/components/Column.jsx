@@ -16,7 +16,6 @@ import { EllipsisHorizontalIcon} from '@heroicons/react/24/solid';
 function Column({ id, column, games, index, setSelectedColumn, setSelectedGame, setOpenModal }) {
 
 
-
     //FIXME: backdrop-blur causing issues with the cards being dragged over appears behind the column
     // And drag and drop is not as smooth as it should be
   return (
