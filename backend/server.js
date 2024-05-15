@@ -18,7 +18,21 @@ const corsOptions = {
   credentials: true, // To allow credentials (cookies, authorization headers, etc.)
 
 };
+const helmet = require('helmet');
+
+// Configure CSP
+const csp = helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+    styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+    fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+  },
+});
+
+
 const app = express();
+app.use(csp);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
