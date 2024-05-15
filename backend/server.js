@@ -13,7 +13,7 @@ connectDB();
 
 
 const corsOptions = {
-  origin: process.env.CLIENT_URL,
+  origin: '*', // Allow requests from any origin
   // origin: process.env.NODE_ENV === 'production' ?  process.env.CLIENT_URL  : 'http://localhost:5173', // Your frontend origin
   credentials: true, // To allow credentials (cookies, authorization headers, etc.)
 
