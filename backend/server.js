@@ -8,13 +8,15 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 
 const connectDB = require('./config/db');
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 connectDB();
 
 
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ?  process.env.CLIENT_URL  : 'http://localhost:5173', // Your frontend origin
+  origin: process.env.CLIENT_URL,
+  // origin: process.env.NODE_ENV === 'production' ?  process.env.CLIENT_URL  : 'http://localhost:5173', // Your frontend origin
   credentials: true, // To allow credentials (cookies, authorization headers, etc.)
+
 };
 const app = express();
 app.use(cors(corsOptions));
