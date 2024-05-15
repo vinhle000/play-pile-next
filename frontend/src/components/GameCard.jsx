@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import UserGameDataEditModal from '@/components/UserGameDataEditModal'
 import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid'
-
+import { XCircleIcon, PlayIcon, ArrowPathIcon, PauseIcon, CheckCircleIcon, CheckBadgeIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { FaInfinity, FaCircleStop } from "react-icons/fa6"
+import { FaCheck } from "react-icons/fa"
 
 import {
   Popover,
@@ -13,31 +15,35 @@ import {
 } from "@/components/ui/popover"
 
 import userGameService from "@/services/userGameService"
-import useUserGameData from '@/hooks/useUserGameData'
+// import useUserGameData from '@/hooks/useUserGameData' Hook for memo
 
 //FIXME: Need to memoize this component with hook, so that we can rerend just the CARD that is being updated,
 // editModal saved changes dont appear until page refresh
 
 function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, setSelectedGame, setOpenModal }) {
 
-
   const gameStatusIcon = (gameStatus) => {
     switch (gameStatus) {
-      case 'Completed':
-        return <TrophyIcon className="w-6 h-6 text-gray-500" />
-      case 'Finished':
-          return <CheckIcon className="w-6 h-6 text-gray-500" />
+      case 'Not owned':
+        return <XCircleIcon className="w-5 h-6"/>;
       case 'Playing':
-        // return <ControllerIcon className="w-6 h-6 text-gray-500" />
+        return <PlayIcon className="w-5 h-6"/>;
+      case 'Replaying':
+        return <ArrowPathIcon className="w-5 h-6"/>
+      case 'Endless':
+        return <FaInfinity className="w-5 h-6"/>
+      case 'Paused':
+        return <PauseIcon className="w-5 h-6"/>
+      case 'Finished':
+        return <FaCheck className="w-5 h-6"/>
+      case 'Completed':
+        return <TrophyIcon className="w-5 h-6"/>
       case 'Abandoned':
-        // return <XIcon className="w-6 h-6 text-gray-500" />
-      case 'Not Started':
-        // return <XIcon className="w-6 h-6 text-gray-500" />
+        return <FaCircleStop className="w-5 h-6"/>
       default:
-        return <div className="text-xs  text-gray-500">Not Owned</div>
+        return <div></div>
     }
   }
-
 
   const draggingStyle = snapshot.isDragging ? { zIndex: 1000 } : {};
 
@@ -85,7 +91,7 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
 
               {/*  game status */}
             <div className="flex min-w-full p-2 justify-end">
-              {gameStatusIcon(game.playedStatus)}
+              {gameStatusIcon(game.playStatus)}
 
             </div>
 

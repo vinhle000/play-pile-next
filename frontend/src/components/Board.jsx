@@ -127,7 +127,8 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal}) {
                     onCancel={handleHideForm}
                   />
                 ) : (
-                  <Button onClick={handleShowForm} className=" text-white font-semibold py-2 px-4 rounded inline-flex items-center focus:ring-0">
+                  <Button onClick={handleShowForm} className="w-100 p-2 space-y-2  bg-gray-100/20 -z-20 rounded-2xl shadow-md hover:bg-gray-100/30
+                  backdrop-filter text-black/90 font-semibold py-2 px-4  inline-flex items-center focus:ring-0">
                     <span>Add list</span>
                   </Button>
                 )}

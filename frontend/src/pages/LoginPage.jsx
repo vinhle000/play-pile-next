@@ -51,8 +51,12 @@ import UserContext from "@/contexts/UserContext";
       console.error('Error logging in user', error)
     })
   }
+  // w-full rounded-md border-0 bg-gray-100/20  py-1.5 pl-10 pr-3 text-gray-300
+  //            placeholder:text-black/50
+  //            focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6
   return (
-    <div className="flex justify-center align h-screen">
+    <div className="flex justify-center align h-screen mt-10">
+
     <Form {...form} className=" flex-row block ">
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-4">
 
@@ -61,10 +65,12 @@ import UserContext from "@/contexts/UserContext";
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="flex items-center">
-              <FormLabel className="block w-1/4">Email</FormLabel>
+            <FormItem className="flex flex-col items-start">
+            <FormLabel className="text-xs px-1 -mb-1.5">Email</FormLabel>
               <FormControl>
-                <Input className="block w-3/4" placeholder="Email" {...field} />
+                <Input className="block w-full bg-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,10 +81,12 @@ import UserContext from "@/contexts/UserContext";
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="flex items-center">
-              <FormLabel className="block w-1/4">Password</FormLabel>
+            <FormItem className="flex flex-col items-start">
+            <FormLabel className="text-xs px-1 -mb-1.5">Password</FormLabel>
               <FormControl>
-                <Input className="block w-3/4" placeholder="Password" {...field} />
+                <Input className="block w-full bg-gray-300
+             placeholder:text-black/50
+             focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Password" {...field} />
               </FormControl>
               <FormMessage className="flex-col justify-center"/>
             </FormItem>

@@ -24,14 +24,9 @@ const UserGameSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    playingStatus: {
+    playStatus: {
       type: String,
-      enum: ['Not started', 'Currently Playing', 'Paused', 'Endless', 'Replaying'],
-      default: 'Not started',
-    },
-    playedStatus: {
-      type: String,
-      enum: ['No status', 'Finished', 'Completed', 'Dropped'],
+      enum: ['No status', 'Not owned', 'Playing', 'Replaying', 'Endless', 'Paused', 'Finished', 'Completed', 'Dropped'],
       default: 'No status',
     },
     playDates: {

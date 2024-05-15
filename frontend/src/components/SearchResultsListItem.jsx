@@ -82,7 +82,7 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
 
         <div className="flex flex-col justify-between">
 
-          <div className="flex justify-start h-1/5">
+          <div className="flex justify-start h-1/5 mt-2">
           <Link to={'/games/' + game.igdbId}>
             <p className="text-lg font-semibold text-black/80">
               {game.name}
@@ -91,12 +91,12 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
 
           </div>
 
-          <div className="flex text-gray-500 text-xs">
+          {/* <div className="flex text-gray-500 text-xs">
             <p>Placeholder</p>
-          </div>
+          </div> */}
 
           <div className="flex-col justify-between max-w-120">
-            <div className="flex items-center  gap-x-2 text-xs leading-5 text-black/90">
+            <div className="flex items-center  gap-x-2 text-xs leading-5 font-bold text-black/90">
               Released:
               <p className="whitespace-nowrap font-light">
                 <time>
@@ -109,11 +109,11 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
             </div>
 
             <div className="flex flex-wrap justify-normal font-medium leading-5 ">
-              <p className="flex items-center text-xs font-light">Genres: </p>
+              <p className="flex items-center text-xs font-bold">Genres: </p>
               {game.genres.map((genre) => (
                 <div
                   key={genre.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2  text-xs ring-1 ring-inset"
+                  className="rounded-md whitespace-nowrap m-1 px-2  text-xs "
                 >
                   {genre.name}
                 </div>
@@ -121,11 +121,11 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
             </div>
 
             <div className="flex flex-wrap justify-normal  leading-5 max-w-80">
-              <p className="flex items-center text-xs"> Platforms: </p>
+              <p className="flex items-center text-xs font-bold"> Platforms: </p>
               {game.platforms.map((platform) => (
                 <div
                   key={platform.id}
-                  className="rounded-md whitespace-nowrap m-1 px-2 text-xs  ring-1 ring-inset"
+                  className="rounded-md whitespace-nowrap m-1 px-1 text-xs  "
                 >
                   {platformsNames[platform.name]
                     ? platformsNames[platform.name]
@@ -139,10 +139,11 @@ function SearchResultsListItem({ game, userPlayPileGameData, setSelectedGame, se
 
       <div className="flex items-center ">
       <DropdownMenu className="flex justify-center items-center">
-            <DropdownMenuTrigger className="min-w-24 py-1 ">
+            <DropdownMenuTrigger className="min-w-24 py-1 mr-8">
               {userPlayPileGameData
-                ?  <div className="bg-gray-400 rounded-2xl" >Edit</div>
-                : <div className=" bg-blue-300 rounded-2xl" >Add</div>
+                ?  <div className="x-4 py-2 rounded-lg font-semibold bg-gray-800/30 hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60 shadow-lg transition duration-300 ease-in-out" >Edit</div>
+                : <div className="px-4 py-2 rounded-lg font-semibold bg-purple-800/30 hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60 shadow-lg transition duration-300 ease-in-out"
+                style={{ backdropFilter: 'saturate(180%) blur(5px)' }}>add</div>
               }
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-auto bg-zinc-100 drop-shadow-2xl">
