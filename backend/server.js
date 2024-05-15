@@ -25,6 +25,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => { // Middleware to log all requests
   // console.log('Headers:', req.body);
   // console.log('Cookies:', req.cookies);
+  if (req.body) {
+    logger.info(`Request Body -----> ${JSON.stringify(req.body)}`);
+  }
   next();
 });
 app.use('/api/games/', require('./src/routes/gameRoutes'));
