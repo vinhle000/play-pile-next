@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const API_URL = `${import.meta.env.VITE_REACT_APP_URL}/api/board/columns`;
+const envURL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
+
+
+const API_URL = `${envURL}/api/board/columns`;
 
 const columnService = {
 

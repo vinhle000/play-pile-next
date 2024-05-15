@@ -10,8 +10,10 @@ const express = require('express');
 const connectDB = require('./config/db');
 const port = process.env.PORT || 5000;
 connectDB();
+
+
 const corsOptions = {
-  origin: 'http://localhost:5173', // Your frontend origin
+  origin: process.env.NODE_ENV === 'production' ?  process.env.CLIENT_URL  : 'http://localhost:5173', // Your frontend origin
   credentials: true, // To allow credentials (cookies, authorization headers, etc.)
 };
 const app = express();
