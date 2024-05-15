@@ -88,9 +88,10 @@ function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
           placeholder="Enter URL here..."
           value={inputUrl}
           onChange={(e) => setInputUrl(e.target.value)}
-          className={`p-2 border ${inputUrlError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
+          className={`p-2 bg-transparent rounded-md w-full
+                    border ${inputUrlError ? 'border-red-500' : 'border-gray-300'} `}
         />
-        <Button onClick={() => handleAddEmbeddedLink(inputUrl)} className="bg-blue-500 text-white rounded-md">
+        <Button onClick={() => handleAddEmbeddedLink(inputUrl)} className=" text-white rounded-md">
           +
         </Button>
       </div>

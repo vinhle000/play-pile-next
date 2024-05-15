@@ -161,7 +161,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
         <div className="fixed inset-0 flex items-center justify-center bg-black/20" >
 
 
-          <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/90 text-left align-middle shadow-xl transition-all">
+          <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/95 text-left align-middle shadow-xl transition-all">
 
             <div className="relative bg-cover bg-center h-40 rounded-t-xl"
                      style={{ backgroundImage: `url(${game.gameInfo.coverUrl})`}} >
@@ -169,7 +169,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 {/* Overlay that creates the blur effect towards the bottom */}
                <div className="absolute inset-0 flex items-end justify-center">
                 <div
-                  className="relative w-full h-3/4 backdrop-filter bg-gradient-to-b from-transparent via-transparent to-white/90"
+                  className="relative w-full h-3/4 backdrop-filter bg-gradient-to-b from-transparent via-transparent to-white/95"
                 >
                     <DialogTitle className="absolute top-16 bg-transparent  my-8 mx-4 text-xl font-bold text-gray-900">
                         {game.gameInfo.name}
@@ -185,7 +185,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
              <div className="play-dates my-3 flex gap-2 items-center">
               <Label>Dates:</Label>
               <DateRangePicker
-                className="bg-white/95 rounded-lg shadow-md border border-gray-500 "
+                className=" rounded-lg shadow-sm border border-gray-300 "
                 handleDateChange={handleDateChange}
                 date={newPlayDate}
                 setDate={setNewPlayDate}
@@ -196,7 +196,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 <DropdownMenu>
                   <Label>Status: </Label>
                   <DropdownMenuTrigger>
-                    <div className="flex gap-2 my-1 p-1 rounded-lg shadow-md border border-gray-500 max-w-max">
+                    <div className="flex gap-2 my-1 p-1 rounded-lg shadow-sm border border-gray-300 max-w-max">
                       {fieldData.playStatus} {gameStatusIcon(fieldData.playStatus)}
                     </div>
                       </DropdownMenuTrigger>
