@@ -39,3 +39,6 @@ app.use('/api/board/columns', require('./src/routes/columnRoutes.js'))
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
+app.get(port, () => {
+  res.send('GET - Server is running');
+});
