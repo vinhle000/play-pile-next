@@ -13,6 +13,12 @@ const gameService = {
       const options = { withCredentials: true,}
       console.log(' gameService.searchIgdbGames -> Endpoint', `${API_URL}/search?q=${encodeURIComponent(searchTerm)}`)
       const response = await axios.get(`${API_URL}/search?q=${encodeURIComponent(searchTerm)}`, options);
+        if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
+      
       return response.data;
 
     } catch (error) {
@@ -35,6 +41,12 @@ const gameService = {
         withCredentials: true,
       };
       const response = await axios.post(`${API_URL}/list/`, {igdbIds}, options);  //TODO: Maybe change the 'games/query' to 'games/list' and use GET with path params
+            
+            if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
             return response.data;
     } catch (error) {
       console.error(error);
