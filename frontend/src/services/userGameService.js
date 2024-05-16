@@ -9,6 +9,11 @@ const userGameService = {
   async getUserPlayPileGames() {
     try {
       const response = await axios.get(`${API_URL}/playPile`, { withCredentials: true});
+         if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
       return response.data;
     } catch (error) {
       console.error('Error getting user play pile', error);
@@ -19,6 +24,11 @@ const userGameService = {
     const body = { columnIds: columnIds };
     try {
       const response = await axios.post(`${API_URL}/column/`, body, { withCredentials: true });
+        if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
       return response.data;
     } catch (error) {
       console.error('Error getting user game by column ids', error);
@@ -28,6 +38,12 @@ const userGameService = {
   async getUserGamesOnBoard() {
     try {
       const response = await axios.get(`${API_URL}/board`, { withCredentials: true });
+        if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
+      
       return response.data;
     } catch (error) {
       console.error('Error getting user games on board', error);
