@@ -52,11 +52,10 @@ app.use('/api/userGames/', require('./src/routes/userGameRoutes'))
 app.use('/api/board/columns', require('./src/routes/columnRoutes.js'))
 
 
+// Root route for testing if the server is running
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
-
-
-
+// Start the server and bind to host 0.0.0.0
+app.listen(port, '0.0.0.0', () => console.log(`Server is running on port ${port}`));
