@@ -18,7 +18,7 @@ const userGameService = {
   async getUserGameByColumnIds(columnIds) {
     const body = { columnIds: columnIds };
     try {
-      const response = await axios.post(`${API_URL}/column/`, requestBody, { withCredentials: true });
+      const response = await axios.post(`${API_URL}/column/`, body, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error('Error getting user game by column ids', error);
