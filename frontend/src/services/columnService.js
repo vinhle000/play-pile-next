@@ -22,6 +22,11 @@ const columnService = {
   async getColumnsOnBoard() {
     try {
       const response = await axios.get(`${API_URL}/onBoard`, { withCredentials: true});
+        if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
       return response.data;
     } catch (error) {
       console.error(`Error getting columns to be displayed on board`, error)
