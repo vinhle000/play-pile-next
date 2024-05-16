@@ -9,6 +9,11 @@ const userGameService = {
   async getUserPlayPileGames() {
     try {
       const response = await axios.get(`${API_URL}/playPile`, { withCredentials: true});
+         if (response.data && Array.isArray(response.data.items)) {
+           console.log(response.data.items);
+         } else {
+          console.error('Unexpected response format:', response.data);
+         }
       return response.data;
     } catch (error) {
       console.error('Error getting user play pile', error);
