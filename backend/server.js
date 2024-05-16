@@ -14,7 +14,7 @@ connectDB();
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173',
+  origin: '*',
   credentials: true, // This allows cookies to be sent with requests
 };
 
