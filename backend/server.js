@@ -1,26 +1,24 @@
-const dotenv = require('dotenv').config();
-const colors = require('colors');
-const cors = require('cors');
-const logger = require('./config/logger');
-const cookieParser = require('cookie-parser');
-// const bodyParser = require('body-parser');
-
+require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const logger = require('./config/logger'); // Assuming you have a custom logger set up
+const connectDB = require('./config/db'); // Your database connection file
 
-const connectDB = require('./config/db');
+const app = express();
 const port = process.env.PORT || 3000;
+
+// Connect to the database
 connectDB();
 
-
+// CORS Configuration
 const corsOptions = {
-  origin: '*', // Allow requests from any origin
-  // origin: process.env.NODE_ENV === 'production' ?  process.env.CLIENT_URL  : 'http://localhost:5173', // Your frontend origin
-  credentials: true, // To allow credentials (cookies, authorization headers, etc.)
-
+  origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173',
+  credentials: true, // This allows cookies to be sent with requests
 };
-const helmet = require('helmet');
 
-// Configure CSP
+// Content Security Policy (CSP) Configuration
 const csp = helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
@@ -30,32 +28,37 @@ const csp = helmet.contentSecurityPolicy({
   },
 });
 
-
-const app = express();
+// Middleware
 app.use(csp);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => { // Middleware to log all requests
-  // console.log('Headers:', req.body);
-  // console.log('Cookies:', req.cookies);
+// Logging middleware to log all requests
+app.use((req, res, next) => {
   if (req.body) {
     logger.info(`Request Body -----> ${JSON.stringify(req.body)}`);
   }
   next();
 });
-app.use('/api/games/', require('./src/routes/gameRoutes'));
-app.use('/api/users/', require('./src/routes/userRoutes'))
-app.use('/api/userGames/', require('./src/routes/userGameRoutes'))
-app.use('/api/board/columns', require('./src/routes/columnRoutes.js'))
 
+// Define routes
+app.use('/api/games/', require('./src/routes/gameRoutes'));
+app.use('/api/users/', require('./src/routes/userRoutes'));
+app.use('/api/userGames/', require('./src/routes/userGameRoutes'));
+app.use('/api/board/columns', require('./src/routes/columnRoutes.js'));
 
 // Root route for testing if the server is running
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
-// Start the server and bind to host 0.0.0.0
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Start the server
 app.listen(port, '0.0.0.0', () => console.log(`Server is running on port ${port}`));
