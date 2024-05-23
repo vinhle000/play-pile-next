@@ -2,18 +2,14 @@ import axios from 'axios'
 import gameService from './gameService'
 
 const envURL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/userGames`;
+const API_URL = `${envURL}/api/userGames`;
 
 const userGameService = {
 
   async getUserPlayPileGames() {
     try {
       const response = await axios.get(`${API_URL}/playPile`, { withCredentials: true});
-         if (response.data && Array.isArray(response.data.items)) {
-           console.log(response.data.items);
-         } else {
-          console.error('Unexpected response format:', response.data);
-         }
+        // This should be an object map of the user's play games with the key being the columnId
       return response.data;
     } catch (error) {
       console.error('Error getting user play pile', error);
@@ -38,12 +34,7 @@ const userGameService = {
   async getUserGamesOnBoard() {
     try {
       const response = await axios.get(`${API_URL}/board`, { withCredentials: true });
-        if (response.data && Array.isArray(response.data.items)) {
-           console.log(response.data.items);
-         } else {
-          console.error('Unexpected response format:', response.data);
-         }
-      
+        // This should be an object map of the user's play games with the key being the columnId
       return response.data;
     } catch (error) {
       console.error('Error getting user games on board', error);

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 const envURL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/games`;
+const API_URL = `${envURL}/api/games`;
 
 const gameService = {
 
@@ -18,7 +18,6 @@ const gameService = {
          } else {
           console.error('Unexpected response format:', response.data);
          }
-      
       return response.data;
 
     } catch (error) {
@@ -41,7 +40,6 @@ const gameService = {
         withCredentials: true,
       };
       const response = await axios.post(`${API_URL}/list/`, {igdbIds}, options);  //TODO: Maybe change the 'games/query' to 'games/list' and use GET with path params
-            
             if (response.data && Array.isArray(response.data.items)) {
            console.log(response.data.items);
          } else {

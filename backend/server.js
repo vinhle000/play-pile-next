@@ -11,10 +11,11 @@ const port = process.env.PORT || 3000;
 
 // Connect to the database
 connectDB();
+const allowedOrigins = process.env.CORS_ORIGINS.split(',');
 
 // CORS Configuration
 const corsOptions = {
-  origin: '*',
+  origin: allowedOrigins,
   credentials: true, // This allows cookies to be sent with requests
 };
 

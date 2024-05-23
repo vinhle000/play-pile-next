@@ -21,7 +21,7 @@ function SearchPage() {
 
   //Mapping by ID to find each userGame data, instead of scanning array
   let userPlayPileGamesByIgdbId = {};
-  if (userPlayPileGames.length > 0) {
+  if (userPlayPileGames?.length > 0) {
     userPlayPileGamesByIgdbId = userPlayPileGames.reduce((acc, game) => {
       acc[game.igdbId] = game;
       return acc;

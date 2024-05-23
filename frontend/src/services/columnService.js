@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 const envURL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/board/columns`;
+const API_URL = `${envURL}/api/board/columns`;
 
 const columnService = {
 
   async getColumns() {
     try{
       const response = await axios.get(`${API_URL}/`, { withCredentials: true});
-      if (response.data && Array.isArray(response.data.items)) {
+      if (response.data && Array.isArray(response.data)) {
            console.log(response.data.items);
          } else {
           console.error('Unexpected response format:', response.data);
@@ -22,8 +22,8 @@ const columnService = {
   async getColumnsOnBoard() {
     try {
       const response = await axios.get(`${API_URL}/onBoard`, { withCredentials: true});
-        if (response.data && Array.isArray(response.data.items)) {
-           console.log(response.data.items);
+        if (response.data && Array.isArray(response.data)) {
+           console.log(response.data);
          } else {
           console.error('Unexpected response format:', response.data);
          }
