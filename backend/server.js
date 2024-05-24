@@ -30,7 +30,7 @@ const csp = helmet.contentSecurityPolicy({
 });
 
 // Middleware
-app.use(csp);
+// app.use(csp);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
