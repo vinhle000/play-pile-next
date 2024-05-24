@@ -38,7 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
           sameSite: 'none',
-          secure: true,
+          secure: process.env.NODE_ENV === 'prod' ? true : false,
         })
 
         res.status(201).json({
@@ -66,8 +66,8 @@ const loginUser = asyncHandler(async (req, res) => {
     res.cookie('userToken', generateToken(user.id), {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-      sameSite: 'lax',
-      secure: none,
+      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'prod' ? true : false,
     })
 
     logger.debug('userController -> res.cookie.userToken -> : ', res.cookie.userToken);
