@@ -88,6 +88,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
   // TODO: Making this modal persist upon change immediately without the save button to submit
   //
   const [fieldData, setFieldData] = useState({
+    // REMOVE: 5.24.24 - Should Not occur anymore after immediate update for each field, instead of waiting for save
     //BUG: after moving the game to a diffenrt colunn on the board. Updating the game data through this modal with save,
     // reasigns its old values. So the game moves back to its previous column
     // columnId: game.columnId,
@@ -159,10 +160,11 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     <>
       <Dialog className="relative z-50">
         <div className="fixed inset-0 flex items-center justify-center bg-black/20" >
-
-
           <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/95 text-left align-middle shadow-xl transition-all">
 
+
+            {/* Scrollable content area */}
+            <div className="overflow-y-auto max-h-screen">
             <div className="relative bg-cover bg-center h-40 rounded-t-xl"
                      style={{ backgroundImage: `url(${game.gameInfo.coverUrl})`}} >
 
@@ -239,7 +241,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                 </div>
                 </div>
 
-
+              </div>
 
            </div>
           </div>
