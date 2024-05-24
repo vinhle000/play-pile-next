@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 
-const envURL = import.meta.env.VITE_ENV === 'production'
+const envURL = import.meta.env.VITE_ENV === 'prod'
 ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
 
 const API_URL = `${envURL}/api/users/`;
 
-console.log('API_URL', API_URL);
 
 const register = async (username, email, password) => {
   return axios.post(API_URL + 'register', {

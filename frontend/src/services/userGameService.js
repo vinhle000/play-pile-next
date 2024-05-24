@@ -1,7 +1,7 @@
 import axios from 'axios'
 import gameService from './gameService'
 
-const envURL = import.meta.env.VITE_ENV === 'production' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
+const envURL = import.meta.env.VITE_ENV === 'prod' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
 const API_URL = `${envURL}/api/userGames`;
 
 const userGameService = {

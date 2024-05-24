@@ -36,13 +36,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// Logging middleware to log all requests
-app.use((req, res, next) => {
-  if (req.body) {
-    logger.info(`Request Body -----> ${JSON.stringify(req.body)}`);
-  }
-  next();
-});
 
 // Define routes
 app.use('/api/games/', require('./src/routes/gameRoutes'));
