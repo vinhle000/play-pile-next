@@ -3,7 +3,7 @@ require('colors');
 
 const connectDB = async () => {
 
-  const mongoServer = process.env.NODE_ENV === 'production' ?
+  const mongoServer = process.env.NODE_ENV === 'prod' ?
   process.env.MONGO_URI : "mongodb://localhost:27017/playPile";
 
   try {
