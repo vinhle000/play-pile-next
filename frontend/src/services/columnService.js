@@ -7,7 +7,7 @@ const columnService = {
 
   async getColumns() {
     try{
-      const response = await axios.get(`${API_URL}/`, { withCredentials: true});
+      const response = await axios.get(`${API_URL}`, { withCredentials: true});
       if (response.data && Array.isArray(response.data)) {
            console.log(response.data);
          } else {
@@ -35,7 +35,7 @@ const columnService = {
 
   async createColumn(title) {
     try{
-      const response = await axios.post(`${API_URL}/`, {columnTitle: title}, {withCredentials: true});
+      const response = await axios.post(`${API_URL}`, {columnTitle: title}, {withCredentials: true});
       return response.data;
     } catch (error) {
       console.error('Error creating column for user', error);
