@@ -23,7 +23,7 @@ class UserGameController {
 
       res.status(200).json(userGamePile);
     } catch (error) {
-      logger.error(`Error getting game pile for user ${error}`)
+      console.error(`Error getting game pile for user ${error}`)
       res.status(500).json({message: 'Error getting game pile for user'})
     }
   })
@@ -63,7 +63,7 @@ class UserGameController {
       res.status(200).json(gamesOnBoard);
 
     } catch (error) {
-      logger.error(`Error getting user games on board ${error}`);
+      console.error(`Error getting user games on board ${error}`);
       res.status(500).json({message: 'Error getting user games on board'});
     }
   })
@@ -89,7 +89,7 @@ class UserGameController {
       let updatedData = await this.updateUserGameDocument(userId, igdbId, updateData);
       res.status(200).json(updatedData);
     } catch (error) {
-      logger.error(`Error updating user game data ${error}`);
+      console.error(`Error updating user game data ${error}`);
       res.status(500).json({ message: 'Error updating user game data' });
     }
   });
@@ -121,7 +121,7 @@ class UserGameController {
       res.status(200).json({message: 'Updated game card position in column successfully'});
 
     } catch (error){
-      logger.error(`Error updating game card positions in column ${error}`)
+      console.error(`Error updating game card positions in column ${error}`)
       console.error(`Error updating game card positions in column ${error}`)
       res.status(500).json({message: 'Error updating game card positions in column'})
     }
@@ -144,7 +144,7 @@ class UserGameController {
 
       return userGame;
     } catch (error) {
-      logger.error(`Error getting userGame document in Mongo ${error}`)
+      console.error(`Error getting userGame document in Mongo ${error}`)
       throw new Error('Error getting userGame docuement in Mongo')
     }
   }
@@ -163,7 +163,7 @@ class UserGameController {
 
       return userGame;
     } catch (error) {
-      logger.error(`Error creating userGame document in Mongo: ${error}`);
+      console.error(`Error creating userGame document in Mongo: ${error}`);
       throw new Error('Error creating userGame document in Mongo ');
     }
   }
@@ -203,7 +203,7 @@ class UserGameController {
       }
       return userGame;
     } catch (error) {
-      logger.error(`Error updating userGame document ${error}`);
+      console.error(`Error updating userGame document ${error}`);
       throw new Error('Error updating userGame document ');
     }
   }
@@ -218,7 +218,7 @@ class UserGameController {
       }
       logger.debug(`UserGame data for ${userId} and ${igdbId} deleted`)
     } catch (error) {
-      logger.error(`Error deleting userGame document ${error}`);
+      console.error(`Error deleting userGame document ${error}`);
       throw new Error('Error deleting userGame document')
     }
   }

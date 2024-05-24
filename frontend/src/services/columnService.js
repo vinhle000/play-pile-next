@@ -1,4 +1,7 @@
-import axios from 'axios'
+import axios from 'axios';
+
+// Set withCredentials to true for all requests
+axios.defaults.withCredentials = true;
 
 const envURL = import.meta.env.VITE_ENV === 'prod' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
 const API_URL = `${envURL}/api/board/columns`;
@@ -6,13 +9,13 @@ const API_URL = `${envURL}/api/board/columns`;
 const columnService = {
 
   async getColumns() {
-    try{
-      const response = await axios.get(`${API_URL}`, { withCredentials: true});
+    try {
+      const response = await axios.get(`${API_URL}`);
       if (response.data && Array.isArray(response.data)) {
-           console.log(response.data);
-         } else {
-          console.error('Unexpected response format:', response.data);
-         }
+        console.log(response.data);
+      } else {
+        console.error('Unexpected response format:', response.data);
+      }
       return response.data;
     } catch (error) {
       console.error('Error getting columns for user', error);
@@ -21,12 +24,12 @@ const columnService = {
 
   async getColumnsOnBoard() {
     try {
-      const response = await axios.get(`${API_URL}/onBoard`, { withCredentials: true});
-        if (response.data && Array.isArray(response.data)) {
-           console.log(response.data);
-         } else {
-          console.error('Unexpected response format:', response.data);
-         }
+      const response = await axios.get(`${API_URL}/onBoard`);
+      if (response.data && Array.isArray(response.data)) {
+        console.log(response.data);
+      } else {
+        console.error('Unexpected response format:', response.data);
+      }
       return response.data;
     } catch (error) {
       console.error('Error getting columns to be displayed on board', error);
@@ -34,8 +37,8 @@ const columnService = {
   },
 
   async createColumn(title) {
-    try{
-      const response = await axios.post(`${API_URL}`, {columnTitle: title}, {withCredentials: true});
+    try {
+      const response = await axios.post(`${API_URL}`, { columnTitle: title });
       return response.data;
     } catch (error) {
       console.error('Error creating column for user', error);
@@ -46,7 +49,7 @@ const columnService = {
   async updateColumn(columnId, updateFields) {
     const requestBody = updateFields ? { ...updateFields } : {};
     try {
-      const response = await axios.patch(`${API_URL}/${columnId}`, requestBody, {withCredentials: true});
+      const response = await axios.patch(`${API_URL}/${columnId}`, requestBody);
       return response.data;
     } catch (error) {
       console.error(`Error updating column ${columnId}`, error);
@@ -54,9 +57,9 @@ const columnService = {
   },
 
   async updatePositions(columns) {
-    const requestBody = { columns: columns ? columns : []}
+    const requestBody = { columns: columns ? columns : [] };
     try {
-      const response = await axios.patch(`${API_URL}/updatePositions`, requestBody, {withCredentials: true });
+      const response = await axios.patch(`${API_URL}/updatePositions`, requestBody);
       return response.data;
     } catch (error) {
       console.error('Error updating column positions', error);
@@ -65,7 +68,7 @@ const columnService = {
 
   async deleteColumn(columnId) {
     try {
-      const response = await axios.delete(`${API_URL}/${columnId}`, {withCredentials: true});
+      const response = await axios.delete(`${API_URL}/${columnId}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting column ${columnId}`, error);

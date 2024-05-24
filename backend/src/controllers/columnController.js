@@ -18,7 +18,7 @@ class ColumnController {
 
       res.status(200).json(columns);
     } catch (error) {
-      logger.error(`Error getting columns ${error}`);
+      console.error(`Error getting columns ${error}`);
       res.status(500).json({ message: 'Error getting columns' });
     }
   });
@@ -43,7 +43,7 @@ class ColumnController {
 
       res.status(200).json(columns);
     } catch (error) {
-      logger.error(`Error getting columns on board ${error}`);
+      console.error(`Error getting columns on board ${error}`);
       res.status(500).json({ message: 'Error getting columns on board' });
     }
 
@@ -75,7 +75,7 @@ class ColumnController {
       });
       res.status(201).json(newColumn);
     } catch (error) {
-      logger.error(`user: ${userId} had Error creating column. ${error}`);
+      console.error(`user: ${userId} had Error creating column. ${error}`);
       res.status(500).json({ message: 'Error creating column' });
     }
   });
@@ -96,7 +96,7 @@ class ColumnController {
       let updatedColumn = await this.updateColumnDocument(columnId, updateData);
       res.status(200).json(updatedColumn);
     } catch (error) {
-      logger.error(`Error updating column: ${columnId}`, error);
+      console.error(`Error updating column: ${columnId}`, error);
       res.status(500).json({ message: 'Error updating column' });
     }
   });
@@ -115,7 +115,7 @@ class ColumnController {
       }))
       res.status(200).json({message:'Updated column positions successfully'})
     } catch (error) {
-      logger.error(`Error update columns positions`, error)
+      console.error(`Error update columns positions`, error)
       res.status(500).json({message: `Error updating column positions`})
     }
   });
@@ -134,7 +134,7 @@ class ColumnController {
 
       res.status(200).json(result);
     } catch (error) {
-      logger.error(`Error deleting column: ${columnId}`);
+      console.error(`Error deleting column: ${columnId}`);
       res.status(500).json({ message: 'Error deleting column' });
     }
   });
@@ -153,7 +153,7 @@ class ColumnController {
         let result = await Column.deleteMany({ userId: userId });
         res.status(200).json(result)
       } catch (error) {
-        logger.error(`Error deleting all columns for user: ${userId}`);
+        console.error(`Error deleting all columns for user: ${userId}`);
         res.status(500).json({ message: 'Error deleting all column' });
       }
     }

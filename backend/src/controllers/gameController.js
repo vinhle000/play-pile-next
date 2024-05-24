@@ -29,7 +29,7 @@ const getIgdbGameById = asyncHandler(async (req, res) => {
     const game = await IGDB.fetchGameById(gameId);
     res.status(200).json(game);
   } catch (error) {
-    logger.error(`Error fetching game by ID from IGDB ${error}`);
+    console.error(`Error fetching game by ID from IGDB ${error}`);
     res.status(500).json({ message: 'Error fetching game from IGDB' });
   }
 });
@@ -48,7 +48,7 @@ const getIgdbGames = asyncHandler(async (req, res) => {
     const games = await IGDB.fetchGames(igdbGameIds);
     res.status(200).json(games);
   } catch (error) {
-    logger.error(`Error fetching games from IGDB ${error}`);
+    console.error(`Error fetching games from IGDB ${error}`);
     res.status(500).json({ message: 'Error fetching games from IGDB' });
   }
 });
@@ -81,7 +81,7 @@ const searchIgdbGames = asyncHandler(async (req, res) => {
     const games = await Game.find({ igdbId: { $in: igdbIds } });
     res.status(200).json(games);
   } catch (error) {
-    logger.error(
+    console.error(
       `Error fetching games from IGDB by query "${q}": ${error}`
     );
     res.status(500).json({
@@ -130,7 +130,7 @@ const getGameById = asyncHandler(async (req, res) => {
     }
     res.status(200).json(game);
   } catch (error) {
-    logger.error(`Error fetching game by ID from MongoDB ${error}`);
+    console.error(`Error fetching game by ID from MongoDB ${error}`);
     res.status(500).json({ message: 'Error fetching game from MongoDB' });
   }
 });
@@ -154,7 +154,7 @@ const getGames = asyncHandler(async (req, res) => {
     }
     res.status(200).json(games);
   } catch (error) {
-    logger.error(`Error fetching games by igdbId from MongoDB ${error}`);
+    console.error(`Error fetching games by igdbId from MongoDB ${error}`);
     res.status(500).json({ message: 'Error fetching games from MongoDB' });
   }
 });
@@ -187,7 +187,7 @@ const createGames = asyncHandler(async (req, res) => {
     logger.debug(`New game(s) DB items created from [${newIgdbIds}] IGDB ID(s)`);
     res.status(201).json(newGames);
   } catch (error) {
-    logger.error(`Error in creating game(s): ${error}`);
+    console.error(`Error in creating game(s): ${error}`);
     res.status(500).json({ message: 'Error in creating games(s)' });
   }
 });
@@ -225,7 +225,7 @@ const updateGameById = asyncHandler(async (req, res) => {
     game.save();
     res.status(201).json(game);
   } catch (error) {
-    logger.error(`Error updating game by igdbId from MongoDV ${error}`);
+    console.error(`Error updating game by igdbId from MongoDV ${error}`);
     res.status(500).json({ message: 'Error updating game from MongoDB' });
   }
 });
@@ -253,7 +253,7 @@ const deleteGameById = asyncHandler(async (req, res) => {
     logger.debug(`Game with igdbId ${igdbId} deleted`);
     res.status(204).send(); // 204 No Content
   } catch (error) {
-    logger.error(`Error deleting game by IGDB ID from MongoDB ${error}`);
+    console.error(`Error deleting game by IGDB ID from MongoDB ${error}`);
     res.status(500).json({ message: 'Error deleting game from MongoDB' });
   }
 });
@@ -300,7 +300,7 @@ const storeGames = async (igdbGames) => {
     logger.debug(`New game(s) created from [${ids}] IGDB ID(s)`);
     return newGames;
   } catch (error) {
-    logger.error(`Error in creating games(s): ${error}`);
+    console.error(`Error in creating games(s): ${error}`);
     throw new Error({ message: 'Error in creating games(s)' });
   }
 };

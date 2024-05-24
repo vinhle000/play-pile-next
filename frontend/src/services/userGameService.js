@@ -1,6 +1,7 @@
 import axios from 'axios'
 import gameService from './gameService'
-
+// Set withCredentials to true for all requests
+axios.defaults.withCredentials = true;
 const envURL = import.meta.env.VITE_ENV === 'prod' ? import.meta.env.VITE_REACT_APP_URL : 'http://localhost:8000';
 const API_URL = `${envURL}/api/userGames`;
 

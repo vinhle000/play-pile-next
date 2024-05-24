@@ -27,7 +27,7 @@ class IGDBWrapper {
       this.token = response.data.access_token;
       this.tokenExpires = Date.now() + response.data.expires_in * 1000;
     } catch (error) {
-      logger.error(`Error retrieving token for IGDB api access ${error}`);
+      console.error(`Error retrieving token for IGDB api access ${error}`);
       // console.error("Error retrieving token for IGDB api access", error);
       throw new Error('Error retrieving token for IGDB API access');
     }
@@ -48,7 +48,7 @@ class IGDBWrapper {
         data: query,
       });
     } catch (error) {
-      logger.error(`Error in IGDB API request ${error}`);
+      console.error(`Error in IGDB API request ${error}`);
       throw new Error('Error in IGDB API request');
     }
   }
@@ -76,7 +76,7 @@ class IGDBWrapper {
       }
 
     } catch (error) {
-        logger.error(`Error in search IGDB API request ${error}`);
+        console.error(`Error in search IGDB API request ${error}`);
         throw new Error('Error in search IGDB API request');
       }
   }
@@ -111,7 +111,7 @@ class IGDBWrapper {
 
 
     } catch (error) {
-      logger.error(`Error in fetching image from IGDB API request ${error}`);
+      console.error(`Error in fetching image from IGDB API request ${error}`);
       throw new Error('Error in fetching image from IGDB API request');
     }
   }

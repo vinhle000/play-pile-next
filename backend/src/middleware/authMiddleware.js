@@ -34,7 +34,7 @@ const protectRoute = asyncHandler(async (req, res, next) => {
 
     next();
   } catch (error) {
-    logger.error(`Error authenticating user: ${error.message}`);
+    console.error(`Error authenticating user: ${error.message}`);
 
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ message: 'Token expired' });
