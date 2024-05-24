@@ -12,9 +12,8 @@ const gameService = {
   async searchIgdbGames(searchTerm) {
     try {
       const options = { withCredentials: true,}
-      console.log(' gameService.searchIgdbGames -> Endpoint', `${API_URL}/search?q=${encodeURIComponent(searchTerm)}`)
       const response = await axios.get(`${API_URL}/search?q=${encodeURIComponent(searchTerm)}`, options);
-        if (response.data && Array.isArray(response.data.items)) {
+        if (response.data && Array.isArray(response.data)) {
            console.log(response.data.items);
          } else {
           console.error('Unexpected response format:', response.data);
