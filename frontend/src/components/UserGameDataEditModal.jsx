@@ -236,7 +236,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
                 <div className="flex justify-end ">
                   {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
-                  <Button onClick={() => setOpenModal('')} variant="secondary">Close</Button>
+                  <Button onClick={() => setOpenModal('')} variant="secondary" className="text-white/95">Close</Button>
                   {/* <Button onClick={() => handleSave(game.igdbId)}>Save</Button> */}
                 </div>
                 </div>

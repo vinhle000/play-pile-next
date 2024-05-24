@@ -59,7 +59,7 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
     >
 
 
-    <div className=" flex items-top justify-between"
+    <div className=" flex items-top "
       onClick={() => {
         setSelectedGame(game)
         setOpenModal('edit')
@@ -74,29 +74,34 @@ function GameCard ({ game, innerRef, draggableProps, dragHandleProps, snapshot, 
             />
           </div>
 
+        <div className="flex-auto px-2 ">
+          <div className="flex flex-col flex-inline align-top justify-between items-center pr-3">
+            {/*  game title*/}
+              <div className="h-1/4 justify-start text-black text-sm font-bold pt-1">
+                {game.gameInfo.name}
+              </div>
 
 
-        <div className="flex flex-col flex-inline align-top justify-between items-center pr-3">
-          {/*  game title*/}
-            <div className="h-1/4 justify-start text-black text-sm font-normal pt-2">
-              {game.gameInfo.name}
+              <div className="flex flex-col justify-between min-h-full">
+                {/* description or achievements */}
+                <div className="h-3/4 justify-start text-left  text-wrap
+                              text-black text-xs font-light ">
+
+                </div>
+
+                  {/*  game status */}
+                  <div className="absolute -inset-1 top-28 justify-between items-center">
+                    <div className="flex min-w-full p-2 justify-end">
+                      {gameStatusIcon(game.playStatus)}
+                    </div>
+                  </div>
+              </div>
+
             </div>
-
-
-            {/* description or achievements */}
-            <div className="h-12 justify-start text-left  text-wrap
-                           text-black text-xs font-light leading-tight">
-              Achievement/Pinned Notes
-            </div>
-
-              {/*  game status */}
-            <div className="flex min-w-full p-2 justify-end">
-              {gameStatusIcon(game.playStatus)}
-
-            </div>
-
-          </div>
       </div>
+
+
+        </div>
     </div>
 
 

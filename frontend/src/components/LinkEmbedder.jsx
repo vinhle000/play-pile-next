@@ -40,55 +40,55 @@ function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
 
 
   const renderContent = (url, index) => {
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      const videoId = extractedYouTubeId(url);
-      const src = `https://www.youtube.com/embed/${videoId}`;
-      return (
+    return (
+
+      <div key={index} className="flex items-center justify-between mb-4">
+      {(url.includes('youtube.com') || url.includes('youtu.be')) ? (
+
         <div key={index} className="aspect-w-16 aspect-h-9">
-          <iframe
-            className="w-full h-full"
-            src={src}
-            frameBorder="0"
-            allowFullScreen
-            title="YouTube Video"
-          ></iframe>
-        </div>
-      );
-    } else {
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}`;
-      return (
-        <div key={index} className="flex items-center justify-center shadow-md rounded-lg -space-x-3 p-2">
-          <img src={faviconUrl} alt="Favicon" className="w-5 h-5" />
-          <Button className="flex-grow bg-transparent max-w-xs">
+            <iframe
+              className="flex-grow rounded-lg"
+              src={`https://www.youtube.com/embed/${extractedYouTubeId(url)}`}
+              frameBorder="0"
+              allowFullScreen
+              title="YouTube Video"
+              ></iframe>
+          </div>
+        )   :  (
+          <Button className="flex-grow bg-transparent max-w-xs justify-start space-x-2 rounded-md shadow-sm hover:bg-gray-100">
+          <img src={`https://www.google.com/s2/favicons?domain=${new URL(url).hostname}`} alt="Favicon" className="w-4 h-4 -ml-1" />
             <a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-500 hover:text-blue-600 truncate overflow-hidden whitespace-nowrap"
-            >
-             {url.split('.com')[1]}
+              className="text-xs text-gray-500 hover:text-gray-600 truncate overflow-hidden whitespace-nowrap"
+              >
+              {url}
             </a>
           </Button>
-          <Button className="bg-gray-300" onClick={() => handleRemoveEmbeddedLink(url)}>
+
+        )}
+
+          <Button className="bg-gray-300 hover:bg-gray-400 text-white rounded-md" onClick={() => handleRemoveEmbeddedLink(url)}>
             -
           </Button>
-        </div>
-      );
-    }
+      </div>
+    )
   };
 
+
   return (
-    <div className="p-4 mx-auto max-w-lg w-full">
+    <div className="p-5 mx-auto max-w-lg w-full">
       {embeddedLinks.map((url, index) => (
         <div key={index}>{renderContent(url, index)}</div>
       ))}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-3">
         <Input
           type="text"
           placeholder="Enter URL here..."
           value={inputUrl}
           onChange={(e) => setInputUrl(e.target.value)}
-          className={`p-2 bg-transparent rounded-md w-full
+          className={` bg-transparent rounded-md w-full
                     border ${inputUrlError ? 'border-red-500' : 'border-gray-300'} `}
         />
         <Button onClick={() => handleAddEmbeddedLink(inputUrl)} className=" text-white/90  bg-purple-500/50  hover:bg-purple-500/80  rounded-md">

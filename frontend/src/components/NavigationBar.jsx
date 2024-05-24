@@ -67,7 +67,7 @@ function NavigationBar() {
   return (
     <>
 
-    <div className="h-12 flex items-center justify-between px-4">
+    <div className="relative z-0 h-12 flex items-center justify-between px-4">
       <NavigationMenu className="w-full h-full">
         {/* Left side of the navigation bar */}
         <div className="flex items-center gap-x-3">

@@ -40,7 +40,7 @@ function Note({gameIgdbId, initialText, updateGame}) {
             <Button variant="secondary" className="p-1 bg-transparent" onClick={toggleEdit}>
               <HiXMark />
             </Button>
-            <Button className="p-2" onClick={handleSave}>
+            <Button className="p-2 text-white/95" onClick={handleSave}>
               Save
             </Button>
           </>
