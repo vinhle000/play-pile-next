@@ -3,6 +3,8 @@
 ## Overview
 Play Pile is an advanced video game inventory management system designed to help gamers manage and progress through their ever-growing backlog of games. This application is deployed and can be accessed at [Play Pile on Vercel](https://play-pile.vercel.app).
 
+![PlayPile_v1_demo_5 24 24](https://github.com/vinhle000/play-pile/assets/26887964/4e72a31c-0d09-4964-a307-b559cd0fc64d)
+
 ## Features
 - **Game Status Tracking**: Categorize games into different statuses like 'Plan to Play', 'Currently Playing', 'Completed', or any custom category that suits your gaming habits.
 - **Dynamic Inventory Management**: Add, update, or remove games from your inventory with a simple and intuitive interface.
