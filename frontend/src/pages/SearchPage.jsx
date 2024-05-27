@@ -61,19 +61,23 @@ function SearchPage() {
         <>
 
             <div className="flex flex-col items-center mt-12 ">
-
-               <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
-                  <SearchResultsList
-                    games={games}
-                    userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId}
-                    setSelectedGame={setSelectedGame}
-                    setOpenModal={setOpenModal}
-                    />
-                </div>
-
-
+            {loading ? <TailSpin color="black" radius="1rem"/> :
+              <>
+                {games?.length === 0 ?
+                    <div className="p-6 text-center text-black/60 text-lg">No search results found for "{searchTerm}"</div>
+                  :
+                  <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter ">
+                    <SearchResultsList
+                      games={games}
+                      userPlayPileGamesByIgdbId={userPlayPileGamesByIgdbId}
+                      setSelectedGame={setSelectedGame}
+                      setOpenModal={setOpenModal}
+                      />
+                  </div>
+                }
+                </>
+              }
           </div>
-
 
 
 

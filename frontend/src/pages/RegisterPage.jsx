@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import userService from "@/services/userService"
 
+import { TailSpin } from "react-loader-spinner"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -79,7 +80,7 @@ function RegisterPage() {
               </FormItem>
             )}
           />
-
+            {/*TODO Add real email verification in 'prod' env */}
             <FormField
             control={form.control}
             name="email"
@@ -134,7 +135,16 @@ function RegisterPage() {
               </FormItem>
             )}
           />
-             <Button type="submit" className="w-full bg-purple-600/50 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</Button>
+             <Button type="submit" className="w-full bg-purple-600/50 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              {loading ?
+                <TailSpin
+                  height={20}
+                  width={20}
+                  color="white"
+                  radius="1rem"
+                />
+              : "Register"}
+              </Button>
         </form>
       </Form>
     </div>

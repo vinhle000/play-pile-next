@@ -46,13 +46,20 @@ class IGDBWrapper {
           'Content-Type': 'text/plain',
         },
         data: query,
+        timeout: 10000,
       });
     } catch (error) {
-      console.error(`Error in IGDB API request ${error}`);
-      throw new Error('Error in IGDB API request');
+      if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
+        console.log('IGDB API request timed out after 10sec');
+        return [];
+
+      } else {
+        console.error(`Error in IGDB API request ${error}`);
+        throw new Error('Error in IGDB API request');
+      }
     }
   }
-å
+
   async fetchGames(igdbGameIds) {
     const ids = igdbGameIds.join(',');
     const query = `fields *; where id = (${ids});`;
