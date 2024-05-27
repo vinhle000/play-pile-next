@@ -43,7 +43,7 @@ import UserContext from "@/contexts/UserContext";
 
     login(values.email, values.password)
     .then((response) => {
-      console.log('User logged in', response)
+
       navigate("/board") // FIXME: rediredt to home page, but needs to update the navBar
     })
     .catch((error) => {
