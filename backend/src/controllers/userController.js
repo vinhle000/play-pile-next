@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
+const Column = require('../models/columnModel');
 const asyncHandler = require('express-async-handler'); // This is a wrapper to catch errors from async functions
 const logger = require('../../config/logger');
 const colors = require('colors');
+
 // @desc   Register a new user
 // @route  POST /api/users
 // @access Public
@@ -27,25 +29,40 @@ const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // Create user
-      const user = await User.create({
-          username,
-          email,
-          password: hashedPassword,
+  const user = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+  });
+
+  if (user) {
+    res.cookie('userToken', generateToken(user.id), {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+      sameSite: process.env.NODE_ENV === 'prod' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === 'prod' ? true : false,
+    })
+
+    // Create initial three columns for the user.
+    // By default, the user will have three columns: 'Backlog', 'Playing', and 'Done'
+    const defaultColumnTitles = ['Backlog', 'Playing', 'Done'];
+
+    defaultColumnTitles.forEach(async (title, index) => {
+      const column = await Column.create({
+        userId: user.id,
+        title: title,
+        onBoard: true,
+        position: index,
       });
-
-      if (user) {
-        res.cookie('userToken', generateToken(user.id), {
-          httpOnly: true,
-          maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-          sameSite: 'none',
-          secure: process.env.NODE_ENV === 'prod' ? true : false,
-        })
-
-        res.status(201).json({
-        _id: user.id,
-        username: user.username,
-        email: user.email,
+      logger.info(`Column ${column.title} created for user ${user.username}`.green);
     });
+
+    res.status(201).json({
+      _id: user.id,
+      username: user.username,
+      email: user.email,
+    });
+
   } else {
       res.status(400);
     throw new Error('Invalid user data');
@@ -66,11 +83,9 @@ const loginUser = asyncHandler(async (req, res) => {
     res.cookie('userToken', generateToken(user.id), {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-      sameSite: 'none',
+      sameSite: process.env.NODE_ENV === 'prod' ? 'none' : 'lax',
       secure: process.env.NODE_ENV === 'prod' ? true : false,
     })
-
-    logger.debug('userController -> res.cookie.userToken -> : ', res.cookie.userToken);
 
     res.json({
       _id: user.id,

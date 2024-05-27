@@ -14,7 +14,6 @@ export const ColumnsProvider = ({children}) => {
       const columns = await columnService.getColumns();
       setColumns(columns);
       return columns;
-
     } catch (error) {
       console.error('Error fetching user play pile', error)
       setLoading(false)
@@ -27,11 +26,23 @@ export const ColumnsProvider = ({children}) => {
       const columnsOnBoard = await columnService.getColumnsOnBoard();
       setColumnsOnBoard(columnsOnBoard);
       return columnsOnBoard;
-
     } catch (error) {
       console.error(`Error fetching user play pile`, error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const createColumn = async (title) => {
+    try {
+      setLoading(true);
+      await columnService.createColumn(title);
+      fetchColumnsOnBoard();
+    } catch (error) {
+      console.error('Error creating column', error)
+
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -45,7 +56,6 @@ export const ColumnsProvider = ({children}) => {
   }
 
   const deleteColumn = async (columnId) => {
-
     try {
       setLoading(true)
       await columnService.deleteColumn(columnId);
@@ -72,6 +82,7 @@ export const ColumnsProvider = ({children}) => {
       columns,
       setColumns,
       fetchColumns,
+      createColumn,
       updateColumn,
       deleteColumn,
       columnsOnBoard,
