@@ -11,7 +11,7 @@ import ColumnsContext from '@/contexts/ColumnsContext';
 import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
 
 function Board({ setSelectedColumn, setSelectedGame, setOpenModal}) {
-  const { columnsOnBoard, setColumnsOnBoard, fetchColumnsOnBoard } = useContext(ColumnsContext);
+  const { columnsOnBoard, setColumnsOnBoard, fetchColumnsOnBoard, createColumn } = useContext(ColumnsContext);
   const { userGamesOnBoard, setUserGamesOnBoard, fetchGamesOnBoard, updateUserGameColumnPositions } = useContext(UserPlayPileGamesContext);
 
 
@@ -28,8 +28,7 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal}) {
 
   const handleCreateColumn = async (title) => {
     try {
-      await columnService.createColumn(title);
-      fetchColumnsOnBoard();
+      await createColumn(title);
     } catch (error) {
       console.error('Error creating column', error);
     }

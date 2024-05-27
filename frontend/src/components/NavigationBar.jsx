@@ -24,7 +24,6 @@ import  UserContext  from '../contexts/UserContext';
 
 function AvatarDropdownMenu() {
   const { user, loading, logout } = useContext(UserContext);
-  console.log(user)
   return (
 
       <DropdownMenu>
