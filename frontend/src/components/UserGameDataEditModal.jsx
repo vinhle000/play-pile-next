@@ -88,29 +88,23 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
   // TODO: Making this modal persist upon change immediately without the save button to submit
   //
   const [fieldData, setFieldData] = useState({
-    // REMOVE: 5.24.24 - Should Not occur anymore after immediate update for each field, instead of waiting for save
-    //BUG: after moving the game to a diffenrt colunn on the board. Updating the game data through this modal with save,
-    // reasigns its old values. So the game moves back to its previous column
-    // columnId: game.columnId,
     playDates: game?.playDates || [{ from: new Date(), to: new Date()}], // This is an array of Dates,
     playStatus: game.playStatus,
+    embeddedLinks: game.embeddedLinks,
     notes: game.notes
   })
 
   //For now just using the first date in the array
   const [newPlayDate, setNewPlayDate] = useState(
-    {...fieldData.playDates[0]} || { from: new Date(), to: new Date()}
+    {...fieldData.playDates[0]} || { from: new Date(), to: new Date()}``
   );
 
-  const [embeddedLinks, setEmbeddedLinks] = useState([])
 
 
-
-
-  const updateGame = async (igdbId, updateData) => {
+  const updateGame = async (updateData) => {
     updateData ? updateData : {}
     try {
-     let newData = await updateUserGameData(igdbId, {...updateData})
+     let newData = await updateUserGameData(game.igdbId, {...updateData})
      setUserPlayPileGames({...userPlayPileGames, ...newData})
     } catch (error) {
       console.error('Error updating UserGame Data ', error)
@@ -121,7 +115,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
   const handlePlayStatusChange = async (status) => {
     try {
-       await updateGame(game.igdbId, {playStatus: status})
+       await updateGame({playStatus: status})
 
        setFieldData((prevState) => {
          return {
@@ -140,7 +134,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     if (fieldData.playDates) {
       if (fieldData.playDates[0] != date ) {
         try {
-          await updateGame(game.igdbId, {playDates: [date]})
+          await updateGame({playDates: [date]})
              // Optimistic update - for faster UI response
           setFieldData((prevState) => {
             //TODO: Implement pushing the new Date the the playDates array
@@ -156,10 +150,11 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
     }
   }
 
+
   return (
     <>
       <Dialog className="relative z-50">
-        <div className="fixed inset-0 flex items-center justify-center bg-black/20" >
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20 px-30" >
           <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/95 text-left align-middle shadow-xl transition-all">
 
 
@@ -222,7 +217,6 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                   <Label>Notes:</Label>
                   {/*FUTURE: Eventually make a list of notes*/}
                   <Note
-                    gameIgdbId={game.igdbId}
                     initialText={fieldData.notes}
                     updateGame={updateGame}
                   />
@@ -230,11 +224,14 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
 
                 {/*TODO: NOW - persist the links to the server! and implement the remove userGame from list button */}
                 <div>
-                  <Label>Links:</Label>
-                  <LinkEmbedder embeddedLinks={embeddedLinks} setEmbeddedLinks={setEmbeddedLinks} />
+                  <Label>Attached Links:</Label>
+                  <LinkEmbedder
+                    links={game.embeddedLinks || []}
+                    updateGame={updateGame}
+                  />
                  </div>
 
-                <div className="flex justify-end ">
+                <div className="flex justify-end mt-10">
                   {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
                   <Button onClick={() => setOpenModal('')} variant="secondary" className="text-white/95">Close</Button>
                   {/* <Button onClick={() => handleSave(game.igdbId)}>Save</Button> */}

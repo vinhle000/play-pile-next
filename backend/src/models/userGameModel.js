@@ -50,6 +50,10 @@ const UserGameSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    embeddedLinks: {
+      type: [String],
+      default: [],
+    },
     gameInfo: { // Embedded game info
       type: {
         name: {
