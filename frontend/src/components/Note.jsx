@@ -20,15 +20,15 @@ function Note({initialText, updateGame}) {
   }
   return (
     <div className="p-2">
-      {isEditing ? (
+   {isEditing ? (
         <Textarea
-          className="w-full min-h-36 resize-y overflow-auto bg-white border border-gray-400 rounded-md shadow-md p-2 text-sm leading-6 font-normal text-gray-700"
+          className="w-full min-h-40 max-h-80  overflow-auto bg-white border border-gray-400 rounded-md shadow-md p-2 text-sm leading-6 font-normal text-gray-700"
           value={text}
           onChange={handleChange}
         />
       ) : (
         <div
-          className="w-full min-h-36 border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700 cursor-pointer whitespace-pre-wrap"
+          className="w-full min-h-36 max-h-40 border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700 cursor-pointer whitespace-pre-wrap overflow-auto"
           onClick={toggleEdit}
         >
           {text || 'please enter text'}

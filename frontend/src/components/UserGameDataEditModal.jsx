@@ -154,7 +154,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
   return (
     <>
       <Dialog className="relative z-50">
-        <div className="fixed inset-0 flex items-center justify-center bg-black/20" >
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20 px-30" >
           <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/95 text-left align-middle shadow-xl transition-all">
 
 
@@ -231,7 +231,7 @@ function UserGameDataEditModal({game, openModal, setOpenModal}) { // game has Us
                   />
                  </div>
 
-                <div className="flex justify-end ">
+                <div className="flex justify-end mt-10">
                   {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
                   <Button onClick={() => setOpenModal('')} variant="secondary" className="text-white/95">Close</Button>
                   {/* <Button onClick={() => handleSave(game.igdbId)}>Save</Button> */}
