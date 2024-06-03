@@ -4,10 +4,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 
-function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
+function LinkEmbedder({ links , updateGame }) {
   const [inputUrl, setInputUrl] = useState('');
   const [inputUrlError, setInputError] = useState('')
+  const [embeddedLinks, setEmbeddedLinks] = useState(links);
 
+  // FIXME: Currently moving the state down to child component, separation of concerns
 
   const isValidUrl = (url) => {
     try {
@@ -20,6 +22,7 @@ function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
   const handleAddEmbeddedLink = (url) => {
     if(isValidUrl(url)) {
       setInputUrl('');
+      updateGame({embeddedLinks: [...embeddedLinks, url]});
       setEmbeddedLinks([...embeddedLinks, url]);
       setInputError('');
     } else {
@@ -28,6 +31,7 @@ function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
   };
 
   const handleRemoveEmbeddedLink = (url) => {
+    updateGame({embeddedLinks: embeddedLinks.filter((embeddedLink) => embeddedLink !== url)});
     setEmbeddedLinks(embeddedLinks.filter((embeddedLink) => embeddedLink !== url));
   };
 
@@ -79,7 +83,7 @@ function LinkEmbedder({ embeddedLinks, setEmbeddedLinks }) {
 
   return (
     <div className="p-5 mx-auto max-w-lg w-full">
-      {embeddedLinks.map((url, index) => (
+      {embeddedLinks && embeddedLinks.map((url, index) => (
         <div key={index}>{renderContent(url, index)}</div>
       ))}
       <div className="flex items-center space-x-3">

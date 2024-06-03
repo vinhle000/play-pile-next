@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { HiXMark } from "react-icons/hi2";
 
 
-function Note({gameIgdbId, initialText, updateGame}) {
+function Note({initialText, updateGame}) {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(initialText);
 
@@ -12,7 +12,7 @@ function Note({gameIgdbId, initialText, updateGame}) {
   const handleChange = (e) => setText(e.target.value);
   const handleSave = async () => {
     try {
-      await updateGame(gameIgdbId, {notes: text})
+      await updateGame({notes: text})
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating Notes of UserGame ', error)
@@ -28,7 +28,7 @@ function Note({gameIgdbId, initialText, updateGame}) {
         />
       ) : (
         <div
-          className="w-full min-h-36 border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700 cursor-pointer"
+          className="w-full min-h-36 border border-gray-400 rounded-md p-2 text-sm leading-6 font-normal text-gray-700 cursor-pointer whitespace-pre-wrap"
           onClick={toggleEdit}
         >
           {text || 'please enter text'}
