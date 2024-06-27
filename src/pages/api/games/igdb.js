@@ -1,22 +1,16 @@
-import Game from '@/lib/models/gameModel'
-import IGDB from '@/lib/igdbWrapper'
+import Game from '@/lib/models/gameModel';
+import IGDB from '@/lib/igdbWrapper';
 
-import { connectDB } from '@/lib/db'
-
-connectDB() //probably not cessary?
 export default async function handler(req, res) {
-
   if (req.method === 'POST') {
-
     const igdbGameIds = req.body.igdbGameIds;
-    if (!igdbGameIds || igdbGameIds.length === 0 ) {
-      res.status(400).json({message: 'No IGDB IDs provided'})
+    if (!igdbGameIds || igdbGameIds.length === 0) {
+      res.status(400).json({ message: 'No IGDB IDs provided' });
     }
 
     try {
       const igdbGames = await IGDB.fetchGames(igdbGameIds);
-      res.status(200).json(igdbGames)
-
+      res.status(200).json(igdbGames);
     } catch (error) {
       console.log('Error fetching games from IGDB by IDs ', error);
       res.status(500).json('Error fetching games from IGDB by IDs ');

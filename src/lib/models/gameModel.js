@@ -39,7 +39,7 @@ const gameSchema = new mongoose.Schema(
       // required: true,
     },
     screenshots: {
-      type:  [Object]
+      type: [Object],
     },
     similarGames: {
       type: [Number],
@@ -52,9 +52,9 @@ const gameSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 gameSchema.index({ igdbId: 1 }, { unique: true });
 
-module.exports = mongoose.models.Game || mongoose.model('Game', gameSchema)
+module.exports = mongoose.models.Game || mongoose.model('Game', gameSchema);

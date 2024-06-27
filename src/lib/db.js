@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
-const mongoServer = process.env.NODE_ENV === 'production' ? process.env.MONGO_URI : "mongodb://localhost:27017/playPile";
+const mongoServer =
+  process.env.NODE_ENV === 'production'
+    ? process.env.MONGO_URI
+    : 'mongodb://localhost:27017/playPile';
 
 export const connectDB = async () => {
   try {

@@ -51,7 +51,6 @@ class IGDBWrapper {
       if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
         console.log('IGDB API request timed out after 10sec');
         return [];
-
       } else {
         console.error(`Error in IGDB API request ${error}`);
         throw new Error('Error in IGDB API request');
@@ -69,7 +68,7 @@ class IGDBWrapper {
   //TODO: Refactor to use query to get specific fields of the games
   async fetchGamesBySearchTerm(searchTerm) {
     const query = `search "${searchTerm}"; fields name, summary, release_dates.human, first_release_date, genres.name, platforms.name, cover.image_id, artworks.url, screenshots.url, videos.video_id, rating, rating_count;
-    where rating >= 60 & rating_count > 10;`
+    where rating >= 60 & rating_count > 10;`;
 
     try {
       const response = await this.makeIGDBRequest(query);
@@ -79,11 +78,10 @@ class IGDBWrapper {
         console.warn(`Error in search IGDB API request ${response}`);
         return [];
       }
-
     } catch (error) {
-        console.error(`Error in search IGDB API request ${error}`);
-        throw new Error('Error in search IGDB API request');
-      }
+      console.error(`Error in search IGDB API request ${error}`);
+      throw new Error('Error in search IGDB API request');
+    }
   }
   /*
   NOTE: Size options available for images
@@ -100,8 +98,7 @@ class IGDBWrapper {
   */
   // Fetching cover image for a game tht is higher quality
   async fetchImage(size, igdbImageId) {
-
-    try{
+    try {
       const response = await axios({
         url: `https://images.igdb.com/igdb/image/upload/t_${size}/${igdbImageId}.jpg`,
         method: 'GET',
@@ -113,14 +110,11 @@ class IGDBWrapper {
       });
 
       return response;
-
-
     } catch (error) {
       console.error(`Error in fetching image from IGDB API request ${error}`);
       throw new Error('Error in fetching image from IGDB API request');
     }
   }
-
 }
 
 module.exports = new IGDBWrapper();
