@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import Game from '@./lib/models/game';
 import IGDB from '@./lib/igdbWrapper';
-import { getGames, addGame, updateGame, deleteGame } from '@./lib/gameHandlers';
 import { connectDB } from '@lib/db';
 
 connectDB();

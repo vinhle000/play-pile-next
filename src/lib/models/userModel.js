@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: [true, 'Please add a name'],
+      // 6.3.24 - Switching to Oauth methods
+      // required: [true, 'Please add a name'],
     },
     email: {
       type: String,
@@ -17,18 +18,20 @@ const userSchema = new mongoose.Schema(
     },
     // The select: false option just means that Mongoose will
     // not include this field by default when you fetch documents.
-    password: {
-      type: String,
-      required: [true, 'Please add a password'],
-      select: false, // Explicitly include the password field
-    },
+
+    // 6.3.24 - Switching to Oauth methods
+    // password: {
+    //   type: String,
+    //   required: [true, 'Please add a password'],
+    //   select: false, // Explicitly include the password field
+    // },
   },
   {
     timestamps: true,
   },
 );
 
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
-
-module.exports = mongoose.model('User', userSchema);
+// userSchema.index({ username: 1 });
+UserSchema.index({ email: 1 });
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
+export default User;
