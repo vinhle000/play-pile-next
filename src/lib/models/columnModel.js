@@ -30,5 +30,7 @@ ColumnSchema.index({ userId: 1, position: 1 });
 ColumnSchema.index({ userId: 1, isOnBoard: 1 });
 ColumnSchema.index({ userId: 1, position: 1, isOnBoard: 1 });
 
-const Column = mongoose.model.Column || mongoose.model('Column', ColumnSchema);
+// Check if the model already exists, otherwise create it
+const Column = mongoose.models.Column || mongoose.model('Column', ColumnSchema);
+
 export default Column;
