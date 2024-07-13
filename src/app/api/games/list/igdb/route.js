@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 import Game from '@/lib/models/gameModel';
 import IGDB from '@/lib/igdbWrapper';
 
-// @desc    Fetch games from MongoDB
-// @route   POST /games/:igdbId
+// @desc    Fetch multiple games DIRECTLY from IGDB
+// @route   POST /games/list/igdb
 // @access  Public
 export async function POST(request) {
   const igdbGameIds = await request.json().then((body) => body.igdbGameIds);

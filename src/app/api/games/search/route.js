@@ -3,14 +3,13 @@ import { NextResponse } from 'next/server';
 import Game from '@/lib/models/gameModel';
 import IGDB from '@/lib/igdbWrapper';
 
-// @desc    Search games from IGDB and persist to collection if does not exist
+// @desc    Search games from IGDB and persist to MongoDB if does not exist
 // @route   GET /games/search?q=<search Tearm>
 // @access  Public
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get('q');
 
-  console.log('search params -----> ', { searchParams, query });
   if (!query) {
     return NextResponse.json(
       { message: 'No search term provided' },
