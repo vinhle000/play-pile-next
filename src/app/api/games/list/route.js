@@ -1,22 +1,38 @@
-//TODO: Convert this to route
-// @desc    Get multiple games from MongoDB by [igdbId]
-// @route   POST /games/list
-// @access  Public
-// export default async function handler(req, res) {
-//   if (req.method === 'POST') {
-//     const igdbGameIds = req.body.igdbGameIds;
+import { auth } from '@/auth';
+import { NextResponse } from 'next/server';
+import Game from '@/lib/models/gameModel';
+import IGDB from '@/lib/igdbWrapper';
+import { connectDB } from '@/lib/db';
+/**
+ * @desc    Get game(s) from DB
+ * @route   POST /games/list/
+ * @access  Private
+ *
+ * @param {NextRequest} request - The incoming HTTP request object
+ * @returns {Promise<NextResponse>} The HTTP response object
+ */
+export async function POST(request) {
+  const igdbIds = await request.json().then((body) => body.igdbIds);
+  console.log('igdbIds --------> ', igdbIds);
+  if (!igdbIds || igdbIds.length === 0) {
+    return NextResponse.json(
+      { message: 'No IGDB IDs provided' },
+      { status: 400 },
+    );
+  }
 
-//     if (!igdbGameIds || igdbGameIds.length === 0) {
-//       res.status(400).json({ message: 'No IGDB IDs provided' });
-//     }
-
-//     try {
-//       // Query the database using the igdbId
-//       let games = await Game.find({ igdbId: { $in: igdbIds } });
-//       return res.status(200).json(games);
-//     } catch (error) {
-//       console.error(`Error fetching games by igdbId from MongoDB`);
-//       return res.status(400).json({ message: 'No games found' });
-//     }
-//   }
-// }
+  try {
+    await connectDB();
+    // Query the database using the igdbId
+    const games = await Game.find({ igdbId: { $in: igdbIds } });
+    return NextResponse.json(games, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching games by igdbIds from DB ', error);
+    return NextResponse.json(
+      { message: 'Error fetching games by IgdbIds' },
+      {
+        status: 500,
+      },
+    );
+  }
+}
