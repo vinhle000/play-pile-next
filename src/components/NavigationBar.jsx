@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 
@@ -18,15 +20,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import SearchBar from '@/components/SearchBar';
-
-import { useSession, signOut } from 'next-auth/react';
-//TODO: implement userLoggedIn state after logging in
-  //useContext to get userLoggedIn state
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 function AvatarDropdownMenu() {
-  const { data: session, status } = useSession();
-  // const { user, loading, logout } = useContext(UserContext);
 
+  // const { user, loading, logout } = useContext(UserContext);
+  const { data: session } =  useSession();
   const handleSignOut = async () => {
     await signOut();
     router.push('/');
@@ -62,11 +61,9 @@ function AvatarDropdownMenu() {
   );
 }
 
-function NavigationBar() {
-  const { data: session, status } = useSession();
+ function NavigationBar() {
   // const { user, loading, logout } = React.useContext(UserContext);
-
-
+  const { data: session } = useSession();
   return (
     <>
 

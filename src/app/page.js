@@ -1,11 +1,10 @@
+'use client';
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import SignInButton from '../components/auth/SignInButton';
 
-import { useNavigate } from 'react-router-dom';
-
-const HomePage = () => {
+export default function Page() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -22,9 +21,6 @@ const HomePage = () => {
   return (
     <div>
       <p>HOME PAGE</p>
-
     </div>
   );
-};
-
-export default HomePage;
+}

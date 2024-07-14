@@ -57,4 +57,5 @@ const gameSchema = new mongoose.Schema(
 
 gameSchema.index({ igdbId: 1 }, { unique: true });
 
-module.exports = mongoose.models.Game || mongoose.model('Game', gameSchema);
+const Game = mongoose.models?.Game || mongoose.model('Game', gameSchema);
+export default Game;
