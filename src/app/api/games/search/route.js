@@ -81,7 +81,7 @@ const storeGames = async (igdbGames) => {
   });
   try {
     const newGames = await Game.insertMany(games);
-    logger.debug(`New game(s) created from [${ids}] IGDB ID(s)`);
+
     return newGames;
   } catch (error) {
     console.error(`Error in creating games(s): ${error}`);
