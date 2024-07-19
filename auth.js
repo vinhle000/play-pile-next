@@ -45,13 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token?.id) {
-        try {
-          // Convert string back to ObjectId, otherwise set to null
-          session.user.id = new mongoose.Types.ObjectId(token.id);
-        } catch (error) {
-          console.error('Error converting to ObjectId:', error);
-          session.user.id = null;
-        }
+        session.user.id = token.id;
       }
       return session;
     },

@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import Game from '@/lib/models/gameModel';
 import IGDB from '@/lib/igdbWrapper';
-import { dbConnect } from '@/lib/db';
+import { connectDB } from '@/lib/db';
 
 /**
  * @desc    Get game document from MongoDB by igdbId
@@ -16,7 +16,15 @@ import { dbConnect } from '@/lib/db';
  * @returns {Promise<NextResponse>} The HTTP response object
  */
 export async function GET(request, { params }) {
-  await dbConnect();
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      { message: 'Not Authorized, no session' },
+      { status: 401 },
+    );
+  }
+
+  await connectDB();
   const igdbId = params.igdbId;
 
   if (!igdbId) {

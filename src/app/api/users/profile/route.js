@@ -12,9 +12,9 @@ export async function GET(request) {
         { status: 401 },
       );
     }
-
+    const userId = new mongoose.Types.ObjectId(session.user.id);
     await connectDB();
-    const user = await User.findById(session.user.id);
+    const user = await User.findById(userId);
     if (!user) {
       return NextResponse.json(
         { message: 'User does not exist' },
