@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 
 /**
  * @desc    Get all columns from DB by userId
- * @route   GET /api/board/columns/
+ * @route   GET /api/board/columns/on-board
  * @access  Private
  *
  * @param {NextRequest} request - The incoming HTTP request object
