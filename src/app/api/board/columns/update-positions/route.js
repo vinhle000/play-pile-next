@@ -5,7 +5,7 @@ import { connectDB } from '@/lib/db';
 
 /**
  * @desc    Update columns positions (after dragging and drop)
- * @route   PATCH /api/board/columns/updatePositions
+ * @route   PATCH /api/board/columns/update-positions
  * @access  Private
  *
  * @param {NextRequest} request - The incoming HTTP request object
