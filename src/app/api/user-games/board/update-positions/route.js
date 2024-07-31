@@ -8,7 +8,7 @@ import {
   createUserGameDocument,
   updateUserGameDocument,
   deleteUserGameData,
-} from '@/services/userGameService';
+} from '@/lib/db/userGames';
 
 /**
  * @desc  Update userGame card position in assigned column

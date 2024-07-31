@@ -2,11 +2,13 @@ import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import Game from '@/lib/models/gameModel';
 import IGDB from '@/lib/igdbWrapper';
+import { connectDB } from '@/lib/db';
 
 // @desc    Search games from IGDB and persist to MongoDB if does not exist
 // @route   GET /games/search?q=<search Tearm>
 // @access  Public
 export async function GET(request) {
+  await connectDB();
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get('q');
 
@@ -30,7 +32,6 @@ export async function GET(request) {
     const newIgdbGames = igdbGames.filter(
       (game) => !existingIgdbIds.has(game.id),
     );
-
     if (newIgdbGames.length > 0) {
       await storeGames(newIgdbGames);
     }

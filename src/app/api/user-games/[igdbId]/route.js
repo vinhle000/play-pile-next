@@ -9,7 +9,7 @@ import {
   createUserGameDocument,
   updateUserGameDocument,
   deleteUserGameData,
-} from '@/services/userGameService';
+} from '@/lib/db/userGames';
 
 /**
  * @desc  Update user game data, can update multiple fields
