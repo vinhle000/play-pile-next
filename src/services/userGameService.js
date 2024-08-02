@@ -1,25 +1,20 @@
-import axios from 'axios';
 import gameService from './gameService';
-// Set withCredentials to true for all requests
 
 /* TODO: ---------------------
 [ ]  NEED to use fetch instead of axios for next.js transition
 [ ] Remove old VITE_ENV refs
 [ ] Create respective userGames context provider to utilize these api calls
 */
-axios.defaults.withCredentials = true;
 const envURL =
-  import.meta.env.VITE_ENV === 'prod' /// THIS
-    ? import.meta.env.VITE_REACT_APP_URL
-    : 'http://localhost:8000';
-const API_URL = `${envURL}/api/userGames`;
+  process.env.NODE_ENV === 'prod'
+    ? process.env.NODE_ENV
+    : 'http://localhost:3000';
+const API_URL = `${envURL}/api/user-games`;
 
 const userGameService = {
-  async getUserPlayPileGames() {
+  async getUserGames() {
     try {
-      const response = await axios.get(`${API_URL}/playPile`, {
-        withCredentials: true,
-      });
+      const response = await fetch(`${API_URL}/play-pile`);
       // This should be an object map of the user's play games with the key being the columnId
       return response.data;
     } catch (error) {
@@ -30,8 +25,9 @@ const userGameService = {
   async getUserGameByColumnIds(columnIds) {
     const body = { columnIds: columnIds };
     try {
-      const response = await axios.post(`${API_URL}/column/`, body, {
-        withCredentials: true,
+      const response = await fetch(`${API_URL}/column/`, {
+        method: 'POST',
+        body: body,
       });
       if (response.data && Array.isArray(response.data.items)) {
         console.log(response.data.items);
@@ -46,9 +42,7 @@ const userGameService = {
 
   async getUserGamesOnBoard() {
     try {
-      const response = await axios.get(`${API_URL}/board`, {
-        withCredentials: true,
-      });
+      const response = await fetch(`${API_URL}/board`);
       // This should be an object map of the user's play games with the key being the columnId
       return response.data;
     } catch (error) {
@@ -59,8 +53,9 @@ const userGameService = {
   async updateUserGameData(igdbId, fields) {
     const body = fields ? { ...fields } : {};
     try {
-      const response = await axios.patch(`${API_URL}/${igdbId}`, body, {
-        withCredentials: true,
+      const response = await fetch(`${API_URL}/${igdbId}`, {
+        method: 'PATCH',
+        body: body,
       });
       return response.data;
     } catch (error) {
@@ -72,9 +67,11 @@ const userGameService = {
     const body = updatedColumnUserGames;
     try {
       const response = await axios.patch(
-        `${API_URL}/board/column/updatePositions`,
-        body,
-        { withCredentials: true },
+        `${API_URL}/board/column/update-positions`,
+        {
+          method: 'PATCH',
+          body: body,
+        },
       );
       return response.data;
     } catch (error) {
