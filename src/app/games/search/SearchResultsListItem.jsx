@@ -1,9 +1,7 @@
 'use client';
 import React, { useState, useContext } from 'react';
-import  Link  from 'next/link';
-// import userGameService from '@/services/userGameService';
-// import UserPlayPileGamesContext from '@/contexts/UserPlayPileGamesContext';
-// import ColumnsContext from '@/contexts/ColumnsContext';
+import Link from 'next/link';
+import { ColumnsContext } from '@/app/providers/ColumnsProvider';
 import { UserGamesContext } from '@/app/providers/UserGamesProvider';
 
 import { Button } from '@/components/ui/button';
@@ -52,7 +50,7 @@ function SearchResultsListItem({
 }) {
   const { loading, fetchUserGames, updateUserGameData } =
     useContext(UserGamesContext);
-  // const { columns, fetchColumns } = useContext(ColumnsContext);
+  const { columns, fetchColumns } = useContext(ColumnsContext);
   const [selectedColumnId, setSelectedColumnId] = useState(
     userGame?.columnId || null,
   );
@@ -77,7 +75,7 @@ function SearchResultsListItem({
   };
 
   return (
-    // <div>{game.name}</div>
+
     <li
       className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl
                   transition-transform duration-300 ease-in-out hover:scale-105"
@@ -180,12 +178,12 @@ function SearchResultsListItem({
                 });
               }}
             >
-              {/* {columns &&
+              {columns &&
                 columns.map((column) => (
                   <DropdownMenuRadioItem key={column._id} value={column._id}>
                     {column.title}
                   </DropdownMenuRadioItem>
-                ))} */}
+                ))}
             </DropdownMenuRadioGroup>
             {userGameData?.isInPlayPile && (
               <>

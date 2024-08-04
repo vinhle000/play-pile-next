@@ -13,7 +13,6 @@ export default function UserGamesProvider({ children }) {
     try {
       setLoading(true);
       const response = await userGameService.getUserGames();
-      console.log('fetchUserGames response -----> ', response);
       setUserGames(response);
     } catch (error) {
       console.error('Error fetching user play pile', error);

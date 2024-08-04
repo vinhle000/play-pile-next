@@ -72,26 +72,4 @@ export default function SearchPageClient({ games }) {
       )}
     </>
   );
-
-  // return (
-  //   <>
-  //     <div className="max-w-5xl mx-6 rounded-2xl bg-gray-100/20 shadow-2xl backdrop-blur-sm backdrop-filter">
-  //       <SearchResultsList
-  //         games={games}
-  //         userGamesByIgdbId={userGamesByIgdbId}
-  //         setSelectedGame={setSelectedGame}
-  //         setOpenModal={setOpenModal}
-  //       />
-  //     </div>
-
-  //     {openModal === 'remove' && (
-  //       <ConfirmModal
-  //         title="Remove Game"
-  //         description="This game will be removed from your play pile. But your data with game still remain. In case, you change your mind :)"
-  //         onConfirm={handleRemoveGameFromPlayPile}
-  //         onCancel={() => setOpenModal('')}
-  //       />
-  //     )}
-  //   </>
-  //);
 }
