@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import UserGamesProvider from './providers/UserGamesProvider';
-import ColumnsProvider from './providers/UserGamesProvider';
+import ColumnsProvider from './providers/ColumnsProvider';
 import NavigationBar from '@/components/NavigationBar';
 
 export default function RootLayout({ children }) {
