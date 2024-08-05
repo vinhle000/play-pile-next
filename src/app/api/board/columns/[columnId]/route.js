@@ -1,7 +1,6 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import Column from '@/lib/models/columnModel';
-import { connectDB } from '@/lib/db';
+import { deleteColumn } from '@/lib/utils/column-utils';
 import mongoose from 'mongoose';
 
 /**
@@ -25,13 +24,10 @@ export async function DELETE(request, context) {
       { status: 401 },
     );
   }
-  // const userId = new mongoose.Types.ObjectId(session.user.id);
 
   try {
-    await connectDB();
-
     if (columnId) {
-      let result = await Column.deleteOne({ _id: columnId });
+      const result = await deleteColumn(columnId);
       if (result.deletedCount === 0) {
         console.log(`Column: ${columnId} not found`);
       }
@@ -40,8 +36,8 @@ export async function DELETE(request, context) {
       NextResponse.json({ message: 'No columnId provided' }, 400);
     }
   } catch (error) {
-    console.error(`Error deleting all columns for user: ${userId}`);
-    return NextResponse.json('Error deleting all column', {
+    console.error(`Error deleting column `, columnId);
+    return NextResponse.json('Error deleting column ', {
       status: 500,
     });
   }

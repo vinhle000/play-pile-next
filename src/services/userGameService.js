@@ -1,103 +1,88 @@
-import { auth } from '@/auth';
-import { NextResponse } from 'next/server';
-import Column from '@/lib/models/columnModel';
-import UserGame from '@/lib/models/userGameModel';
-import Game from '@/lib/models/gameModel';
-import { connectDB } from '@/lib/db';
-import mongoose from 'mongoose';
+import gameService from './gameService';
 
-// ====================================================
-// userGames DB CRUD OPERATIONS
-// ====================================================
+/* TODO: ---------------------
+[ ]  NEED to use fetch instead of axios for next.js transition
+[ ] Remove old VITE_ENV refs
+[ ] Create respective userGames context provider to utilize these api calls
+*/
+const envURL =
+  process.env.NODE_ENV === 'prod'
+    ? process.env.NODE_ENV
+    : 'http://localhost:3000';
+const API_URL = `${envURL}/api/user-games`;
 
-export async function getUserGameDocument(userId, igdbId) {
-  try {
-    const userGame = await UserGame.findOne({
-      userId: userId,
-      igdbId: parseInt(igdbId),
-    });
+const userGameService = {
+  async getUserGames() {
+    try {
+      const response = await fetch(`${API_URL}/play-pile`);
+      // This should be an object map of the user's play games with the key being the columnId
 
-    if (!userGame) {
-      const newUserGameData = await createUserGameDocument(userId, igdbId);
-      logger.info(
-        `No userGame document in Mongo, creating one for ${userId} and ${igdbId}`,
-      );
-      return newUserGameData;
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting user play pile', error);
     }
+  },
 
-    return userGame;
-  } catch (error) {
-    console.error(`Error getting userGame document in Mongo ${error}`);
-    throw new Error('Error getting userGame docuement in Mongo');
-  }
-}
-
-export async function createUserGameDocument(userId, igdbId, updatedData) {
-  //NOTE: - Dont thisnk the mongo objectID is needed
-  try {
-    const userGame = await UserGame.create({
-      userId: userId,
-      igdbId: parseInt(igdbId),
-      ...updatedData,
-    });
-
-    return userGame;
-  } catch (error) {
-    console.error(`Error creating userGame document in Mongo: ${error}`);
-    throw new Error('Error creating userGame document in Mongo ');
-  }
-}
-
-export async function updateUserGameDocument(userId, igdbId, updateData) {
-  try {
-    let userGameDocument = await UserGame.findOne({ userId, igdbId });
-
-    // Fetch game from Game collection with Game model
-    const gameInfo = await Game.findOne({ igdbId: igdbId });
-    if (!gameInfo) {
-      throw new Error('Game info not found');
-    }
-
-    if (!userGameDocument) {
-      // NOTE: Create a New Doc to track User & Game relationship if it doesn't exist
-      userGameDocument = new UserGame({
-        userId,
-        igdbId,
-        gameInfo: {
-          name: gameInfo.name,
-          coverUrl: gameInfo.cover.url,
-        },
+  async getUserGameByColumnIds(columnIds) {
+    const body = { columnIds: columnIds };
+    try {
+      const response = await fetch(`${API_URL}/column/`, {
+        method: 'POST',
+        body: body,
       });
-      await userGameDocument.save();
+      if (response.data && Array.isArray(response.data.items)) {
+        console.log(response.data.items);
+      } else {
+        console.error('Unexpected response format:', response.data);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting user game by column ids', error);
     }
+  },
 
-    const userGame = await UserGame.findOneAndUpdate(
-      { userId: userId, igdbId: igdbId },
-      { $set: updateData },
-      { new: true }, // return the updated document
-    );
-
-    if (!userGame) {
-      logger.warn('No userGame found for update');
+  async getUserGamesOnBoard() {
+    try {
+      const response = await fetch(`${API_URL}/board`);
+      // This should be an object map of the user's play games with the key being the columnId
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting user games on board', error);
     }
-    return userGame;
-  } catch (error) {
-    console.error(`Error updating userGame document ${error}`);
-    throw new Error('Error updating userGame document ');
-  }
-}
+  },
 
-// @desc Delete userGame document PRIVATE - //TODO: remove after dev and testing
-export async function deleteUserGameData(userId, igdbId) {
-  try {
-    const result = await UserGame.deleteOne({ userId: userId, igdbId: igdbId });
+  async updateUserGameData(igdbId, fields) {
+    const body = fields ? { ...fields } : {};
 
-    if (result.deletedCount === 0) {
-      logger.debug(`Game for ${userId} and ${igdbId} not found`);
+    try {
+      const response = await fetch(`${API_URL}/${igdbId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json', // Set the content type
+        },
+        body: JSON.stringify(body), // Convert body to JSON string
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating user's game data`, error);
     }
-    logger.debug(`UserGame data for ${userId} and ${igdbId} deleted`);
-  } catch (error) {
-    console.error(`Error deleting userGame document ${error}`);
-    throw new Error('Error deleting userGame document');
-  }
-}
+  },
+
+  async updateUserGameColumnPositions(updatedColumnUserGames) {
+    const body = updatedColumnUserGames;
+    try {
+      const response = await axios.patch(
+        `${API_URL}/board/column/update-positions`,
+        {
+          method: 'PATCH',
+          body: body,
+        },
+      );
+      return await response.json();
+    } catch (error) {
+      console.error(`Error updating game card positions in column ${error}`);
+    }
+  },
+};
+
+export default userGameService;

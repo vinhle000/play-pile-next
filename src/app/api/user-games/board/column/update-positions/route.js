@@ -1,14 +1,15 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import UserGame from '@/lib/models/userGameModel';
-import { connectDB } from '@/lib/db';
+// import UserGame from '@/lib/models/userGameModel';
+// import { connectDB } from '@/lib/db';
 import mongoose from 'mongoose';
-import {
-  getUserGameDocument,
-  createUserGameDocument,
-  updateUserGameDocument,
-  deleteUserGameData,
-} from '@/services/userGameService';
+// import {
+//   getUserGameDocument,
+//   createUserGameDocument,
+//   updateUserGameDocument,
+//   deleteUserGameData,
+// } from '@/lib/db/userGames';
+import { updateUserGamePositions } from '@/lib/utils/user-game-utils';
 
 /**
  * @desc  Update userGame card position in assigned column
@@ -16,7 +17,6 @@ import {
  * @access Private
  */
 export async function PATCH(request, context) {
-  await connectDB();
   let session = await auth();
   if (!session) {
     return NextResponse.json(
@@ -24,9 +24,6 @@ export async function PATCH(request, context) {
       { status: 401 },
     );
   }
-  let userId = new mongoose.Type.ObjectId(session.user.id);
-  let igdbId = context.params.igdbId;
-
   let body;
   try {
     body = await request.json();
@@ -43,23 +40,7 @@ export async function PATCH(request, context) {
   }
 
   try {
-    const sourceColumnPromises = source.userGames.map((item, index) =>
-      UserGame.findOneAndUpdate(
-        { _id: item._id },
-        { $set: { columnId: source.columnId, columnPosition: index } },
-        { new: true },
-      ),
-    );
-
-    const destinationColumnPromises = destination.userGames.map((item, index) =>
-      UserGame.findOneAndUpdate(
-        { _id: item._id },
-        { $set: { columnId: destination.columnId, columnPosition: index } },
-        { new: true },
-      ),
-    );
-    await Promise.all([...sourceColumnPromises, ...destinationColumnPromises]);
-
+    await updateUserGamePositions(source, destination);
     return NextResponse.json(
       { message: 'Successfully updated userGame card positions in column' },
       { status: 200 },

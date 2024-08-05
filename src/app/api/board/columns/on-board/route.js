@@ -1,40 +1,29 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import Column from '@/lib/models/columnModel';
 import IGDB from '@/lib/igdbWrapper';
-import { connectDB } from '@/lib/db';
 import mongoose from 'mongoose';
-
+import { getColumnsOnBoard } from '@/lib/utils/column-utils';
 /**
  * @desc    Get all columns showing on board from DB by userId
  * @route   GET /api/board/columns/on-board
  * @access  Private
- *
- * @param {NextRequest} request - The incoming HTTP request object
- * @returns {Promise<NextResponse>} The HTTP response object
  */
-export async function GET(request) {
-  const session = await auth();
+export async function GET() {
+  let session = await auth();
   if (!session) {
-    return NextResponse.json(
-      { message: 'Not Authorized, no session' },
-      { status: 401 },
-    );
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
 
   try {
-    await connectDB();
-    const columns = await Column.find({
-      userId: userId,
-      isOnBoard: true,
-    }).sort('position');
+    const columns = await getColumnsOnBoard(userId);
 
     return NextResponse.json(columns, { status: 200 });
   } catch (error) {
-    console.error('Error fetching user columns from DB ', error);
-    return NextResponse.json('Error fetching game from DB', {
-      status: 500,
-    });
+    console.error('Error fetching user columns on the board', error);
+    return NextResponse.json(
+      { message: 'Error fetching user columns on the board' },
+      { status: 500 },
+    );
   }
 }

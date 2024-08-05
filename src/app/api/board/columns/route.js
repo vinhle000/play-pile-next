@@ -1,8 +1,13 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import Column from '@/lib/models/columnModel';
 import { connectDB } from '@/lib/db';
 import mongoose from 'mongoose';
+import {
+  getColumnsOnBoard,
+  createColumn,
+  updateColumn,
+  deleteAllColumns,
+} from '@/lib/utils/column-utils.js';
 
 /**
  * @desc    Get all columns from DB by userId
@@ -22,8 +27,7 @@ export async function GET(request) {
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
   try {
-    await connectDB();
-    const columns = await Column.find({ userId: userId });
+    const columns = await getColumnsOnBoard(userId);
     return NextResponse.json(columns, { status: 200 });
   } catch (error) {
     console.error('Error fetching user columns from DB ', error);
@@ -53,18 +57,7 @@ export async function POST(request) {
   const columnTitle = await request.json().then((body) => body.columnTitle);
 
   try {
-    await connectDB();
-    let currentColumnCount = await Column.countDocuments({
-      userId: userId,
-      isOnBoard: true,
-    });
-
-    let column = await Column.create({
-      userId: userId,
-      title: columnTitle || '',
-      isOnBoard: true,
-      position: currentColumnCount + 1,
-    });
+    const column = await createColumn(userId, columnTitle);
 
     return NextResponse.json(column, { status: 200 });
   } catch (error) {
@@ -99,7 +92,7 @@ export async function PATCH(request) {
 
   try {
     await connectDB();
-    let updatedColumn = await updateColumnDocument(columnId, updateData);
+    let updatedColumn = await updateColumn(columnId, updateData);
 
     return NextResponse.json(updatedColumn, { status: 201 });
   } catch (error) {
@@ -111,8 +104,8 @@ export async function PATCH(request) {
 }
 
 /**
- * @desc    Delete ALL column
- * @route   Delete /api/board/columns/:columnId
+ * @desc    Delete ALL columns
+ * @route   Delete /api/board/columns
  * @access  Private
  *
  * @param {NextRequest} request - The incoming HTTP request object
@@ -129,12 +122,11 @@ export async function DELETE(request) {
   const userId = new mongoose.Types.ObjectId(session.user.id);
 
   try {
-    await connectDB();
     const toDeleteAll = await request.json().then((body) => body.toDeleteAll);
     if (toDeleteAll === true) {
       console.log('Deleting all columns of user!');
 
-      let result = await Column.deleteMany({ userId: userId });
+      let result = await deleteAllColumns(userId);
       return NextResponse.json(result, { status: 200 });
     }
 
@@ -147,26 +139,5 @@ export async function DELETE(request) {
     return NextResponse.json('Error deleting all column', {
       status: 500,
     });
-  }
-}
-
-// ====================================================
-// CRUD OPERATIONS - directly to MongoDB
-// ====================================================
-
-async function updateColumnDocument(columnId, updateData) {
-  try {
-    let column = await Column.findOneAndUpdate(
-      { _id: columnId },
-      { $set: updateData },
-      { new: true }, // return updated document
-    );
-
-    if (!column) {
-      logger.warn(`No column: ${columnId} found for update`);
-    }
-    return column;
-  } catch (error) {
-    throw new Error('Error updating userGame document');
   }
 }

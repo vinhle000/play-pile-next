@@ -1,8 +1,8 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import UserGame from '@/lib/models/userGameModel';
 import { connectDB } from '@/lib/db';
 import mongoose from 'mongoose';
+import { getUserGamesInPlayPile } from '@/lib/utils/user-game-utils';
 
 /**
  * @desc  Add to game to user's "pile" of games they want to track
@@ -18,13 +18,7 @@ export async function GET() {
   const userId = new mongoose.Types.ObjectId(session.user.id);
 
   try {
-    await connectDB();
-
-    let userGames = await UserGame.find({
-      userId: userId,
-      isInPlayPile: true,
-    });
-
+    const userGames = await getUserGamesInPlayPile(userId);
     return NextResponse.json(userGames, { status: 200 });
   } catch (error) {
     console.error('Error getting Play Pile userGames');
