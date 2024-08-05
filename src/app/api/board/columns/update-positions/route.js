@@ -1,8 +1,9 @@
+import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import Column from '@/lib/models/columnModel';
 import mongoose from 'mongoose';
+import { updateColumnPositions } from '@/lib/utils/column-utils';
 import { connectDB } from '@/lib/db';
-
 /**
  * @desc    Update columns positions (after dragging and drop)
  * @route   PATCH /api/board/columns/update-positions
@@ -20,7 +21,6 @@ export async function PATCH(request) {
       { status: 401 },
     );
   }
-  const userId = new mongoose.Types.ObjectId(session.user.id);
 
   try {
     await connectDB();
@@ -32,12 +32,15 @@ export async function PATCH(request) {
         { status: 400 },
       );
 
-    await Promise.all(
-      updatedColumns.map((column, index) => {
-        //Fixme; shoud use index OR poition field?
-        return Column.findByIdAndUpdate(column._id, { position: index });
-      }),
-    );
+    // await Promise.all(
+    //   updatedColumns.map((column) => {
+    //     //Fixme; should use index OR poition field?
+    //     return Column.findByIdAndUpdate(column._id, {
+    //       position: column.position,
+    //     });
+    //   }),
+    // );
+    await updateColumnPositions(updatedColumns);
 
     return NextResponse.json(
       { message: 'Updated column positions successfully' },
@@ -49,27 +52,5 @@ export async function PATCH(request) {
       { message: 'Error updating column positions' },
       { status: 500 },
     );
-  }
-}
-
-// TODO: Same helper function is in api/board/column/route.js code to lib?
-// ====================================================
-// CRUD OPERATIONS - directly to MongoDB
-// ====================================================
-
-async function updateColumnDocument(columnId, updateData) {
-  try {
-    let column = await Column.findOneAndUpdate(
-      { _id: columnId },
-      { $set: updateData },
-      { new: true }, // return updated document
-    );
-
-    if (!column) {
-      logger.warn(`No column: ${columnId} found for update`);
-    }
-    return column;
-  } catch (error) {
-    throw new Error('Error updating userGame document');
   }
 }

@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
  */
 export async function GET() {
   let session = await auth();
-
+  // console.log('           user-games/bpard/route.js session ----->  ', session);
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }

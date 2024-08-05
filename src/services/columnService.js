@@ -1,5 +1,3 @@
-ession = await auth()s
-
 const envURL =
   process.env.NODE_ENV === 'prod'
     ? process.env.NODE_ENV
@@ -31,7 +29,7 @@ const columnService = {
       if (response.data && Array.isArray(response.data)) {
         console.log(response.data);
       } else {
-        console.error('Unexpected response format:', response.data);åå
+        console.error('Unexpected response format:', response.data);
       }
       return response.data;
     } catch (error) {
