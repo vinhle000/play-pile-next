@@ -45,11 +45,11 @@ export async function createColumn(userId, columnTitle) {
 export async function updateColumn(columnId, updateData) {
   try {
     await connectDB();
-    let column = await Column.findOneAndUpdatea(
+    const column = await Column.findOneAndUpdate(
       { _id: columnId },
       { $set: updateData },
       { new: true }, // return updated document
-    );
+    ).lean();
 
     if (!column) {
       console.warn(`No column: ${columnId} found for update`);
@@ -101,7 +101,10 @@ export async function getColumnsOnBoard(userId) {
     const columns = await Column.find({
       userId: userId,
       isOnBoard: true,
-    }).sort('position');
+    })
+      .lean() //to plain JS obj
+      .sort('position');
+
     return columns;
   } catch (error) {
     console.error('Error fetching user columns on board  from DB ', error);
