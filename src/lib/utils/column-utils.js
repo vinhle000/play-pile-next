@@ -3,6 +3,9 @@ import UserGame from '@/lib/models/userGameModel';
 import Column from '@/lib/models/columnModel';
 import { connectDB } from '@/lib/db';
 
+function convertToPlainObject(doc) {
+  return JSON.parse(JSON.stringify(doc));
+}
 // * @route   GET /api/board/columns/
 export async function getColumns(userId) {
   try {
@@ -69,7 +72,7 @@ export async function deleteColumn(columnId) {
     await connectDB();
     const result = await Column.deleteOne({ _id: columnId });
     if (result.deletedCount === 0) {
-      throw new Error(`No column found with id: ${columnId} to delete`);
+      console.warn(`No column found with id: ${columnId} to delete`);
     }
     return result;
   } catch (error) {
@@ -102,10 +105,10 @@ export async function getColumnsOnBoard(userId) {
       userId: userId,
       isOnBoard: true,
     })
-      .lean() //to plain JS obj
+      .lean() // Convert documents to plain JS objects -> but still constaines methods such as ObjectId and Date
       .sort('position');
-
-    return columns;
+    // Convert due to warning, Server components should only pass down JS objects down to client components
+    return columns.map(convertToPlainObject);
   } catch (error) {
     console.error('Error fetching user columns on board  from DB ', error);
     throw new Error('Failed to fetch columns on board from DB');

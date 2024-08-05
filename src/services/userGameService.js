@@ -16,7 +16,8 @@ const userGameService = {
     try {
       const response = await fetch(`${API_URL}/play-pile`);
       // This should be an object map of the user's play games with the key being the columnId
-      return response.data;
+
+      return await response.json();
     } catch (error) {
       console.error('Error getting user play pile', error);
     }
@@ -34,7 +35,7 @@ const userGameService = {
       } else {
         console.error('Unexpected response format:', response.data);
       }
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('Error getting user game by column ids', error);
     }
@@ -44,7 +45,7 @@ const userGameService = {
     try {
       const response = await fetch(`${API_URL}/board`);
       // This should be an object map of the user's play games with the key being the columnId
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('Error getting user games on board', error);
     }
@@ -52,10 +53,14 @@ const userGameService = {
 
   async updateUserGameData(igdbId, fields) {
     const body = fields ? { ...fields } : {};
+
     try {
       const response = await fetch(`${API_URL}/${igdbId}`, {
         method: 'PATCH',
-        body: body,
+        headers: {
+          'Content-Type': 'application/json', // Set the content type
+        },
+        body: JSON.stringify(body), // Convert body to JSON string
       });
       return response.data;
     } catch (error) {
@@ -73,7 +78,7 @@ const userGameService = {
           body: body,
         },
       );
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error(`Error updating game card positions in column ${error}`);
     }

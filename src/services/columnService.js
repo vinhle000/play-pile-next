@@ -15,7 +15,7 @@ const columnService = {
       } else {
         console.error('Unexpected response format:', response.data);
       }
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('Error getting columns for user', error);
     }
@@ -31,7 +31,7 @@ const columnService = {
       } else {
         console.error('Unexpected response format:', response.data);
       }
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('Error getting columns to be displayed on board', error);
     }
@@ -43,7 +43,7 @@ const columnService = {
         method: 'POST',
         body: { columnTitle: title },
       });
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('Error creating column for user', error);
       throw error;
@@ -57,7 +57,7 @@ const columnService = {
         method: 'PATCH',
         body: requestBody,
       });
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error(`Error updating column ${columnId}`, error);
     }
@@ -70,7 +70,7 @@ const columnService = {
         method: 'PATCH',
         body: requestBody,
       });
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error('Error updating column positions', error);
     }
@@ -81,7 +81,7 @@ const columnService = {
       const response = await fetch(`${API_URL}/${columnId}`, {
         method: 'DELETE',
       });
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error(`Error deleting column ${columnId}`, error);
     }

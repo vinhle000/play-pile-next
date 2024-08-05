@@ -24,6 +24,7 @@ export async function DELETE(request, context) {
       { status: 401 },
     );
   }
+
   try {
     if (columnId) {
       const result = await deleteColumn(columnId);
@@ -35,8 +36,8 @@ export async function DELETE(request, context) {
       NextResponse.json({ message: 'No columnId provided' }, 400);
     }
   } catch (error) {
-    console.error(`Error deleting all columns for user: ${userId}`);
-    return NextResponse.json('Error deleting all column', {
+    console.error(`Error deleting column `, columnId);
+    return NextResponse.json('Error deleting column ', {
       status: 500,
     });
   }

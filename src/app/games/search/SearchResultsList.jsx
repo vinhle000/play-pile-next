@@ -11,6 +11,7 @@ function SearchResultsList({
   userGamesByIgdbId,
   setSelectedGame,
   setOpenModal,
+  columnsOnBoard,
 }) {
   return (
     <>
@@ -23,6 +24,7 @@ function SearchResultsList({
               userGame={userGamesByIgdbId[game.igdbId] || {}}
               setSelectedGame={setSelectedGame}
               setOpenModal={setOpenModal}
+              columnsOnBoard={columnsOnBoard}
             />
           ))}
       </ul>

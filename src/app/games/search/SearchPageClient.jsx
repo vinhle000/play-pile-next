@@ -6,7 +6,7 @@ import ConfirmModal from '@/components/ConfirmModal';
 import { UserGamesContext } from '@/app/providers/UserGamesProvider';
 import { TailSpin } from 'react-loader-spinner';
 
-export default function SearchPageClient({ games }) {
+export default function SearchPageClient({ games, columnsOnBoard }) {
   const [selectedGame, setSelectedGame] = useState(null);
   const [openModal, setOpenModal] = useState('');
 
@@ -55,6 +55,7 @@ export default function SearchPageClient({ games }) {
                   userGamesByIgdbId={userGamesByIgdbId}
                   setSelectedGame={setSelectedGame}
                   setOpenModal={setOpenModal}
+                  columnsOnBoard={columnsOnBoard}
                 />
               </div>
             )}

@@ -11,12 +11,13 @@ const gameService = {
       const response = await fetch(
         `${API_URL}/search?q=${encodeURIComponent(searchTerm)}`,
       );
-      if (response.data && Array.isArray(response.data)) {
-        console.log(response.data.items);
+      const searchResult = await response.json();
+      if (searchResult && Array.isArray(searchResult)) {
+        console.log(searchResult);
       } else {
-        console.error('Unexpected response format:', response.data);
+        console.error('Unexpected response format:', searchResult);
       }
-      return response.data;
+      return await searchResult;
     } catch (error) {
       console.error('Error searching IGDB for games:', error);
     }
@@ -25,7 +26,7 @@ const gameService = {
   async getGameById(igdbId) {
     try {
       const response = await fetch(`${API_URL}/${igdbId}`);
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error(error);
     }
@@ -38,12 +39,14 @@ const gameService = {
         body: { igdbIds },
       });
       //TODO: Maybe change the 'games/query' to 'games/list' and use GET with path params
-      if (response.data && Array.isArray(response.data.items)) {
-        console.log(response.data.items);
+
+      const games = await response.json();
+      if (games && Array.isArray(games)) {
+        console.log(games);
       } else {
         console.error('Unexpected response format:', response.data);
       }
-      return response.data;
+      return games;
     } catch (error) {
       console.error(error);
     }

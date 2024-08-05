@@ -47,10 +47,11 @@ function SearchResultsListItem({
   userGame,
   setSelectedGame,
   setOpenModal,
+  columnsOnBoard,
 }) {
   const { loading, fetchUserGames, updateUserGameData } =
     useContext(UserGamesContext);
-  const { columns, fetchColumns } = useContext(ColumnsContext);
+  // const { columns, fetchColumns } = useContext(ColumnsContext);
   const [selectedColumnId, setSelectedColumnId] = useState(
     userGame?.columnId || null,
   );
@@ -150,7 +151,7 @@ function SearchResultsListItem({
       <div className="flex items-center ">
         <DropdownMenu className="flex justify-center items-center">
           <DropdownMenuTrigger className="min-w-24 py-1 mr-8">
-            {userGameData ? (
+            {Object.keys(userGameData).length > 0 ? (
               <div className="x-4 py-2 rounded-lg font-semibold text-white/90  bg-gray-800/40 hover:bg-gray-800/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60  transition duration-300 ease-in-out">
                 Edit
               </div>
@@ -178,8 +179,8 @@ function SearchResultsListItem({
                 });
               }}
             >
-              {columns &&
-                columns.map((column) => (
+              {columnsOnBoard &&
+                columnsOnBoard.map((column) => (
                   <DropdownMenuRadioItem key={column._id} value={column._id}>
                     {column.title}
                   </DropdownMenuRadioItem>
@@ -191,7 +192,7 @@ function SearchResultsListItem({
                 <DropdownMenuItem
                   className="flex justify-center text-sm font-bold text-red-400"
                   onClick={() => {
-                    setSelectedGame(userPlayPileGameData);
+                    setSelectedGame(userGameData);
                     setOpenModal('remove');
                   }}
                 >
