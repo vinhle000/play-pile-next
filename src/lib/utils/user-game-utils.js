@@ -52,7 +52,7 @@ export async function getUserGamesOnBoard(userId) {
 
     userGamesOnBoard.forEach((userGame) => {
       if (!userGamesByColumnId[userGame.columnId]) {
-        userGamesByColumnId[userGame.columnId] = [userGame];
+        userGamesByColumnId[userGame.columnId] = [];
       }
       userGamesByColumnId[userGame.columnId].push(userGame);
     });

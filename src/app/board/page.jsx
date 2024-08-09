@@ -1,5 +1,6 @@
 import React from 'react';
 import { auth } from '@/auth';
+import mongoose from 'mongoose';
 
 import BoardPageClient from './BoardPageClient';
 import { Button } from '@/components/ui/button';
@@ -13,12 +14,21 @@ export default async function Page() {
       { status: 401 },
     );
   }
+  const userId = new mongoose.Types.ObjectId(session.user.id);
+  let columnsOnBoard = [];
+  let errorMessage = null;
 
   //TODO: get initial data
+  try {
+    columnsOnBoard = await columnService.getColumnsByUserId(userId);
+  } catch (error) {
+    errorMessage = error.message;
+    console.error('Error fetching columns for board: ', error);
+  }
 
   return (
     <>
-      <BoardPageClient />
+      <BoardPageClient columnsOnBoard={columnsOnBoard} />
     </>
   );
 }

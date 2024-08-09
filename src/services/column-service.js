@@ -63,7 +63,7 @@ const columnService = {
     }
   },
 
-  async updatePositions(columns, session) {
+  async updatePositions(columns) {
     const requestBody = { columns: columns ? columns : [] };
     try {
       const response = await fetch(`${API_URL}/update-positions`, {
@@ -76,7 +76,7 @@ const columnService = {
     }
   },
 
-  async deleteColumn(columnId, session) {
+  async deleteColumn(columnId) {
     try {
       const response = await fetch(`${API_URL}/${columnId}`, {
         method: 'DELETE',
