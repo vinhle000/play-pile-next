@@ -124,9 +124,9 @@ export async function updateColumnPositions(updatedColumns) {
   try {
     connectDB();
     await Promise.all(
-      updatedColumns.map((column) => {
+      updatedColumns.map((column, index) => {
         return Column.findByIdAndUpdate(column._id, {
-          position: column.position,
+          position: index, // The updated columns are in the correct order already
         });
       }),
     );

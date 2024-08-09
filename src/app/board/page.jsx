@@ -6,6 +6,8 @@ import BoardPageClient from './BoardPageClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import { getColumnsOnBoard } from '@/lib/utils/column-utils'
+
 export default async function Page() {
   const session = await auth();
   if (!session) {
@@ -20,7 +22,7 @@ export default async function Page() {
 
   //TODO: get initial data
   try {
-    columnsOnBoard = await columnService.getColumnsByUserId(userId);
+    columnsOnBoard = await getColumnsOnBoard(userId);
   } catch (error) {
     errorMessage = error.message;
     console.error('Error fetching columns for board: ', error);

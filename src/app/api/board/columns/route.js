@@ -54,8 +54,18 @@ export async function POST(request) {
     );
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
-  const columnTitle = await request.json().then((body) => body.columnTitle);
+  let body;
 
+  try {
+    body = await request.json();
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+    return NextResponse.json(
+      { message: 'Error parsing JSON' },
+      { status: 400 },
+    );
+  }
+  const { columnTitle } = body;
   try {
     const column = await createColumn(userId, columnTitle);
 
@@ -84,8 +94,17 @@ export async function PATCH(request) {
       { status: 401 },
     );
   }
+  try {
+    body = await request.json();
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+    return NextResponse.json(
+      { message: 'Error parsing JSON' },
+      { status: 400 },
+    );
+  }
 
-  const { columnId, ...updateData } = await request.json().then((body) => body);
+  const { columnId, ...updateData } = body;
 
   if (!columnId) res.status(400).json({ message: 'No columnId provided' });
   if (!updateData) res.status(400).json({ message: 'No update data provided' });

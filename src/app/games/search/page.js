@@ -1,6 +1,5 @@
 import React from 'react';
 import SearchPageClient from './SearchPageClient';
-import useServerColumnService from '@/services/columnService';
 import { getColumnsOnBoard } from '@/lib/utils/column-utils';
 import { auth } from '@/auth';
 import mongoose from 'mongoose';

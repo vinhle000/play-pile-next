@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import Column from './Column';
 import ColumnForm from './ColumnForm';
 
-import columnService from '@/services/columnService';
-import userGameService from '@/services/userGameService';
+// import columnService from '@/services/column-service';
+// import userGameService from '@/services/userGameService';
 
 import { ColumnsContext } from '@/app/providers/ColumnsProvider';
 import { UserGamesContext } from '@/app/providers/UserGamesProvider';
@@ -20,8 +20,8 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
   } = useContext(ColumnsContext);
   const {
     userGamesOnBoard,
-    setUserGamesOnBoard,
-    fetchGamesOnBoard,
+    // setUserGamesOnBoard,
+    // fetchGamesOnBoard,
     updateUserGameColumnPositions,
   } = useContext(UserGamesContext);
 
@@ -61,10 +61,11 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
       const [removed] = newColumns.splice(source.index, 1);
       newColumns.splice(destination.index, 0, removed);
 
-      setColumnsOnBoard(newColumns);
-      columnService.updatePositions(
-        newColumns.map((column) => ({ _id: column._id })),
-      );
+      // setColumnsOnBoard(newColumns);
+      // columnService.updatePositions(
+      //   newColumns.map((column) => ({ _id: column._id })),
+      // );
+      updateUserGameColumnPositions(newColumns)
     }
 
     // Handle game card drag

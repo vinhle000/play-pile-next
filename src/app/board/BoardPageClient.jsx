@@ -2,8 +2,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 
 import { TailSpin } from 'react-loader-spinner';
-import columnService from '@/services/columnService';
-import userGameService from '@/services/userGameService';
+
 
 import Board from './Board';
 import UserGameDataEditModal from '@/components/UserGameDataEditModal';
@@ -29,10 +28,9 @@ export default function BoardPageClient() {
     updateUserGameColumnPositions,
   } = useContext(UserGamesContext);
   const {
+    columns,
     columnsOnBoard,
-    setColumnsOnBoard,
     columnsOnBoardLoading,
-    fetchColumnsOnBoard,
     deleteColumn,
   } = useContext(ColumnsContext);
 
@@ -83,9 +81,9 @@ export default function BoardPageClient() {
 
   useEffect(() => {
     try {
-      fetchUserPlayPileGames();
+      fetchUserGames();
       fetchGamesOnBoard();
-      fetchColumnsOnBoard();
+      // fetchColumnsOnBoard();
     } catch (error) {
       console.error(
         'Error fetching columns and user games by column ids: ',

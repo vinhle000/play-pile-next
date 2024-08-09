@@ -41,7 +41,8 @@ const columnService = {
     try {
       const response = await fetch(`${API_URL}`, {
         method: 'POST',
-        body: { columnTitle: title },
+        body: JSON.stringify({ columnTitle: title }),
+        headers: { 'Content-Type': 'application/json' },
       });
       return await response.json();
     } catch (error) {
@@ -63,7 +64,7 @@ const columnService = {
     }
   },
 
-  async updatePositions(columns) {
+  async updateColumnPositions(columns) {
     const requestBody = { columns: columns ? columns : [] };
     try {
       const response = await fetch(`${API_URL}/update-positions`, {
