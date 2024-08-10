@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import mongoose from 'mongoose';
 import {
+  getColumns,
   getColumnsOnBoard,
   createColumn,
   updateColumn,
@@ -27,7 +28,7 @@ export async function GET(request) {
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
   try {
-    const columns = await getColumnsOnBoard(userId);
+    const columns = await getColumns(userId);
     return NextResponse.json(columns, { status: 200 });
   } catch (error) {
     console.error('Error fetching user columns from DB ', error);
