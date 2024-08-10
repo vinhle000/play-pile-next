@@ -1,63 +1,34 @@
 'use client';
 import React, { useState, useEffect, useCallback, createContext } from 'react';
-import useSWR, { mutate } from 'swr';
+import useSWR, { mutate, SWRConfig } from 'swr';
 import columnService from '@/services/column-service';
 
 export const ColumnsContext = createContext({});
 
 // const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function ColumnsProvider({ children }) {
-  // const [columns, setColumns] = useState([]);
-  // const [columnsOnBoard, setColumnsOnBoard] = useState([]);
+export default function ColumnsProvider({ children, initialColumns, initialColumnsOnBoard }) {
   const [loading, setLoading] = useState(true);
 
-  // const fetchColumns = useCallback(async () => {
-  //   try {
-  //     setLoading(true);
-  //     const columns = await useColumnService.getColumns();
-  //     setColumns(columns);
-  //     return columns;
-  //   } catch (error) {
-  //     console.error('Error fetching user play pile', error);
-  //     setLoading(false);
-  //   }
-  // }, []);
-
-  // const fetchColumnsOnBoard = useCallback(async () => {
-  //   try {
-  //     setLoading(true);
-  //     const columnsOnBoard = await useColumnService.getColumnsOnBoard();
-  //     setColumnsOnBoard(columnsOnBoard);
-  //     return columnsOnBoard;
-  //   } catch (error) {
-  //     console.error(`Error fetching user play pile`, error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
   const {
     data: columns,
     error: columnsError,
-    loading: columnsLoading,
+    isLoading: columnsIsLoading,
   } = useSWR('/api/board/columns', columnService.getColumns);
+
   const {
     data: columnsOnBoard,
     error: columnsOnBoardError,
-    loading: columnsOnBoardLoading,
-  } = useSWR('/api/board/columns/on-board', columnService.getColumnsOnBoard);
+    isLoading: columnsOnBoardIsLoading,
+  } = useSWR('/api/board/columns/on-board', columnService.getColumnsOnBoard,);
 
   const createColumn = useCallback(async (title) => {
     try {
-      //No optimistic update
       setLoading(true)
       await columnService.createColumn(title);
-      // mutate('/api/board/columns/') // if we need to fetch all columns
       mutate('/api/board/columns/on-board');
     } catch (error) {
       console.error('Error creating column');
-
-      // rollback changews
     } finally {
       setLoading(false)
     }
@@ -78,31 +49,9 @@ export default function ColumnsProvider({ children }) {
   };
 
 
-  /*
-{
-	"columns":
-	[
-		{
-			"_id": "6632bdb73c16959712a41345",
-			"position": 0
-		},
-		{
-			"_id": "6632bdb23c16959712a41341",
-			"position": 1
-		},
-		{
-			"_id": "6632bdbb3c16959712a41349",
-			"position": 2
-		}
-	]
-}
-
-
-  */
   const updateColumnPositions = async (columnsWithNewPositions) => {
     try {
       setLoading(true);
-
       // set columsn optimistaclaly
       mutate('/api/board/columns/on-board', columnsWithNewPositions, false)
       await useColumnService.updateColumnPositions(columnsWithNewPositions.map((column) => ({ _id: column._id }))); //
@@ -142,13 +91,22 @@ export default function ColumnsProvider({ children }) {
   });
 
   return (
+    <SWRConfig value={{
+      fallback: {
+        '/api/board/columns': initialColumns,
+        '/api/board/columns/on-board': initialColumnsOnBoard
+      }
+      }
+    }>
     <ColumnsContext.Provider
       value={{
-        loading: loading || columnsLoading || columnsOnBoardLoading,
+        loading,
         columns,
+        columnsError,
+        columnsIsLoading,
         columnsOnBoard,
         columnsOnBoardError,
-        // columnsOnBoardLoading,
+        columnsOnBoardIsLoading,
 
         // loading,
         // columns,
@@ -164,5 +122,6 @@ export default function ColumnsProvider({ children }) {
     >
       {children}
     </ColumnsContext.Provider>
+  </SWRConfig>
   );
 }

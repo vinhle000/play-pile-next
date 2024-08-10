@@ -61,7 +61,8 @@ const columnService = {
     try {
       const response = await fetch(`${API_URL}/${columnId}`, {
         method: 'PATCH',
-        body: requestBody,
+        body: JSON.stringify(requestBody),
+        headers: { 'Content-Type': 'application/json' },
       });
       return await response.json();
     } catch (error) {
@@ -74,7 +75,8 @@ const columnService = {
     try {
       const response = await fetch(`${API_URL}/update-positions`, {
         method: 'PATCH',
-        body: requestBody,
+        body: JSON.stringify(requestBody),
+        headers: { 'Content-Type': 'application/json' },
       });
       return await response.json();
     } catch (error) {
