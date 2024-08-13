@@ -23,29 +23,14 @@ const userGameService = {
     }
   },
 
-  async getUserGameByColumnIds(columnIds) {
-    const body = { columnIds: columnIds };
-    try {
-      const response = await fetch(`${API_URL}/column/`, {
-        method: 'POST',
-        body: body,
-      });
-      if (response.data && Array.isArray(response.data.items)) {
-        console.log(response.data.items);
-      } else {
-        console.error('Unexpected response format:', response.data);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error getting user game by column ids', error);
-    }
-  },
-
   async getUserGamesOnBoard() {
     try {
       const response = await fetch(`${API_URL}/board`);
       // This should be an object map of the user's play games with the key being the columnId
-      return await response.json();
+
+      const data = await response.json();
+      console.log('   getUserGamesOnBoard()  ------>', data);
+      return data;
     } catch (error) {
       console.error('Error getting user games on board', error);
     }
@@ -62,7 +47,7 @@ const userGameService = {
         },
         body: JSON.stringify(body), // Convert body to JSON string
       });
-      return response.data;
+      return await response.json();
     } catch (error) {
       console.error(`Error updating user's game data`, error);
     }
