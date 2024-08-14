@@ -1,5 +1,6 @@
 import React from 'react';
 import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 import mongoose from 'mongoose';
 
 import BoardPageClient from './BoardPageClient';
@@ -10,11 +11,9 @@ import { getColumnsOnBoard } from '@/lib/utils/column-utils'
 
 export default async function Page() {
   const session = await auth();
+
   if (!session) {
-    return NextResponse.json(
-      { message: 'Not Authorized, no session' },
-      { status: 401 },
-    );
+    redirect('/signup'); // Redirect to login page if no session
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
   let columnsOnBoard = [];
@@ -30,7 +29,7 @@ export default async function Page() {
 
   return (
     <>
-      <BoardPageClient columnsOnBoard={columnsOnBoard} />
+      <BoardPageClient  columnsOnBoard={columnsOnBoard} />
     </>
   );
 }
