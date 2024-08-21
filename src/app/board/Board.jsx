@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useContext } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { Button } from '@/components/ui/button';
 import Column from './Column';
 import ColumnForm from './ColumnForm';
@@ -15,13 +15,12 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
   const {
     columnsOnBoard,
     setColumnsOnBoard,
-    fetchColumnsOnBoard,
     createColumn,
+    updateColumnPositions,
   } = useContext(ColumnsContext);
   const {
     userGamesOnBoard,
     setUserGamesOnBoard,
-    fetchGamesOnBoard,
     updateUserGameColumnPositions,
   } = useContext(UserGamesContext);
 
@@ -62,8 +61,8 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
       const [removed] = newColumns.splice(source.index, 1);
       newColumns.splice(destination.index, 0, removed);
 
-      setColumnsOnBoard(newColumns);
-      columnService.updatePositions(  // TODO this shoudl be a call in the column context provider
+      setColumnsOnBoard(newColumns); //TODO: decide to optimistaclly update here? or in context
+      updateColumnPositions(
         newColumns.map((column) => ({ _id: column._id })),
       );
 

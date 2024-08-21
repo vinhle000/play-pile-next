@@ -59,6 +59,19 @@ export default function ColumnsProvider({ children }) {
     }
   };
 
+  const updateColumnPositions = async (columns) => {
+    try {
+      setLoading(true);
+      await columnService.updateColumnPositions(columns);
+      fetchColumns();
+      fetchColumnsOnBoard();
+    } catch (error) {
+      console.error('Error updating column positions', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const deleteColumn = useCallback(
     async (columnId) => {
       try {
@@ -95,6 +108,7 @@ export default function ColumnsProvider({ children }) {
         columnsOnBoard,
         setColumnsOnBoard,
         fetchColumnsOnBoard,
+        updateColumnPositions,
       }}
     >
       {children}

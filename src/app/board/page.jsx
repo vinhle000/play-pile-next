@@ -13,7 +13,7 @@ export default async function Page() {
   const session = await auth();
 
   if (!session) {
-    redirect('/signup'); // Redirect to login page if no session
+    redirect('/sign-up'); // Redirect to login page if no session
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
   let columnsOnBoard = [];
@@ -21,7 +21,7 @@ export default async function Page() {
 
   //TODO: get initial data
   try {
-    columnsOnBoard = await getColumnsOnBoard(userId);
+    // columnsOnBoard = await getColumnsOnBoard(userId);
   } catch (error) {
     errorMessage = error.message;
     console.error('Error fetching columns for board: ', error);
@@ -29,7 +29,7 @@ export default async function Page() {
 
   return (
     <>
-      <BoardPageClient  columnsOnBoard={columnsOnBoard} />
+      <BoardPageClient />
     </>
   );
 }

@@ -14,7 +14,7 @@ import { UserGamesContext } from '@/app/providers/UserGamesProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function BoardPageClient({ columnsOnBoard }) {
+export default function BoardPageClient() {
   //TODO: cleanup and refactor this page
   const {
     loading,
@@ -29,7 +29,7 @@ export default function BoardPageClient({ columnsOnBoard }) {
   } = useContext(UserGamesContext);
   const {
     columns,
-    // columnsOnBoard,
+    columnsOnBoard,
     columnsOnBoardLoading,
     fetchColumnsOnBoard,
     deleteColumn,
@@ -80,22 +80,22 @@ export default function BoardPageClient({ columnsOnBoard }) {
     }
   };
 
-  useEffect(() => {
-    try {
-      fetchUserGames();
-      fetchGamesOnBoard();
-      fetchColumnsOnBoard();
-    } catch (error) {
-      console.error(
-        'Error fetching columns and user games by column ids: ',
-        error,
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     fetchUserGames();
+  //     fetchGamesOnBoard();
+  //     fetchColumnsOnBoard();
+  //   } catch (error) {
+  //     console.error(
+  //       'Error fetching columns and user games by column ids: ',
+  //       error,
+  //     );
+  //   }
+  // }, []);
 
-  // if (userGamesOnBoardLoading || columnsOnBoardLoading) {
-  //   return <TailSpin color="black" radius="1rem" />;
-  // }
+  if (loading || columnsOnBoardLoading) {
+    return <TailSpin color="black" radius="1rem" />;
+  }
 
   return (
     <>
