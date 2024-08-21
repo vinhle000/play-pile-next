@@ -1,10 +1,5 @@
 import gameService from './gameService';
 
-/* TODO: ---------------------
-[ ]  NEED to use fetch instead of axios for next.js transition
-[ ] Remove old VITE_ENV refs
-[ ] Create respective userGames context provider to utilize these api calls
-*/
 const envURL =
   process.env.NODE_ENV === 'prod'
     ? process.env.NODE_ENV
@@ -56,13 +51,13 @@ const userGameService = {
   async updateUserGameColumnPositions(updatedColumnUserGames) {
     const body = updatedColumnUserGames;
     try {
-      const response = await axios.patch(
-        `${API_URL}/board/column/update-positions`,
-        {
-          method: 'PATCH',
-          body: body,
+      const response = await fetch(`${API_URL}/board/column/update-positions`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json', // Set the content type
         },
-      );
+        body: JSON.stringify(body), // Convert body to JSON string
+      });
       return await response.json();
     } catch (error) {
       console.error(`Error updating game card positions in column ${error}`);

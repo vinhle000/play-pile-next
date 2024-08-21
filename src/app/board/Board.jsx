@@ -20,8 +20,8 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
   } = useContext(ColumnsContext);
   const {
     userGamesOnBoard,
-    // setUserGamesOnBoard,
-    // fetchGamesOnBoard,
+    setUserGamesOnBoard,
+    fetchGamesOnBoard,
     updateUserGameColumnPositions,
   } = useContext(UserGamesContext);
 
@@ -45,7 +45,7 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
 
   const handleOnDragEnd = (result) => {
     const { source, destination, type } = result;
-    // console.log(`handleOnDragEnd ---> result `, {source, destination, type})
+
 
     if (!destination) return;
 
@@ -57,15 +57,16 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
 
     // Handle column drag
     if (type === 'column') {
+      console.log(`handleOnDragEnd ---> result `, {source, destination, type})
       const newColumns = [...columnsOnBoard];
       const [removed] = newColumns.splice(source.index, 1);
       newColumns.splice(destination.index, 0, removed);
 
-      // setColumnsOnBoard(newColumns);
-      // columnService.updatePositions(
-      //   newColumns.map((column) => ({ _id: column._id })),
-      // );
-      updateUserGameColumnPositions(newColumns)
+      setColumnsOnBoard(newColumns);
+      columnService.updatePositions(  // TODO this shoudl be a call in the column context provider
+        newColumns.map((column) => ({ _id: column._id })),
+      );
+
     }
 
     // Handle game card drag
@@ -108,11 +109,7 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable
-        droppableId={`columnsBoard}`}
-        direction="horizontal"
-        type="column"
-      >
+      <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided, snapshot) => (
           <div
             {...provided.droppableProps}

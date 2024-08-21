@@ -14,7 +14,7 @@ import { UserGamesContext } from '@/app/providers/UserGamesProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function BoardPageClient() {
+export default function BoardPageClient({ columnsOnBoard }) {
   //TODO: cleanup and refactor this page
   const {
     loading,
@@ -29,8 +29,9 @@ export default function BoardPageClient() {
   } = useContext(UserGamesContext);
   const {
     columns,
-    columnsOnBoard,
+    // columnsOnBoard,
     columnsOnBoardLoading,
+    fetchColumnsOnBoard,
     deleteColumn,
   } = useContext(ColumnsContext);
 
@@ -83,7 +84,7 @@ export default function BoardPageClient() {
     try {
       fetchUserGames();
       fetchGamesOnBoard();
-      // fetchColumnsOnBoard();
+      fetchColumnsOnBoard();
     } catch (error) {
       console.error(
         'Error fetching columns and user games by column ids: ',
