@@ -93,7 +93,7 @@ function UserGameDataEditModal({ game, openModal, setOpenModal }) {
   // game has UserGameData and Game details
 
   const { setUserPlayPileGames, userPlayPileGames, updateUserGameData } =
-    useContext(UserPlayPileGamesContext); // {playDates,  playStatus, notes}
+    useContext(UserGamesContext); // {playDates,  playStatus, notes}
 
   // TODO: Making this modal persist upon change immediately without the save button to submit
   //
