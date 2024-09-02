@@ -1,12 +1,18 @@
 'use client';
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useCallback, useMemo } from 'react';
 import userGameService from '@/services/userGameService';
 
 export const UserGamesContext = createContext();
 
-export default function UserGamesProvider({ children }) {
-  const [userGames, setUserGames] = useState([]);
-  const [userGamesOnBoard, setUserGamesOnBoard] = useState([]);
+export default function UserGamesProvider({
+  children,
+  initialUserGames,
+  initialUserGamesOnBoard,
+}) {
+  const [userGames, setUserGames] = useState(initialUserGames);
+  const [userGamesOnBoard, setUserGamesOnBoard] = useState(
+    initialUserGamesOnBoard,
+  );
   const [loading, setLoading] = useState(true);
 
   const fetchUserGames = useCallback(async () => {
@@ -64,25 +70,32 @@ export default function UserGamesProvider({ children }) {
     [],
   );
 
-  useEffect(() => {
-    fetchUserGames();
-    fetchGamesOnBoard();
-  }, [fetchUserGames, fetchGamesOnBoard]);
+  // Memoize the context value to avoid re-renders of consuming components
+  const contextValue = useMemo(
+    () => ({
+      loading,
+      userGames,
+      setUserGames,
+      fetchUserGames,
+      userGamesOnBoard,
+      setUserGamesOnBoard,
+      fetchGamesOnBoard,
+      updateUserGameData,
+      updateUserGameColumnPositions,
+    }),
+    [
+      loading,
+      userGames,
+      userGamesOnBoard,
+      fetchUserGames,
+      fetchGamesOnBoard,
+      updateUserGameData,
+      updateUserGameColumnPositions,
+    ],
+  );
 
   return (
-    <UserGamesContext.Provider
-      value={{
-        loading,
-        userGames,
-        setUserGames,
-        fetchUserGames,
-        userGamesOnBoard,
-        setUserGamesOnBoard,
-        fetchGamesOnBoard,
-        updateUserGameData,
-        updateUserGameColumnPositions,
-      }}
-    >
+    <UserGamesContext.Provider value={contextValue}>
       {children}
     </UserGamesContext.Provider>
   );

@@ -1,15 +1,13 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { Button } from '@/components/ui/button';
 import Column from './Column';
 import ColumnForm from './ColumnForm';
-
-// import columnService from '@/services/column-service';
-// import userGameService from '@/services/userGameService';
-
 import { ColumnsContext } from '@/app/providers/ColumnsProvider';
 import { UserGamesContext } from '@/app/providers/UserGamesProvider';
+
+import { TailSpin } from 'react-loader-spinner';
 
 function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
   const {
@@ -26,85 +24,101 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
 
   const [showForm, setShowForm] = useState(false);
 
-  const handleShowForm = () => {
+  const handleShowForm = useCallback(() => {
     setShowForm(true);
-  };
+  }, []);
 
-  const handleHideForm = () => {
+  const handleHideForm = useCallback(() => {
     setShowForm(false);
-  };
+  }, []);
 
-  const handleCreateColumn = async (title) => {
-    try {
-      await createColumn(title);
-    } catch (error) {
-      console.error('Error creating column', error);
-    }
-  };
+  const handleCreateColumn = useCallback(
+    async (title) => {
+      try {
+        await createColumn(title);
+      } catch (error) {
+        console.error('Error creating column', error);
+      }
+    },
+    [createColumn],
+  );
 
-  const handleOnDragEnd = (result) => {
-    const { source, destination, type } = result;
+  const handleOnDragEnd = useCallback(
+    (result) => {
+      const { source, destination, type } = result;
 
+      if (!destination) return;
 
-    if (!destination) return;
+      if (
+        destination.droppableId === source.droppableId &&
+        destination.index === source.index
+      )
+        return;
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return;
+      // Handle column drag
+      if (type === 'column') {
+        console.log(`handleOnDragEnd ---> result `, {
+          source,
+          destination,
+          type,
+        });
+        const newColumns = [...columnsOnBoard];
+        const [removed] = newColumns.splice(source.index, 1);
+        newColumns.splice(destination.index, 0, removed);
 
-    // Handle column drag
-    if (type === 'column') {
-      console.log(`handleOnDragEnd ---> result `, {source, destination, type})
-      const newColumns = [...columnsOnBoard];
-      const [removed] = newColumns.splice(source.index, 1);
-      newColumns.splice(destination.index, 0, removed);
+        setColumnsOnBoard(newColumns); //TODO: decide to optimistaclly update here? or in context
+        updateColumnPositions(
+          newColumns.map((column) => ({ _id: column._id })),
+        );
+      }
 
-      setColumnsOnBoard(newColumns); //TODO: decide to optimistaclly update here? or in context
-      updateColumnPositions(
-        newColumns.map((column) => ({ _id: column._id })),
-      );
+      // Handle game card drag
+      if (type === 'card') {
+        const sourceColumnId = source.droppableId.split('-')[1];
+        const destinationColumnId = destination.droppableId.split('-')[1];
 
-    }
+        const sourceList = Array.from(userGamesOnBoard[sourceColumnId]);
+        const destinationList =
+          sourceColumnId === destinationColumnId // Handling drag in same column
+            ? sourceList
+            : Array.from(userGamesOnBoard[destinationColumnId] || []);
 
-    // Handle game card drag
-    if (type === 'card') {
-      const sourceColumnId = source.droppableId.split('-')[1];
-      const destinationColumnId = destination.droppableId.split('-')[1];
+        const [removed] = sourceList.splice(source.index, 1);
+        destinationList.splice(destination.index, 0, removed);
 
-      const sourceList = Array.from(userGamesOnBoard[sourceColumnId]);
+        setUserGamesOnBoard((prev) => ({
+          ...prev,
+          [sourceColumnId]: sourceList,
+          [destinationColumnId]: destinationList,
+        }));
 
-      const destinationList =
-        sourceColumnId === destinationColumnId // Handling drag in same column
-          ? sourceList
-          : Array.from(userGamesOnBoard[destinationColumnId] || []);
+        const updatedColumnLists = {
+          source: {
+            columnId: sourceColumnId,
+            userGames: sourceList,
+          },
+          destination: {
+            columnId: destinationColumnId,
+            userGames: destinationList,
+          },
+        };
 
-      const [removed] = sourceList.splice(source.index, 1);
-      destinationList.splice(destination.index, 0, removed);
+        updateUserGameColumnPositions(updatedColumnLists);
+      }
+    },
+    [
+      columnsOnBoard,
+      userGamesOnBoard,
+      setColumnsOnBoard,
+      setUserGamesOnBoard,
+      updateColumnPositions,
+      updateUserGameColumnPositions,
+    ],
+  );
 
-      const newUserGamesOnBoard = {
-        ...userGamesOnBoard,
-        [sourceColumnId]: sourceList,
-        [destinationColumnId]: destinationList,
-      };
-
-      setUserGamesOnBoard(newUserGamesOnBoard);
-
-      const updatedColumnLists = {
-        source: {
-          columnId: sourceColumnId,
-          userGames: sourceList,
-        },
-        destination: {
-          columnId: destinationColumnId,
-          userGames: destinationList,
-        },
-      };
-
-      updateUserGameColumnPositions(updatedColumnLists);
-    }
-  };
+  if (!columnsOnBoard || !userGamesOnBoard) {
+    return <TailSpin color="#00BFFF" height={80} width={80} />;
+  }
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -157,4 +171,4 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
   );
 }
 
-export default Board;
+export default React.memo(Board);

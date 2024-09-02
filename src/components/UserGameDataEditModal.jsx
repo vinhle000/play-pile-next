@@ -1,5 +1,5 @@
 'use client';
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import userGameService from '@/services/userGameService';
 import ConfirmModal from '@/components/ConfirmModal';
 import Note from '@/components/Note';
@@ -248,4 +248,4 @@ function UserGameDataEditModal({ game, openModal, setOpenModal }) {
   );
 }
 
-export default UserGameDataEditModal;
+export default React.memo(UserGameDataEditModal);

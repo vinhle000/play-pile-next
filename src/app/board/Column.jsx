@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Draggable, Droppable } from '@hello-pangea/dnd';
 import ConfirmModal from '@/components/ConfirmModal';
 import {
@@ -101,4 +101,4 @@ function Column({
   );
 }
 
-export default Column;
+export default React.memo(Column);

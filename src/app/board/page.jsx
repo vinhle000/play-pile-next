@@ -13,7 +13,7 @@ export default async function Page() {
   const session = await auth();
 
   if (!session) {
-    redirect('/sign-up'); // Redirect to login page if no session
+    redirect('/sign-in'); // Redirect to login page if no session
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
   let columnsOnBoard = [];

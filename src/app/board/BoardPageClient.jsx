@@ -1,8 +1,7 @@
 'use client';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 
 import { TailSpin } from 'react-loader-spinner';
-
 
 import Board from './Board';
 import UserGameDataEditModal from '@/components/UserGameDataEditModal';
@@ -15,25 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export default function BoardPageClient() {
-  //TODO: cleanup and refactor this page
-  const {
-    loading,
-    userGames,
-    setUserGames,
-    fetchUserGames,
-    userGamesOnBoard,
-    setUserGamesOnBoard,
-    fetchGamesOnBoard,
-    updateUserGameData,
-    updateUserGameColumnPositions,
-  } = useContext(UserGamesContext);
-  const {
-    columns,
-    columnsOnBoard,
-    columnsOnBoardLoading,
-    fetchColumnsOnBoard,
-    deleteColumn,
-  } = useContext(ColumnsContext);
+  const { loading, updateUserGameData, updateUserGameColumnPositions } =
+    useContext(UserGamesContext);
+  const { columnsOnBoardLoading, deleteColumn } = useContext(ColumnsContext);
 
   const [openModal, setOpenModal] = useState(''); // ['edit' ||'remove' || '']
   const [selectedGame, setSelectedGame] = useState(null);
@@ -41,13 +24,13 @@ export default function BoardPageClient() {
   const [inputTitle, setInputTitle] = useState('');
 
   /// FIXME: This is not working, making flexible method to open all types of modals setOpenModal('edit' || 'remove' || '')
-  const handleOpenEditModal = (game) => {
+  const handleOpenEditModal = useCallback((game) => {
     console.log('handleOpenEditModal -> game', game);
     setOpenModal('edit');
     setSelectedGame(game);
-  };
+  }, []);
 
-  const handleRemoveGameConfirm = async () => {
+  const handleRemoveGameConfirm = useCallback(async () => {
     try {
       await updateUserGameData(selectedGame.igdbId, {
         isInPlayPile: 'false',
@@ -59,9 +42,9 @@ export default function BoardPageClient() {
     } finally {
       setOpenModal('');
     }
-  };
+  }, [selectedGame, updateUserGameData]);
 
-  const handleDeleteColumn = async () => {
+  const handleDeleteColumn = useCallback(async () => {
     // TODO: set  column related fields to default values for userGames items in this columns.
     // A) Use selectedColumn to and use endpoint to delete it using columnId
 
@@ -78,31 +61,18 @@ export default function BoardPageClient() {
     } finally {
       setOpenModal('');
     }
-  };
+  }, [selectedColumn, deleteColumn]);
 
-  // useEffect(() => {
-  //   try {
-  //     fetchUserGames();
-  //     fetchGamesOnBoard();
-  //     fetchColumnsOnBoard();
-  //   } catch (error) {
-  //     console.error(
-  //       'Error fetching columns and user games by column ids: ',
-  //       error,
-  //     );
-  //   }
-  // }, []);
 
-  if (loading || columnsOnBoardLoading) {
-    return <TailSpin color="black" radius="1rem" />;
-  }
+  // NOTE: Hydrating initial items from server side rendered data.
+  //So initial loading spiiner not neccesry for now
+  //   return <TailSpin color="black" radius="1rem" />;
+  // }
 
   return (
     <>
       <div className="mt-5">
         <Board
-          columns={columnsOnBoard}
-          userGamesOnBoard={userGamesOnBoard}
           setSelectedColumn={setSelectedColumn}
           setSelectedGame={setSelectedGame}
           setOpenModal={setOpenModal}
