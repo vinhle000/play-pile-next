@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import { SessionProvider } from 'next-auth/react';
+import ClientSessionProvider from './providers/ClientSessionProvider.jsx';
 import UserGamesProvider from './providers/UserGamesProvider';
 import ColumnsProvider from './providers/ColumnsProvider';
 import { getColumns, getColumnsOnBoard } from '@/lib/utils/column-utils';
@@ -30,7 +30,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
+        <ClientSessionProvider session={session}>
           <UserGamesProvider
             initialUserGames={initialUserGames}
             initialUserGamesOnBoard={initialUserGamesOnBoard}
@@ -45,7 +45,7 @@ export default async function RootLayout({ children }) {
               </div>
             </ColumnsProvider>
           </UserGamesProvider>
-        </SessionProvider>
+        </ClientSessionProvider>
       </body>
     </html>
   );
