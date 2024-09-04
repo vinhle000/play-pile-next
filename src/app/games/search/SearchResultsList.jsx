@@ -8,23 +8,26 @@ import { Link } from 'react-router-dom';
 
 function SearchResultsList({
   games,
-  userGamesByIgdbId,
+  userGamesByIgdbIds,
   setSelectedGame,
   setOpenModal,
   columnsOnBoard,
+  handleUpdateGameFields,
 }) {
+
   return (
     <>
       <ul role="list" className="mx-4 py-5 space-y-4 divide-gray-100">
         {games &&
           games.map((game) => (
             <SearchResultsListItem
-              key={game.igdbId}
+              key={game?.igdbId}
               game={game}
-              userGame={userGamesByIgdbId[game.igdbId] || {}}
+              userGame={userGamesByIgdbIds[game.igdbId] || {}}
               setSelectedGame={setSelectedGame}
               setOpenModal={setOpenModal}
               columnsOnBoard={columnsOnBoard}
+              handleUpdateGameFields={handleUpdateGameFields}
             />
           ))}
       </ul>

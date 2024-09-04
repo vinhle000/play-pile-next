@@ -48,35 +48,10 @@ function SearchResultsListItem({
   setSelectedGame,
   setOpenModal,
   columnsOnBoard,
+  handleUpdateGameFields,
 }) {
-  const { loading, fetchUserGames, updateUserGameData } =
-    useContext(UserGamesContext);
-  // const { columns, fetchColumns } = useContext(ColumnsContext);
-  const [selectedColumnId, setSelectedColumnId] = useState(
-    userGame?.columnId || null,
-  );
-  const [userGameData, setUserGameData] = useState({ ...userGame });
-
-  // [ ] FIXME: switch from using react context, to using server side reneinr with next.js
-  const updateUserGame = async (igdbId, updateData) => {
-    updateData ? updateData : {};
-    try {
-      //FIXME: Only update the listItem as User edits the their relationship with the game
-      let newData = await updateUserGameData(igdbId, {
-        ...updateData,
-      });
-      if (updateData.columnId) {
-        fetchUserGames();
-        setSelectedColumnId(updateData.columnId);
-      }
-      setUserGameData({ ...userGameData, ...newData });
-    } catch (error) {
-      console.error('Error updating UserGame Data ', error);
-    }
-  };
 
   return (
-
     <li
       className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl
                   transition-transform duration-300 ease-in-out hover:scale-105"
@@ -151,32 +126,34 @@ function SearchResultsListItem({
       <div className="flex items-center ">
         <DropdownMenu className="flex justify-center items-center">
           <DropdownMenuTrigger className="min-w-24 py-1 mr-8">
-            {Object.keys(userGameData).length > 0 ? (
+            {userGame.isInPlayPile ? (
               <div className="x-4 py-2 rounded-lg font-semibold text-white/90  bg-gray-800/40 hover:bg-gray-800/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60  transition duration-300 ease-in-out">
-                Edit
+                ...
               </div>
             ) : (
               <div
                 className="px-4 py-2 rounded-lg font-semibold text-white/90 bg-purple-500/50  hover:bg-purple-500/80 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-60 transition duration-300 ease-in-out"
                 style={{ backdropFilter: 'saturate(180%) blur(5px)' }}
               >
-                Add
+                +
               </div>
             )}
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-auto bg-zinc-100 drop-shadow-2xl">
             <DropdownMenuLabel className="flex justify-center font-bold ">
-              Add To List
+              List
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-gray-300" />
 
             <DropdownMenuRadioGroup
-              value={selectedColumnId}
+              value={userGame.columnId}
               onValueChange={(columnId) => {
-                updateUserGame(game.igdbId, {
+                handleUpdateGameFields(game.igdbId, {
                   columnId: columnId,
                   isInPlayPile: true,
                 });
+
+
               }}
             >
               {columnsOnBoard &&
@@ -186,13 +163,15 @@ function SearchResultsListItem({
                   </DropdownMenuRadioItem>
                 ))}
             </DropdownMenuRadioGroup>
-            {userGameData?.isInPlayPile && (
+
+            {userGame?.isInPlayPile && (
               <>
                 <DropdownMenuSeparator className="bg-gray-300" />
                 <DropdownMenuItem
                   className="flex justify-center text-sm font-bold text-red-400"
                   onClick={() => {
-                    setSelectedGame(userGameData);
+
+                    setSelectedGame(userGame);
                     setOpenModal('remove');
                   }}
                 >
@@ -207,4 +186,4 @@ function SearchResultsListItem({
   );
 }
 
-export default SearchResultsListItem;
+export default React.memo(SearchResultsListItem);

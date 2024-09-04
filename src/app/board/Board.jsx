@@ -57,11 +57,6 @@ function Board({ setSelectedColumn, setSelectedGame, setOpenModal }) {
 
       // Handle column drag
       if (type === 'column') {
-        console.log(`handleOnDragEnd ---> result `, {
-          source,
-          destination,
-          type,
-        });
         const newColumns = [...columnsOnBoard];
         const [removed] = newColumns.splice(source.index, 1);
         newColumns.splice(destination.index, 0, removed);

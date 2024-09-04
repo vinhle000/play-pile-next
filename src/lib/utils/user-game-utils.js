@@ -74,6 +74,31 @@ export async function getUserGamesOnBoard(userId) {
 }
 
 /**
+ * @desc  Get Only the games that are in columns that are on the board
+ */
+export async function getUserGamesByIgdbIds(igdbIds) {
+  try {
+    const userGames = await UserGame.find({
+      igdbId: { $in: igdbIds },
+    }).lean();
+
+    let userGamesByIgdbIds = {};
+
+    /// FIXME //TODO: the error is being caused right here
+    if (!!userGames) {
+      userGames.forEach((userGame) => {
+        userGamesByIgdbIds[userGame.igdbId] = userGame;
+      });
+    }
+    return convertToPlainObject(userGamesByIgdbIds);
+    // sort userGames into obj map by igdbId as keys
+  } catch (error) {
+    console.log(`Error getting userGames by igdbIds`);
+    throw new Error(`Error getting userGames by igdbIds`);
+  }
+}
+
+/**
  * @desc  Update user game data, can update multiple fields
  * @route PATCH /api/userGames/:igdbId
  * @access Private

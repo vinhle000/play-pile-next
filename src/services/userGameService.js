@@ -10,9 +10,10 @@ const userGameService = {
   async getUserGames() {
     try {
       const response = await fetch(`${API_URL}/play-pile`);
-      // This should be an object map of the user's play games with the key being the columnId
-
-      return await response.json();
+      // This should be an object map userGames
+      // with igdb as key and object as value
+      let data = await response.json();
+      return data;
     } catch (error) {
       console.error('Error getting user play pile', error);
     }
@@ -22,9 +23,7 @@ const userGameService = {
     try {
       const response = await fetch(`${API_URL}/board`);
       // This should be an object map of the user's play games with the key being the columnId
-
       const data = await response.json();
-      console.log('   getUserGamesOnBoard()  ------>', data);
       return data;
     } catch (error) {
       console.error('Error getting user games on board', error);

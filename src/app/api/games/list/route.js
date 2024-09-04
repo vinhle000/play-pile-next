@@ -13,7 +13,6 @@ import { connectDB } from '@/lib/db';
  */
 export async function POST(request) {
   const igdbIds = await request.json().then((body) => body.igdbIds);
-  console.log('igdbIds --------> ', igdbIds);
   if (!igdbIds || igdbIds.length === 0) {
     return NextResponse.json(
       { message: 'No IGDB IDs provided' },
