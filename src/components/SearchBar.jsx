@@ -28,7 +28,7 @@ function SearchBar() {
           <input
             id="search"
             name="search"
-            className="block w-full rounded-md border-0 bg-gray-100/20  py-1.5 pl-10 pr-3 text-gray-300
+            className="block w-full rounded-md border-0  bg-gray-400/20  py-1.5 pl-10 pr-3 text-gray-300
              placeholder:text-black/50
              focus:bg-gray-100/40 focus:text-gray-900 focus:ring-0 sm:text-sm sm:leading-6"
             placeholder="Search for games"
