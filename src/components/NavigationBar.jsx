@@ -37,7 +37,7 @@ function AvatarDropdownMenu() {
         <div className="h-full w-full">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.pn" />
-            <AvatarFallback className="w-full h-full flex justify-center items-center bg-gray-100/20 shadow-sm text-white rounded-xl hover:bg-gray-700/20">
+            <AvatarFallback className="w-full h-full flex justify-center items-center border-gray-900 bg-gray-500/20 shadow-sm text-white rounded-xl hover:bg-gray-700/20">
               {session.user.email[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>

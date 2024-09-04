@@ -4,6 +4,9 @@ import Column from '@/lib/models/columnModel';
 import Game from '@/lib/models/gameModel';
 import { connectDB } from '@/lib/db';
 
+function convertToPlainObject(doc) {
+  return JSON.parse(JSON.stringify(doc));
+}
 /**
  * @desc  Add to game to user's "pile" of games they want to track
  * @route GET /api/user-games/play-pile
@@ -18,7 +21,7 @@ export async function getUserGamesInPlayPile(userId) {
       isInPlayPile: true,
     }).lean();
 
-    return userGames;
+    return userGames.map(convertToPlainObject);
   } catch (error) {
     console.error('Error getting userGames in PlayPile from DB', error);
     throw new Error('Error getting userGames in PlayPile from DB');
@@ -43,7 +46,7 @@ export async function getUserGamesOnBoard(userId) {
     const userGamesOnBoard = await UserGame.find({
       userId: userId,
       columnId: { $in: columnIds },
-    });
+    }).lean();
 
     if (!userGamesOnBoard) {
       return NextResponse.json({}, { stats: 200 }); // providing an empty object since no games were found
@@ -52,7 +55,7 @@ export async function getUserGamesOnBoard(userId) {
 
     userGamesOnBoard.forEach((userGame) => {
       if (!userGamesByColumnId[userGame.columnId]) {
-        userGamesByColumnId[userGame.columnId] = [userGame];
+        userGamesByColumnId[userGame.columnId] = [];
       }
       userGamesByColumnId[userGame.columnId].push(userGame);
     });
@@ -63,10 +66,35 @@ export async function getUserGamesOnBoard(userId) {
         (a, b) => a.columnPosition - b.columnPosition,
       );
     }
-    return userGamesByColumnId;
+    return convertToPlainObject(userGamesByColumnId);
   } catch (error) {
     console.error('Error getting userGames on board from DB', error);
     throw new Error('Error getting userGames on board from DB');
+  }
+}
+
+/**
+ * @desc  Get Only the games that are in columns that are on the board
+ */
+export async function getUserGamesByIgdbIds(igdbIds) {
+  try {
+    const userGames = await UserGame.find({
+      igdbId: { $in: igdbIds },
+    }).lean();
+
+    let userGamesByIgdbIds = {};
+
+    /// FIXME //TODO: the error is being caused right here
+    if (!!userGames) {
+      userGames.forEach((userGame) => {
+        userGamesByIgdbIds[userGame.igdbId] = userGame;
+      });
+    }
+    return convertToPlainObject(userGamesByIgdbIds);
+    // sort userGames into obj map by igdbId as keys
+  } catch (error) {
+    console.log(`Error getting userGames by igdbIds`);
+    throw new Error(`Error getting userGames by igdbIds`);
   }
 }
 
@@ -107,7 +135,7 @@ export async function updateUserGame(userId, igdbId, updateData) {
     if (!userGame) {
       console.warn('No userGame found for update');
     }
-    return userGame;
+    return convertToPlainObject(userGame);
   } catch (error) {
     console.error(`Error updating userGame document ${error}`);
     throw new Error('Error updating userGame document ');

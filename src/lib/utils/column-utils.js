@@ -3,6 +3,12 @@ import UserGame from '@/lib/models/userGameModel';
 import Column from '@/lib/models/columnModel';
 import { connectDB } from '@/lib/db';
 
+/*
+"Only plain objects can be passed to Client Components from Server Components"
+ occurs when you try to pass complex objects like Mongoose
+ documents directly to client components. ""
+*/
+
 function convertToPlainObject(doc) {
   return JSON.parse(JSON.stringify(doc));
 }
@@ -10,11 +16,32 @@ function convertToPlainObject(doc) {
 export async function getColumns(userId) {
   try {
     await connectDB();
-    const columns = await Column.find({ userId: userId });
-    return columns;
+    const columns = await Column.find({ userId: userId }).lean();
+    return columns.map(convertToPlainObject);
   } catch (error) {
     console.error('Error getting columns from DB ', error);
     throw new Error('Error getting columns from DB');
+  }
+}
+
+/**
+ * @desc    Get all columns showing on board from DB by userId
+ * @route   GET /api/board/columns/on-board
+ */
+export async function getColumnsOnBoard(userId) {
+  try {
+    await connectDB();
+    const columns = await Column.find({
+      userId: userId,
+      isOnBoard: true,
+    })
+      .lean() // Convert documents to plain JS objects -> but still constaines methods such as ObjectId and Date
+      .sort('position');
+    // Convert due to warning, Server components should only pass down JS objects down to client components
+    return columns.map(convertToPlainObject);
+  } catch (error) {
+    console.error('Error fetching user columns on board  from DB ', error);
+    throw new Error('Failed to fetch columns on board from DB');
   }
 }
 
@@ -33,8 +60,8 @@ export async function createColumn(userId, columnTitle) {
       title: columnTitle || '',
       isOnBoard: true,
       position: currentColumnCount + 1,
-    });
-    return column;
+    }).lean();
+    return convertToPlainObject(column);
   } catch (error) {
     console.error('Error when create column in DB ', error);
     throw new Error('Failed to create column in DB');
@@ -58,7 +85,7 @@ export async function updateColumn(columnId, updateData) {
       console.warn(`No column: ${columnId} found for update`);
       throw new Error(`No column found in DB with id: ${columnId}`);
     }
-    return column;
+    return convertToPlainObject(column);
   } catch (error) {
     console.error('Error updating column ', error);
     throw new Error('Failed to update column');
@@ -94,27 +121,6 @@ export async function deleteAllColumns(userId) {
   }
 }
 
-/**
- * @desc    Get all columns showing on board from DB by userId
- * @route   GET /api/board/columns/on-board
- */
-export async function getColumnsOnBoard(userId) {
-  try {
-    await connectDB();
-    const columns = await Column.find({
-      userId: userId,
-      isOnBoard: true,
-    })
-      .lean() // Convert documents to plain JS objects -> but still constaines methods such as ObjectId and Date
-      .sort('position');
-    // Convert due to warning, Server components should only pass down JS objects down to client components
-    return columns.map(convertToPlainObject);
-  } catch (error) {
-    console.error('Error fetching user columns on board  from DB ', error);
-    throw new Error('Failed to fetch columns on board from DB');
-  }
-}
-
 /*
  * @desc    Update columns positions (after dragging and drop)
  * @route   PATCH /api/board/columns/update-positions
@@ -124,9 +130,9 @@ export async function updateColumnPositions(updatedColumns) {
   try {
     connectDB();
     await Promise.all(
-      updatedColumns.map((column) => {
+      updatedColumns.map((column, index) => {
         return Column.findByIdAndUpdate(column._id, {
-          position: column.position,
+          position: index, // The updated columns are in the correct order already
         });
       }),
     );

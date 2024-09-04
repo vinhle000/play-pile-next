@@ -1,19 +1,22 @@
 'use client';
-import React, { useState, useEffect, useCallback, createContext } from 'react';
-import useColumnService from '@/services/columnService';
+import React, { useState, useCallback, createContext } from 'react';
+import columnService from '@/services/column-service';
 
 export const ColumnsContext = createContext({});
 
-
-export default function ColumnsProvider({ children }) {
-  const [columns, setColumns] = useState([]);
-  const [columnsOnBoard, setColumnsOnBoard] = useState([]);
+export default function ColumnsProvider({
+  children,
+  initialColumns,
+  initialColumnsOnBoard,
+}) {
+  const [columns, setColumns] = useState(initialColumns);
+  const [columnsOnBoard, setColumnsOnBoard] = useState(initialColumnsOnBoard);
   const [loading, setLoading] = useState(true);
 
   const fetchColumns = useCallback(async () => {
     try {
       setLoading(true);
-      const columns = await useColumnService.getColumns();
+      const columns = await columnService.getColumns();
       setColumns(columns);
       return columns;
     } catch (error) {
@@ -25,7 +28,7 @@ export default function ColumnsProvider({ children }) {
   const fetchColumnsOnBoard = useCallback(async () => {
     try {
       setLoading(true);
-      const columnsOnBoard = await useColumnService.getColumnsOnBoard();
+      const columnsOnBoard = await columnService.getColumnsOnBoard();
       setColumnsOnBoard(columnsOnBoard);
       return columnsOnBoard;
     } catch (error) {
@@ -39,7 +42,7 @@ export default function ColumnsProvider({ children }) {
     async (title) => {
       try {
         setLoading(true);
-        await useColumnService.createColumn(title);
+        await columnService.createColumn(title);
         fetchColumnsOnBoard();
       } catch (error) {
         console.error('Error creating column', error);
@@ -50,37 +53,48 @@ export default function ColumnsProvider({ children }) {
     [fetchColumnsOnBoard],
   );
 
-  const updateColumn = async (columnId, updateData) => {
-    try {
-      await useColumnService.updateColumn(columnId, updateData);
-      fetchColumns();
-    } catch (error) {
-      console.error('Error updating column', error);
-    }
-  };
+  const updateColumn = useCallback(
+    async (columnId, updateData) => {
+      try {
+        await columnService.updateColumn(columnId, updateData);
+        fetchColumns();
+      } catch (error) {
+        console.error('Error updating column', error);
+      }
+    },
+    [fetchColumns],
+  );
 
-  const deleteColumn = useCallback(
-    async (columnId) => {
+  const updateColumnPositions = useCallback(
+    async (columns) => {
       try {
         setLoading(true);
-        await useColumnService.deleteColumn(columnId);
-        //optimistic update for UI responsiveness
-        setColumnsOnBoard(
-          columnsOnBoard.filter((column) => column._id !== columnId),
-        );
+        await columnService.updateColumnPositions(columns);
+        fetchColumns();
+        fetchColumnsOnBoard();
       } catch (error) {
-        console.error('Error deleting column', error);
+        console.error('Error updating column positions', error);
       } finally {
         setLoading(false);
       }
     },
-    [columnsOnBoard],
+    [fetchColumns, fetchColumnsOnBoard],
   );
 
-  useEffect(() => {
-    fetchColumns();
-    fetchColumnsOnBoard();
-  }, [fetchColumns, fetchColumnsOnBoard]);
+  const deleteColumn = useCallback(async (columnId) => {
+    try {
+      setLoading(true);
+      await columnService.deleteColumn(columnId);
+      //optimistic update for UI responsiveness
+      setColumnsOnBoard((prev) =>
+        prev.filter((column) => column._id !== columnId),
+      );
+    } catch (error) {
+      console.error('Error deleting column', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <ColumnsContext.Provider
@@ -95,6 +109,7 @@ export default function ColumnsProvider({ children }) {
         columnsOnBoard,
         setColumnsOnBoard,
         fetchColumnsOnBoard,
+        updateColumnPositions,
       }}
     >
       {children}

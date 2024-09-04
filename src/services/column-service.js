@@ -9,13 +9,16 @@ const API_URL = `${envURL}/api/board/columns`;
 const columnService = {
   async getColumns() {
     try {
-      const response = await fetch(`${API_URL}`);
-      if (response.data && Array.isArray(response.data)) {
-        console.log(response.data);
+      const response = await fetch(`${API_URL}`, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        console.log('fetch getColumns --->', data);
       } else {
-        console.error('Unexpected response format:', response.data);
+        console.error('Unexpected response format:', data);
       }
-      return await response.json();
+      return data;
     } catch (error) {
       console.error('Error getting columns for user', error);
     }
@@ -23,15 +26,17 @@ const columnService = {
 
   async getColumnsOnBoard() {
     try {
-      const response = await fetch(`${API_URL}/on-board`);
+      const response = await fetch(`${API_URL}/on-board`, {
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-      // BUG: ISSUE IS HAPPENING HERE!!! - 7.24
-      if (response.data && Array.isArray(response.data)) {
-        console.log(response.data);
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        console.log('fetch getColumnsOnBoard ---> ', data);
       } else {
-        console.error('Unexpected response format:', response.data);
+        console.error('Unexpected response format:', data);
       }
-      return await response.json();
+      return data;
     } catch (error) {
       console.error('Error getting columns to be displayed on board', error);
     }
@@ -41,7 +46,8 @@ const columnService = {
     try {
       const response = await fetch(`${API_URL}`, {
         method: 'POST',
-        body: { columnTitle: title },
+        body: JSON.stringify({ columnTitle: title }),
+        headers: { 'Content-Type': 'application/json' },
       });
       return await response.json();
     } catch (error) {
@@ -55,7 +61,8 @@ const columnService = {
     try {
       const response = await fetch(`${API_URL}/${columnId}`, {
         method: 'PATCH',
-        body: requestBody,
+        body: JSON.stringify(requestBody),
+        headers: { 'Content-Type': 'application/json' },
       });
       return await response.json();
     } catch (error) {
@@ -63,12 +70,13 @@ const columnService = {
     }
   },
 
-  async updatePositions(columns, session) {
+  async updateColumnPositions(columns) {
     const requestBody = { columns: columns ? columns : [] };
     try {
       const response = await fetch(`${API_URL}/update-positions`, {
         method: 'PATCH',
-        body: requestBody,
+        body: JSON.stringify(requestBody),
+        headers: { 'Content-Type': 'application/json' },
       });
       return await response.json();
     } catch (error) {
@@ -76,7 +84,7 @@ const columnService = {
     }
   },
 
-  async deleteColumn(columnId, session) {
+  async deleteColumn(columnId) {
     try {
       const response = await fetch(`${API_URL}/${columnId}`, {
         method: 'DELETE',

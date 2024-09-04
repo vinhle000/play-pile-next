@@ -1,29 +1,30 @@
 import React from 'react';
 import SearchPageClient from './SearchPageClient';
-import useServerColumnService from '@/services/columnService';
 import { getColumnsOnBoard } from '@/lib/utils/column-utils';
 import { auth } from '@/auth';
 import mongoose from 'mongoose';
+import { getGameSearchResults } from '@/lib/utils/game-utils';
+import { getUserGamesByIgdbIds } from '@/lib/utils/user-game-utils';
 
-// TODO:  Refine data fetching when first loading and after updating userGame data;
-// [ ]: make it so page does not refresh after adding a game to a list(column). Possibly memoize?
-// [ ]: Page starts with correct data
+async function getData(searchQuery, userId) {
+  let error = null;
+  try {
+    const games = await getGameSearchResults(searchQuery);
+    const userGamesByIgdbIds = await getUserGamesByIgdbIds(
+      games.map((g) => g.igdbId),
+    );
+    const columnsOnBoard = await getColumnsOnBoard(userId);
 
-// NOTE: Should create util functions for Game CRUD to use directly as server component.
-// And client component if necessary.
-async function searchGames(query) {
-  const res = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/games/search?q=${encodeURIComponent(query)}`,
-    {
-      cache: 'no-store',
-    },
-  );
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch games');
+    return {
+      games,
+      userGamesByIgdbIds,
+      columnsOnBoard,
+    };
+  } catch (err) {
+    error = err.message;
+    console.error('Error getting data for search', error);
+    return {};
   }
-
-  return res.json();
 }
 
 export default async function Page({ searchParams }) {
@@ -36,16 +37,11 @@ export default async function Page({ searchParams }) {
   }
   const userId = new mongoose.Types.ObjectId(session.user.id);
   const searchQuery = searchParams.q || '';
-  let games = [];
-  let columnsOnBoard = [];
-  let error = null;
-  try {
-    games = await searchGames(searchQuery);
-    columnsOnBoard = await getColumnsOnBoard(userId);
-  } catch (err) {
-    error = err.message;
-    console.error('Error searching... ', error);
-  }
+
+  const { games, userGamesByIgdbIds, columnsOnBoard } = await getData(
+    searchQuery,
+    userId,
+  );
 
   return (
     <>
@@ -54,7 +50,11 @@ export default async function Page({ searchParams }) {
           No search results found for "{searchQuery}"
         </div>
       ) : (
-        <SearchPageClient games={games} columnsOnBoard={columnsOnBoard} />
+        <SearchPageClient
+          games={games}
+          columnsOnBoard={columnsOnBoard}
+          userGamesByIgdbIds={userGamesByIgdbIds}
+        />
       )}
     </>
   );
