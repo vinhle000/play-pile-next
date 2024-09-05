@@ -1,0 +1,251 @@
+'use client';
+import React, { useState, useContext } from 'react';
+import userGameService from '@/services/userGameService';
+import ConfirmModal from '@/components/ConfirmModal';
+import Note from '@/components/Note';
+import LinkEmbedder from '@/components/LinkEmbedder';
+
+import { TrophyIcon, CheckIcon } from '@heroicons/react/24/solid';
+import {
+  XCircleIcon,
+  PlayIcon,
+  ArrowPathIcon,
+  PauseIcon,
+  CheckCircleIcon,
+  CheckBadgeIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/solid';
+import { FaInfinity, FaCircleStop } from 'react-icons/fa6';
+import { HiXMark } from 'react-icons/hi2';
+import { FaCheck } from 'react-icons/fa';
+
+import { UserGamesContext } from '@/app/providers/UserGamesProvider';
+import { ColumnsContext } from '@/app/providers/ColumnsProvider';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+
+import DateRangePicker from '@/components/DateRangePicker';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
+const gameStatusIcon = (gameStatus) => {
+  switch (gameStatus) {
+    case 'Not owned':
+      return <XCircleIcon className="w-5 h-6" />;
+    case 'Playing':
+      return <PlayIcon className="w-5 h-6" />;
+    case 'Replaying':
+      return <ArrowPathIcon className="w-5 h-6" />;
+    case 'Endless':
+      return <FaInfinity className="w-5 h-6" />;
+    case 'Paused':
+      return <PauseIcon className="w-5 h-6" />;
+    case 'Finished':
+      return <FaCheck className="w-5 h-6" />;
+    case 'Completed':
+      return <TrophyIcon className="w-5 h-6" />;
+    case 'Abandoned':
+      return <FaCircleStop className="w-5 h-6" />;
+    default:
+      return <div></div>;
+  }
+};
+
+const gameStatusList = [
+  'Not started',
+  'Not owned',
+  'Playing',
+  'Replaying',
+  'Endless',
+  'Paused',
+  'Finished',
+  'Completed',
+  'Abandoned',
+];
+
+function UserGameDataEditModal({ game, openModal, setOpenModal }) {
+  // game has UserGameData and Game details
+
+  const { setUserPlayPileGames, userPlayPileGames, updateUserGameData } =
+    useContext(UserGamesContext); // {playDates,  playStatus, notes}
+
+  // TODO: Making this modal persist upon change immediately without the save button to submit
+  //
+  const [fieldData, setFieldData] = useState({
+    playDates: game?.playDates || [{ from: new Date(), to: new Date() }], // This is an array of Dates,
+    playStatus: game.playStatus,
+    embeddedLinks: game.embeddedLinks,
+    notes: game.notes,
+  });
+
+  //For now just using the first date in the array
+  const [newPlayDate, setNewPlayDate] = useState(
+    { ...fieldData.playDates[0] } || { from: new Date(), to: new Date() }``,
+  );
+
+  const updateGame = async (updateData) => {
+    updateData ? updateData : {};
+    try {
+      let newData = await updateUserGameData(game.igdbId, { ...updateData });
+      setUserPlayPileGames({ ...userPlayPileGames, ...newData });
+    } catch (error) {
+      console.error('Error updating UserGame Data ', error);
+      throw error;
+    }
+  };
+
+  const handlePlayStatusChange = async (status) => {
+    try {
+      await updateGame({ playStatus: status });
+
+      setFieldData((prevState) => {
+        return {
+          ...prevState,
+          playStatus: status,
+        };
+      });
+    } catch (error) {
+      console.error('Error updating Play Status of UserGame', error);
+    }
+  };
+
+  const handleDateChange = async (date) => {
+    if (fieldData.playDates) {
+      if (fieldData.playDates[0] != date) {
+        try {
+          await updateGame({ playDates: [date] });
+          // Optimistic update - for faster UI response
+          setFieldData((prevState) => {
+            //TODO: Implement pushing the new Date the the playDates array
+            return {
+              ...prevState,
+              playDates: [date],
+            };
+          });
+        } catch (error) {
+          console.error('Error saving(updating) Date of UserGame', error);
+        }
+      }
+    }
+  };
+
+  return (
+    <>
+      <Dialog className="relative z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/20 px-30">
+          <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white/95 text-left align-middle shadow-xl transition-all">
+            {/* Scrollable content area */}
+            <div className="overflow-y-auto max-h-screen">
+              <div
+                className="relative bg-cover bg-center h-40 rounded-t-xl"
+                style={{ backgroundImage: `url(${game.gameInfo.coverUrl})` }}
+              >
+                {/* Overlay that creates the blur effect towards the bottom */}
+                <div className="absolute inset-0 flex items-end justify-center">
+                  <div className="relative w-full h-3/4 backdrop-filter bg-gradient-to-b from-transparent via-transparent to-white/95">
+                    <DialogTitle className="absolute top-16 bg-transparent  my-8 mx-4 text-xl font-bold text-gray-900">
+                      {game.gameInfo.name}
+                    </DialogTitle>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4">
+                {/*  TODO: Keep track of state of all available columns(lists) using columnId  */}
+                <div className="play-dates my-3 flex gap-2 items-center">
+                  <Label>Dates:</Label>
+                  <DateRangePicker
+                    className=" rounded-lg shadow-sm border border-gray-300 "
+                    handleDateChange={handleDateChange}
+                    date={newPlayDate}
+                    setDate={setNewPlayDate}
+                  />
+                </div>
+
+                <div className="play-status flex gap-2 items-center">
+                  <DropdownMenu>
+                    <Label>Status: </Label>
+                    <DropdownMenuTrigger>
+                      <div className="flex gap-2 my-1 p-1 rounded-lg shadow-sm border border-gray-300 max-w-max">
+                        {fieldData.playStatus}{' '}
+                        {gameStatusIcon(fieldData.playStatus)}
+                      </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white/95">
+                      {gameStatusList.map((status) => {
+                        return (
+                          <DropdownMenuItem
+                            key={status}
+                            onSelect={() => handlePlayStatusChange(status)}
+                            className="flex justify-between"
+                          >
+                            {status} {gameStatusIcon(status)}
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                <div className="notes ">
+                  <Label>Notes:</Label>
+                  {/*FUTURE: Eventually make a list of notes*/}
+                  <Note initialText={fieldData.notes} updateGame={updateGame} />
+                </div>
+
+                {/*TODO: NOW - persist the links to the server! and implement the remove userGame from list button */}
+                <div>
+                  <Label>Attached Links:</Label>
+                  <LinkEmbedder
+                    links={game.embeddedLinks || []}
+                    updateGame={updateGame}
+                  />
+                </div>
+
+                <div className="flex justify-end mt-10">
+                  {/* <Button onClick={()=> {}} variant="destructive">Remove</Button> */}
+                  <Button
+                    onClick={() => setOpenModal('')}
+                    variant="secondary"
+                    className="text-white/95"
+                  >
+                    Close
+                  </Button>
+                  {/* <Button onClick={() => handleSave(game.igdbId)}>Save</Button> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </>
+  );
+}
+
+export default React.memo(UserGameDataEditModal);
