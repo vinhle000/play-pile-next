@@ -36,3 +36,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+
+# created by macOS in each folder. Its purpose is to store custom attributes of a folder, like icon position, window size, and other settings
+.DS_Store
