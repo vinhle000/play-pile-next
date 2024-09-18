@@ -3,21 +3,17 @@
     "browser": true,
     "es2021": true
   },
-  "extends": [
-    "next",
-    "next/core-web-vitals",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["next", "next/core-web-vitals", "plugin:prettier/recommended"],
   "parserOptions": {
-    "ecmaVersion": 12,
+    "ecmaVersion": 2021,
     "sourceType": "module"
   },
   "rules": {
-    "prettier/prettier": ["error", { "singleQuote": true, "semi": false }],
+    "prettier/prettier": ["error", { "singleQuote": true, "semi": true }],
     "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",
     "@next/next/no-img-element": "off",
-    "no-console": "warn",
+    "no-console": "off",
     "no-unused-vars": "warn"
   }
 }

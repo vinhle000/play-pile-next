@@ -2,15 +2,15 @@
   "name": "play-pile",
   "version": "0.1.0",
   "private": true,
-"scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-  "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,scss,md,json,html}\"",
-  "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss,md,json,html}\""
-},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,scss,md,json,html}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css,scss,md,json,html}\""
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

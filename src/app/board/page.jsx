@@ -7,7 +7,7 @@ import BoardPageClient from './BoardPageClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import { getColumnsOnBoard } from '@/lib/utils/column-utils'
+import { getColumnsOnBoard } from '@/lib/utils/column-utils';
 
 export default async function Page() {
   const session = await auth();

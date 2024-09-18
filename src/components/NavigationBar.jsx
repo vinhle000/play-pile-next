@@ -23,13 +23,12 @@ import SearchBar from '@/components/SearchBar';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
 function AvatarDropdownMenu() {
-
   // const { user, loading, logout } = useContext(UserContext);
-  const { data: session } =  useSession();
+  const { data: session } = useSession();
   const handleSignOut = async () => {
     await signOut();
     router.push('/');
-  }
+  };
 
   return (
     <DropdownMenu>
@@ -61,68 +60,68 @@ function AvatarDropdownMenu() {
   );
 }
 
- function NavigationBar() {
+function NavigationBar() {
   // const { user, loading, logout } = React.useContext(UserContext);
   const { data: session } = useSession();
   return (
     <>
-
-    <div className="relative z-0 h-12 flex items-center justify-between px-4">
-      <NavigationMenu className="w-full h-full">
-        {/* Left side of the navigation bar */}
+      <div className="relative z-0 h-12 flex items-center justify-between px-4">
+        <NavigationMenu className="w-full h-full">
+          {/* Left side of the navigation bar */}
           <div className="flex items-center gap-x-3"></div>
-        <NavigationMenuList className="flex items-center gap-x-3">
-          <NavigationMenuItem key="playPile">
+          <NavigationMenuList className="flex items-center gap-x-3">
+            <NavigationMenuItem key="playPile">
               <Link
                 href="/play-pile"
                 className="font-extrabold text-xl text-black/60 hover:text-black/30"
               >
                 PlayPile
-            </Link>
-          </NavigationMenuItem>
-          <div className="w-px h-8 opacity-90 bg-black rounded-sm"></div>
-          <NavigationMenuItem key="board">
+              </Link>
+            </NavigationMenuItem>
+            <div className="w-px h-8 opacity-90 bg-black rounded-sm"></div>
+            <NavigationMenuItem key="board">
               <Link
                 href="/board"
                 className="font-medium text-lg text-black/60 hover:text-black/30"
               >
                 Board
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
         </NavigationMenu>
 
         {/* Right side of the navigation bar */}
         <NavigationMenu>
-        <NavigationMenuList className="flex items-center gap-x-3">
-          {session ? (
-            <>
-              <SearchBar />
-              <AvatarDropdownMenu />
-            </>
-          ) : (
-            <>
-
-              <NavigationMenuItem key="login">
-                <Link href="/sign-in" className="font-medium text-lg text-black/60 hover:text-black/30">
-                  Sign In
-                </Link>
-              </NavigationMenuItem>
-              {/* <div className="w-px h-8 opacity-90 bg-black rounded-sm"></div>
+          <NavigationMenuList className="flex items-center gap-x-3">
+            {session ? (
+              <>
+                <SearchBar />
+                <AvatarDropdownMenu />
+              </>
+            ) : (
+              <>
+                <NavigationMenuItem key="login">
+                  <Link
+                    href="/sign-in"
+                    className="font-medium text-lg text-black/60 hover:text-black/30"
+                  >
+                    Sign In
+                  </Link>
+                </NavigationMenuItem>
+                {/* <div className="w-px h-8 opacity-90 bg-black rounded-sm"></div>
               <NavigationMenuItem key="register">
                 <Link href="/register" className="font-medium text-lg text-black/60 hover:text-black/30">
                   Register
                 </Link>
               </NavigationMenuItem> */}
-            </>
-          )}
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
+              </>
+            )}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
       <div className="my-1 w-full h-0.5 bg-black/80 rounded-2xl opacity-30" />
-      </>
-  )
-
+    </>
+  );
 }
 
 export default NavigationBar;

@@ -1,10 +1,8 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
-import Credentials from 'next-auth/providers/credentials';
 import { connectDB } from '@/lib/db';
 import User from '@/lib/models/userModel';
 import Column from '@/lib/models/columnModel';
-import mongoose from 'mongoose';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],
@@ -12,7 +10,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ profile }) {
       await connectDB();
       let existingUser = await User.findOne({ email: profile.email });
 
@@ -33,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
         await connectDB();
         const existingUser = await User.findOne({ email: user.email });
