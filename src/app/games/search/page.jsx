@@ -47,7 +47,7 @@ export default async function Page({ searchParams }) {
     <>
       {games?.length === 0 ? (
         <div className="p-6 text-center text-black/60 text-lg">
-          No search results found for "{searchQuery}"
+          No search results found for: {searchQuery}
         </div>
       ) : (
         <SearchPageClient

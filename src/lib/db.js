@@ -1,9 +1,17 @@
 import mongoose from 'mongoose';
 
-const mongoServer =
-  process.env.NODE_ENV === 'production'
-    ? process.env.MONGO_URI
-    : 'mongodb://localhost:27017/playPile';
+const mongoServer = (() => {
+  switch (process.env.NODE_ENV) {
+    case 'prod':
+      return process.env.MONGO_URI_PROD;
+    case 'stage':
+      return process.env.MONGO_URI_STAGE;
+    case 'dev':
+      return process.env.MONGO_URI_DEV;
+    default:
+      return 'mongodb://localhost:27017/playPile_dev_local';
+  }
+})();
 
 if (!mongoServer) {
   throw new Error(

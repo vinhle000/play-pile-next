@@ -22,13 +22,18 @@ function ColumnForm({ onSave, onCancel }) {
         maxLength="512"
       />
       <div className="flex items-center space-x-2">
-        <Button type="submit" className="bg-gray-100/20 hover:bg-gray-100/30 text-gray-800 py-2 px-4 rounded-2xl font-medium">
+        <Button
+          type="submit"
+          className="bg-gray-100/20 hover:bg-gray-100/30 text-gray-800 py-2 px-4 rounded-2xl font-medium"
+        >
           Add list
         </Button>
-        <Button type="button" onClick={onCancel} className="bg-gray-100/20 hover:bg-gray-100/30 text-gray-800 py-2 px-4 rounded-2xl font-medium">
-          <span className="inline-block">
-            X
-          </span>
+        <Button
+          type="button"
+          onClick={onCancel}
+          className="bg-gray-100/20 hover:bg-gray-100/30 text-gray-800 py-2 px-4 rounded-2xl font-medium"
+        >
+          <span className="inline-block">X</span>
         </Button>
       </div>
     </form>

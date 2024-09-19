@@ -63,7 +63,6 @@ export default function BoardPageClient() {
     }
   }, [selectedColumn, deleteColumn]);
 
-
   // NOTE: Hydrating initial items from server side rendered data.
   //So initial loading spiiner not neccesry for now
   //   return <TailSpin color="black" radius="1rem" />;

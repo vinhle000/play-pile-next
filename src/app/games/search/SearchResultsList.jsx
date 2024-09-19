@@ -14,7 +14,6 @@ function SearchResultsList({
   columnsOnBoard,
   handleUpdateGameFields,
 }) {
-
   return (
     <>
       <ul role="list" className="mx-4 py-5 space-y-4 divide-gray-100">

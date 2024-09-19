@@ -50,7 +50,6 @@ function SearchResultsListItem({
   columnsOnBoard,
   handleUpdateGameFields,
 }) {
-
   return (
     <li
       className="flex items-center justify-between  bg-white/70 rounded-xl shadow-xl
@@ -152,8 +151,6 @@ function SearchResultsListItem({
                   columnId: columnId,
                   isInPlayPile: true,
                 });
-
-
               }}
             >
               {columnsOnBoard &&
@@ -170,7 +167,6 @@ function SearchResultsListItem({
                 <DropdownMenuItem
                   className="flex justify-center text-sm font-bold text-red-400"
                   onClick={() => {
-
                     setSelectedGame(userGame);
                     setOpenModal('remove');
                   }}
