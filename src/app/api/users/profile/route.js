@@ -2,6 +2,8 @@ import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import User from '@/lib/models/userModel';
 import { connectDB } from '@/lib/db';
+import mongoose from 'mongoose';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
   try {
