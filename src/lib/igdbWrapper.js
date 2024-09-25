@@ -15,8 +15,8 @@ class IGDBWrapper {
       method: 'post',
       url: `https://id.twitch.tv/oauth2/token`,
       params: {
-        client_id: process.env.IGDB_CLIENT_ID,
-        client_secret: process.env.IGDB_CLIENT_SECRET,
+        client_id: process.env.AUTH_TWITCH_ID,
+        client_secret: process.env.AUTH_TWITCH_SECRET,
         grant_type: 'client_credentials',
       },
     };
@@ -40,7 +40,7 @@ class IGDBWrapper {
         url: 'https://api.igdb.com/v4/games',
         method: 'post',
         headers: {
-          'Client-ID': process.env.IGDB_CLIENT_ID,
+          'Client-ID': process.env.AUTH_TWITCH_ID,
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'text/plain',
         },
@@ -103,7 +103,7 @@ class IGDBWrapper {
         url: `https://images.igdb.com/igdb/image/upload/t_${size}/${igdbImageId}.jpg`,
         method: 'GET',
         headers: {
-          'Client-ID': process.env.IGDB_CLIENT_ID,
+          'Client-ID': process.env.AUTH_TWITCH_ID,
           Authorization: `Bearer ${this.token}`,
           'Content-Type': 'text/plain',
         },
