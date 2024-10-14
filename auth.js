@@ -18,16 +18,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!existingUser) {
         const newUser = await User.create({ email: profile.email });
-        const defaultColumnTitles = ['Backlog', 'Playing', 'Done']; // Create initial three columns for the user.
-
-        for (const [index, title] of defaultColumnTitles.entries()) {
-          await Column.create({
-            userId: newUser._id,
-            title: title,
-            onBoard: true,
-            position: index,
-          });
-        }
+        const defaultBacklogColumn = await Column.create({
+          userId: newUser._id,
+          title: 'Backlog',
+          onBoard: true,
+          position: 0,
+        });
       }
       return true;
     },
@@ -46,6 +42,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl + '/board';
     },
   },
 });
