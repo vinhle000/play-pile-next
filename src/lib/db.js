@@ -12,8 +12,7 @@ const mongoServer = (() => {
       return 'mongodb://localhost:27017/playPile_dev_local';
   }
 })();
-console.log('env ==> ', process.env.NODE_ENV);
-console.log('mongo server ==> ', mongoServer);
+console.log('env ==> ', process.env.NEXT_PUBLIC_ENV);
 
 if (!mongoServer) {
   throw new Error(
