@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const mongoServer = (() => {
-  switch (process.env.NODE_ENV) {
-    case 'prod':
+  switch (process.env.NEXT_PUBLIC_ENV) {
+    case 'production':
       return process.env.MONGO_URI_PROD;
     case 'stage':
       return process.env.MONGO_URI_STAGE;
