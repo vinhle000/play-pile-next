@@ -18,7 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!existingUser) {
         const newUser = await User.create({ email: profile.email });
-        const defaultBacklogColumn = await Column.create({
+        Column.create({
           userId: newUser._id,
           title: 'Backlog',
           onBoard: true,
