@@ -8,16 +8,20 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/board');
-    } else if (status === 'unauthenticated') {
+    if (!session) {
       router.push('/sign-in');
+    } else {
+      router.push('/board');
     }
-  }, [status, router]);
+  }, [session, router]);
 
   if (status === 'loading') {
     return <p>Loading...</p>;
   }
 
-  return <div>{/* <p>HOME PAGE</p> */}</div>;
+  return (
+    <div>
+      <p>HOME PAGE</p>
+    </div>
+  );
 }
