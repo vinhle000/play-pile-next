@@ -33,7 +33,7 @@ if (!cached) {
 
 export const connectDB = async () => {
   if (cached.connection) {
-    console.log('Using cached mongo connection ------>');
+    console.log('CACHED mongo connection ------>');
     return cached.connection;
   }
 
@@ -55,7 +55,7 @@ export const connectDB = async () => {
       console.log('Mongoose disconnected');
       cached.connection = null; // Reset cached connection
     });
-
+    console.log('NEW mongo connection ------>');
     return cached.connection;
   } catch (error) {
     cached.promise = null;
