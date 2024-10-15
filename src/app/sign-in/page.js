@@ -1,4 +1,5 @@
 import React from 'react';
+import { connectDB } from '@/lib/db';
 
 import SignInOptions from '@/components/auth/SignInOptions';
 import { auth } from '@/auth';
@@ -6,6 +7,7 @@ import { auth } from '@/auth';
 export default async function Page() {
   const session = await auth();
 
+  await connectDB();
   if (!session) {
     return (
       <div className="flex justify-center mt-10">

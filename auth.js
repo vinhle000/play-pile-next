@@ -17,7 +17,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       let existingUser = await User.findOne({ email: profile.email });
 
       if (!existingUser) {
+        console.log(' signin - no existing user  ');
         const newUser = await User.create({ email: profile.email });
+        console.log(' signin - new user created! ---> ', newUser);
         //   Column.create({
         //     userId: newUser._id,
         //     title: 'Backlog',
