@@ -4,7 +4,6 @@ import Discord from 'next-auth/providers/discord';
 import Twitch from 'next-auth/providers/twitch';
 import { connectDB } from '@/lib/db';
 import User from '@/lib/models/userModel';
-import Column from '@/lib/models/columnModel';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google, Discord, Twitch],
@@ -18,12 +17,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!existingUser) {
         const newUser = await User.create({ email: profile.email });
-        Column.create({
-          userId: newUser._id,
-          title: 'Backlog',
-          onBoard: true,
-          position: 0,
-        });
+        //   Column.create({
+        //     userId: newUser._id,
+        //     title: 'Backlog',
+        //     onBoard: true,
+        //     position: 0,
+        //   });
       }
       return true;
     },

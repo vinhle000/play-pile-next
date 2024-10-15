@@ -1,8 +1,6 @@
-import gameService from './gameService';
-
 const envURL =
-  process.env.NODE_ENV === 'prod'
-    ? process.env.NODE_ENV
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXTAUTH_URL
     : 'http://localhost:3000';
 const API_URL = `${envURL}/api/user-games`;
 
