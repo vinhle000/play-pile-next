@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const mongoServer = (() => {
-  switch (process.env.NODE_ENV) {
-    case 'prod':
+  switch (process.env.NEXT_PUBLIC_ENV) {
+    case 'production':
       return process.env.MONGO_URI_PROD;
     case 'stage':
       return process.env.MONGO_URI_STAGE;
@@ -12,6 +12,7 @@ const mongoServer = (() => {
       return 'mongodb://localhost:27017/playPile_dev_local';
   }
 })();
+console.log('env ==> ', process.env.NEXT_PUBLIC_ENV);
 
 if (!mongoServer) {
   throw new Error(
@@ -32,6 +33,7 @@ if (!cached) {
 
 export const connectDB = async () => {
   if (cached.connection) {
+    console.log('CACHED mongo connection ------>');
     return cached.connection;
   }
 
@@ -51,9 +53,9 @@ export const connectDB = async () => {
 
     mongoose.connection.on('disconnected', () => {
       console.log('Mongoose disconnected');
-      cached.conn = null; // Reset cached connection
+      cached.connection = null; // Reset cached connection
     });
-
+    console.log('NEW mongo connection ------>');
     return cached.connection;
   } catch (error) {
     cached.promise = null;

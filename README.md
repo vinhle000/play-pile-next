@@ -3,7 +3,7 @@
 ## Overview
 Play Pile is a video game inventory management system designed to help gamers manage their ever-growing backlog of games. This version of Play Pile is a complete revamp of the original MERN stack implementation, now built with **Next.js** for enhanced performance, server-side rendering (SSR), and future scalability.
 
-This project is deployed and can be accessed at [Play Pile - Next.js on Vercel](https://playpile.xyz).
+This project is deployed and can be accessed at [Play Pile](https://playpile.xyz).
 
 <!-- ![PlayPile_v2_demo](https://github.com/your-username/play-pile-next/assets/your-image-link) -->
 

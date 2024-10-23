@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -50,6 +51,10 @@ function LinkEmbedder({ links, updateGame }) {
   };
 
   const renderContent = (url, index) => {
+    //favion source ---->  https://www.google.com/s2/favicons?domain=www.youtube.com
+    console.log(
+      `favion source ---->  https://www.google.com/s2/favicons?domain=${new URL(url).hostname}`,
+    );
     return (
       <div key={index} className="flex items-center  mb-4">
         {url.includes('youtube.com') || url.includes('youtu.be') ? (
@@ -64,11 +69,11 @@ function LinkEmbedder({ links, updateGame }) {
           </div>
         ) : (
           <Button className="flex-grow bg-transparent max-w-xs justify-start space-x-2 mr-3 rounded-md shadow-sm hover:bg-gray-100">
-            <img
+            {/* <img
               src={`https://www.google.com/s2/favicons?domain=${new URL(url).hostname}`}
               alt="Favicon"
               className="w-4 h-4 -ml-1"
-            />
+            /> */}
             <a
               href={url}
               target="_blank"
