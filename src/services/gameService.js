@@ -1,6 +1,6 @@
 const envURL =
   process.env.NODE_ENV === 'production'
-    ? process.env.NEXTAUTH_URL
+    ? process.env.NEXT_PUBLIC_NEXTAUTH_URL
     : 'http://localhost:3000';
 const API_URL = `${envURL}/api/games`;
 

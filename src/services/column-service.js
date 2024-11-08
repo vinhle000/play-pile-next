@@ -1,17 +1,16 @@
 const envURL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXTAUTH_URL
+  process.env.NODE_ENV == 'production'
+    ? process.env.NEXT_PUBLIC_NEXTAUTH_URL
     : 'http://localhost:3000';
 
 const API_URL = `${envURL}/api/board/columns`;
-
-console.log('column service -> process.env.NODE_ENV  - ', process.env.NODE_ENV);
+console.log('------------------------------------');
 console.log(
-  'column service -> process.env.NEXTAUTH_URL - ',
-  process.env.NEXTAUTH_URL,
+  'column service -> process.env.NEXT_PUBLIC_NEXTAUTH_URL = ',
+  process.env.NEXT_PUBLIC_NEXTAUTH_URL,
 );
 console.log('column-service env = ', { envURL, API_URL });
-
+console.log('------------------------------------');
 /// OLD Implementation before making service calls for bothj Server and client components
 const columnService = {
   async getColumns() {
