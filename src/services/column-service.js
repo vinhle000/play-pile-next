@@ -5,6 +5,13 @@ const envURL =
 
 const API_URL = `${envURL}/api/board/columns`;
 
+console.log('column service -> process.env.NODE_ENV  - ', process.env.NODE_ENV);
+console.log(
+  'column service -> process.env.NEXTAUTH_URL - ',
+  process.env.NEXTAUTH_URL,
+);
+console.log('column-service env = ', { envURL, API_URL });
+
 /// OLD Implementation before making service calls for bothj Server and client components
 const columnService = {
   async getColumns() {
