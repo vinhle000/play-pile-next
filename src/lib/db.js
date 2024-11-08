@@ -12,7 +12,6 @@ const mongoServer = (() => {
       return 'mongodb://localhost:27017/playPile_dev_local';
   }
 })();
-console.log('env ==> ', process.env.NEXT_PUBLIC_ENV);
 
 if (!mongoServer) {
   throw new Error(
@@ -33,7 +32,6 @@ if (!cached) {
 
 export const connectDB = async () => {
   if (cached.connection) {
-    console.log('CACHED mongo connection ------>');
     return cached.connection;
   }
 
@@ -55,7 +53,6 @@ export const connectDB = async () => {
       console.log('Mongoose disconnected');
       cached.connection = null; // Reset cached connection
     });
-    console.log('NEW mongo connection ------>');
     return cached.connection;
   } catch (error) {
     cached.promise = null;

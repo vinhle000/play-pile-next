@@ -4,14 +4,7 @@ const envURL =
     : 'http://localhost:3000';
 
 const API_URL = `${envURL}/api/board/columns`;
-console.log('------------------------------------');
-console.log(
-  'column service -> process.env.NEXT_PUBLIC_NEXTAUTH_URL = ',
-  process.env.NEXT_PUBLIC_NEXTAUTH_URL,
-);
-console.log('column-service env = ', { envURL, API_URL });
-console.log('------------------------------------');
-/// OLD Implementation before making service calls for bothj Server and client components
+
 const columnService = {
   async getColumns() {
     try {
