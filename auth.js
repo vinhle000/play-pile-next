@@ -5,6 +5,7 @@ import Twitch from 'next-auth/providers/twitch';
 import { connectDB } from '@/lib/db';
 import User from '@/lib/models/userModel';
 
+console.log(' nextauth_url   ---->', process.env.NEXTAUTH_URL);
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google, Discord, Twitch],
   session: {
@@ -12,6 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ profile }) {
+      console.log(' signin - BEFORE db connect  ');
       await connectDB();
 
       let existingUser = await User.findOne({ email: profile.email }).lean();
@@ -29,6 +31,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
     async jwt({ token, user }) {
+      console.log(' jwt - user -->', user);
+      console.log(' jwt - token -->', token);
       if (user) {
         await connectDB();
         const existingUser = await User.findOne({ email: user.email }).lean();
@@ -39,6 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token }) {
+      console.log(' session  - args -->', session.user.email);
       if (token?.id) {
         session.user.id = token.id;
       }
