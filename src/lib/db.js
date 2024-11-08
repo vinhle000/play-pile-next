@@ -13,7 +13,6 @@ const mongoServer = (() => {
   }
 })();
 
-
 if (!mongoServer) {
   throw new Error(
     'Please define the MONGO_URI environment variable inside .env.local',
@@ -33,7 +32,6 @@ if (!cached) {
 
 export const connectDB = async () => {
   if (cached.connection) {
-    console.log('CACHED mongo connection ------>');
     return cached.connection;
   }
 
