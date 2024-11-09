@@ -6,6 +6,8 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   : [
       'https://playpile.xyz',
       'https://www.playpile.xyz',
+      'https://stage.playpile.xyz',
+      'https://dev.playpile.xyz'
       'http://localhost:3000',
     ];
 const protectedRoutes = process.env.PROTECTED_ROUTES
