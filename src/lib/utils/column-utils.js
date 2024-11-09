@@ -60,7 +60,7 @@ export async function createColumn(userId, columnTitle) {
       title: columnTitle || '',
       isOnBoard: true,
       position: currentColumnCount + 1,
-    }).lean();
+    });
     return convertToPlainObject(column);
   } catch (error) {
     console.error('Error when create column in DB ', error);
