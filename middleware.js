@@ -7,7 +7,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       'https://playpile.xyz',
       'https://www.playpile.xyz',
       'https://stage.playpile.xyz',
-      'https://dev.playpile.xyz'
+      'https://dev.playpile.xyz',
       'http://localhost:3000',
     ];
 const protectedRoutes = process.env.PROTECTED_ROUTES
@@ -16,6 +16,11 @@ const protectedRoutes = process.env.PROTECTED_ROUTES
 
 export async function middleware(req) {
   const origin = req.headers.get('origin');
+
+  // Normalize origin by removing any extra trailing slash
+  if (origin && origin.endsWidth('/')) {
+    origin = origin.slice(0, -1);
+  }
 
   // CORS Handling
   if (allowedOrigins.includes(origin)) {
