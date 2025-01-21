@@ -1,10 +1,10 @@
 # Play Pile (Next.js) - Video Game Inventory Management System
 
 ## Overview
-Play Pile is a video game inventory management system designed to help gamers manage their ever-growing backlog of games. This version of Play Pile is a complete revamp of the original MERN stack implementation, now built with **Next.js** for enhanced performance, server-side rendering (SSR), and future scalability.
+Play Pile is a video game inventory management system designed to help gamers manage their ever-growing backlog of games. This version of Play Pile is a complete revamp of the [original MERN stack implementation](https://github.com/vinhle000/play-pile), now built with **Next.js** for enhanced performance, server-side rendering (SSR), and future scalability.
 
 
-You can access the live application through the following link: https://playpile.xyz
+You can access the live application through the following link: https://stage.playpile.xyz
 
 <!-- ![PlayPile_v2_demo](https://github.com/your-username/play-pile-next/assets/your-image-link) -->
 
@@ -83,8 +83,6 @@ NEXTAUTH_URL=http://localhost:3000
   - Please find more instructions here [IGDB API Docs](https://api-docs.igdb.com/#getting-started)
 - **Twitch Developer Portal**: Go to [Twitch Developers](https://dev.twitch.tv/console/apps), create an account if you haven't already, and set up a new application. This will provide you with the necessary client ID and secret.
 
-
-  For more information, see [NextAuth.js Documentation.](https://playpile.xyz)
 
   ### Running the Application
 ```sh
