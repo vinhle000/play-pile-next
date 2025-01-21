@@ -6,6 +6,14 @@ Play Pile is a video game inventory management system designed to help gamers ma
 
 You can access the live application through the following link: https://stage.playpile.xyz
 
+## Getting Started
+1. Login through Oauth provider
+2. Create list with the 'add list' button on the Board page (e.g. 'Backlog', 'Playing', and 'Done')
+3. Use search bar to search games and it will retrieve results provided by IGDB.com
+4. Use the '+' game to add game a list that you previously created
+5. Select 'Board' on top left to access your lists
+6. Click a game on a list to manage details or move them to different lists with drag and drop.
+
 <!-- ![PlayPile_v2_demo](https://github.com/your-username/play-pile-next/assets/your-image-link) -->
 
 ## Features
@@ -93,6 +101,7 @@ This will start the application locally on http://localhost:3000.
 
 ## Usage
 Use Play Pile to manage your video game backlog effectively. After logging in, you can start adding games to your inventory, set statuses, and organize them according to your current gaming goals.
+
 
 ## Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
